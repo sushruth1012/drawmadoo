@@ -531,18 +531,26 @@ const DEFAULT_DATABASE = {
   ],
 
   /* ── Dynamic Categories ── */
+  /* ── Dynamic Categories ── */
   categories: [
     { id: 'cat-all', name: 'All', icon: '🎨', image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&q=80' },
     { id: 'cat-portrait', name: 'Portrait', icon: '👤', image: 'https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=200&q=80' },
     { id: 'cat-landscape', name: 'Landscape', icon: '🏔️', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=80' },
     { id: 'cat-traditional', name: 'Traditional', icon: '🏛️', image: 'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=200&q=80' },
     { id: 'cat-abstract', name: 'Abstract', icon: '🌀', image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
-    { id: 'cat-digital', name: 'Digital Art', icon: '💻', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80' },
-    { id: 'cat-sketches', name: 'Sketches', icon: '✏️', image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&q=80' },
+    { id: 'cat-modern', name: 'Modern', icon: '📐', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80' },
+    { id: 'cat-fantasy', name: 'Fantasy', icon: '✨', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80' },
+    { id: 'cat-anime', name: 'Anime', icon: '🌸', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&q=80' },
+    { id: 'cat-nature', name: 'Nature', icon: '🌿', image: 'https://images.unsplash.com/photo-1511497584788-87676104235f?w=200&q=80' },
+    { id: 'cat-architecture', name: 'Architecture', icon: '🏰', image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&q=80' },
+    { id: 'cat-spiritual', name: 'Spiritual', icon: '🕉️', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=200&q=80' },
+    { id: 'cat-wildlife', name: 'Wildlife', icon: '🦌', image: 'https://images.unsplash.com/photo-1484406566174-9da000fda645?w=200&q=80' },
     { id: 'cat-watercolor', name: 'Watercolor', icon: '💧', image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=200&q=80' },
     { id: 'cat-oil', name: 'Oil Painting', icon: '🖌️', image: 'https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=200&q=80' },
-    { id: 'cat-fantasy', name: 'Fantasy', icon: '✨', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80' },
-    { id: 'cat-anime', name: 'Anime', icon: '🌸', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&q=80' }
+    { id: 'cat-ink', name: 'Ink', icon: '✒️', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80' },
+    { id: 'cat-pencil', name: 'Pencil', icon: '✏️', image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&q=80' },
+    { id: 'cat-digital', name: 'Digital Art', icon: '💻', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80' },
+    { id: 'cat-mixed', name: 'Mixed Media', icon: '🎭', image: 'https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?w=200&q=80' }
   ],
 
   /* ── Dynamic Collections ── */
