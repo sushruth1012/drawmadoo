@@ -20,7 +20,7 @@
 </head>
 <body>
 
-  <!-- ═══════════ Sticky Frosted Navbar (Mockup #1) ═══════════ -->
+  <!-- ═══════════ Sticky Frosted Glass Navbar ═══════════ -->
   <header class="navbar scrolled" id="explore-navbar">
     <div class="container navbar-inner" style="gap: var(--space-4);">
       
@@ -44,7 +44,7 @@
         <a href="index.html#about">About</a>
       </nav>
 
-      <!-- Center Live Search Input & Autocomplete Suggestions (Mockup #1 & #7) -->
+      <!-- Center Live Search Input & Autocomplete Suggestions -->
       <div style="flex: 1; max-width: 440px; position: relative;" class="nav-search-wrapper">
         <div style="position: relative; width: 100%;">
           <input type="text" 
@@ -62,9 +62,8 @@
           </button>
         </div>
 
-        <!-- Search Suggestions Dropdown Overlay (Mockup #7) -->
+        <!-- Search Suggestions Dropdown Overlay -->
         <div class="search-suggestions-dropdown" id="search-suggestions-dropdown">
-          <!-- Recent Searches -->
           <div class="search-suggest-group">
             <div class="search-suggest-label">Recent searches</div>
             <div class="recent-searches-list" id="recent-searches-container">
@@ -92,7 +91,6 @@
             </div>
           </div>
 
-          <!-- Trending Searches -->
           <div class="search-suggest-group">
             <div class="search-suggest-label">Trending searches</div>
             <div class="trending-chips-wrap">
@@ -108,7 +106,6 @@
             </div>
           </div>
 
-          <!-- Popular Artists -->
           <div class="search-suggest-group" style="margin-bottom: 0;">
             <div class="search-suggest-label">Popular artists</div>
             <div class="popular-artists-suggest-list">
@@ -138,7 +135,7 @@
         </div>
       </div>
 
-      <!-- Navbar Actions: Wishlist, Cart, Theme, Admin, Avatar -->
+      <!-- Navbar Actions -->
       <div class="navbar-actions">
         <button class="navbar-action-btn" onclick="openWishlistDrawer()" aria-label="Wishlist" title="Wishlist">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -167,7 +164,7 @@
     </div>
   </header>
 
-  <!-- ═══════════ Editorial Header & Panorama Banner (Mockup #1) ═══════════ -->
+  <!-- ═══════════ Editorial Header & Panorama Banner ═══════════ -->
   <section class="explore-editorial-banner">
     <div class="container">
       <div class="explore-editorial-header">
@@ -177,7 +174,7 @@
         </p>
       </div>
 
-      <!-- Category Chips Carousel with Artwork Thumbnails (Mockup #1) -->
+      <!-- Category Chips Carousel with Artwork Thumbnails -->
       <div class="explore-cat-carousel-wrapper">
         <div class="explore-cat-carousel" id="explore-category-chips">
           <!-- Dynamically populated via DrawmadooDB and DrawmadooComponents.CategoryChip -->
@@ -189,395 +186,262 @@
     </div>
   </section>
 
-  <!-- ═══════════ Main Layout: Sidebar Filters + Masonry Gallery (Mockup #1) ═══════════ -->
+  <!-- ═══════════ Full-Width Main Layout ═══════════ -->
   <main class="container explore-main-layout">
     
-    <!-- ── Left Column: Desktop Filter Sidebar (Mockup #1) ── -->
-    <aside class="explore-filters-sidebar">
-      <div class="filters-sidebar-header">
-        <div class="filters-sidebar-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+    <!-- ── Interactive Gallery Toolbar ── -->
+    <div class="explore-toolbar">
+      <div class="explore-toolbar-left">
+        <!-- Highlighted Glassmorphism Filters Button (Opens Popup on Click) -->
+        <button class="btn-filter-highlighted" onclick="openFiltersModal()" id="btn-open-filters" title="Open Filter Options">
+          <span class="btn-filter-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          </span>
           <span>Filters</span>
-        </div>
-        <button class="filters-clear-btn" onclick="resetAllFilters()">Clear all</button>
+          <span class="btn-filter-badge" id="active-filter-badge" style="display:none;">0</span>
+        </button>
+
+        <span class="results-count-text" id="live-artworks-count">1,248 artworks found</span>
       </div>
 
-      <!-- Price Range Filter -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Price Range</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="price-slider-wrap">
-          <div class="price-slider-label" id="price-slider-label">₹500 – ₹50,000</div>
-          <input type="range" 
-                 id="price-range-slider" 
-                 class="price-range-input" 
-                 min="500" 
-                 max="50000" 
-                 step="500" 
-                 value="50000" 
-                 oninput="onPriceSliderChange(this.value)">
-        </div>
-      </div>
+      <div class="explore-toolbar-right">
+        <!-- Sort Dropdown -->
+        <select class="sort-select-dropdown" id="gallery-sort-select" onchange="onSortChange(this.value)">
+          <option value="trending">Sort by: Trending ▾</option>
+          <option value="newest">Newest</option>
+          <option value="popular">Most Popular</option>
+          <option value="rating">Highest Rated</option>
+          <option value="price-asc">Price Low to High</option>
+          <option value="price-desc">Price High to Low</option>
+          <option value="editors-choice">Editor's Choice</option>
+        </select>
 
-      <!-- Medium Checkboxes -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Medium</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Acrylic" onchange="onCheckboxFilterChange('medium', 'Acrylic', this.checked)">
-              <span>Acrylic</span>
-            </span>
-            <span class="filter-count-badge">(124)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Oil Painting" onchange="onCheckboxFilterChange('medium', 'Oil Painting', this.checked)">
-              <span>Oil Painting</span>
-            </span>
-            <span class="filter-count-badge">(98)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Watercolor" onchange="onCheckboxFilterChange('medium', 'Watercolor', this.checked)">
-              <span>Watercolor</span>
-            </span>
-            <span class="filter-count-badge">(76)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Pencil" onchange="onCheckboxFilterChange('medium', 'Pencil', this.checked)">
-              <span>Pencil & Charcoal</span>
-            </span>
-            <span class="filter-count-badge">(62)</span>
-          </label>
-          <button class="filter-show-more-btn">Show more ▾</button>
-        </div>
-      </div>
-
-      <!-- Style Checkboxes -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Style</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Traditional" onchange="onCheckboxFilterChange('style', 'Traditional', this.checked)">
-              <span>Traditional</span>
-            </span>
-            <span class="filter-count-badge">(112)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Modern" onchange="onCheckboxFilterChange('style', 'Modern', this.checked)">
-              <span>Modern</span>
-            </span>
-            <span class="filter-count-badge">(95)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Abstract" onchange="onCheckboxFilterChange('style', 'Abstract', this.checked)">
-              <span>Abstract</span>
-            </span>
-            <span class="filter-count-badge">(84)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Realistic" onchange="onCheckboxFilterChange('style', 'Realistic', this.checked)">
-              <span>Realistic</span>
-            </span>
-            <span class="filter-count-badge">(68)</span>
-          </label>
-          <button class="filter-show-more-btn">Show more ▾</button>
-        </div>
-      </div>
-
-      <!-- Orientation Checkboxes -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Orientation</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="vertical" onchange="onCheckboxFilterChange('orientation', 'vertical', this.checked)">
-              <span>Portrait</span>
-            </span>
-            <span class="filter-count-badge">(180)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="horizontal" onchange="onCheckboxFilterChange('orientation', 'horizontal', this.checked)">
-              <span>Landscape</span>
-            </span>
-            <span class="filter-count-badge">(150)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="square" onchange="onCheckboxFilterChange('orientation', 'square', this.checked)">
-              <span>Square</span>
-            </span>
-            <span class="filter-count-badge">(62)</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Size Checkboxes -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Size</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Small" onchange="onCheckboxFilterChange('size', 'Small', this.checked)">
-              <span>Small</span>
-            </span>
-            <span class="filter-count-badge">(74)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Medium" onchange="onCheckboxFilterChange('size', 'Medium', this.checked)">
-              <span>Medium</span>
-            </span>
-            <span class="filter-count-badge">(182)</span>
-          </label>
-          <label class="filter-checkbox-item">
-            <span class="filter-checkbox-left">
-              <input type="checkbox" value="Large" onchange="onCheckboxFilterChange('size', 'Large', this.checked)">
-              <span>Large</span>
-            </span>
-            <span class="filter-count-badge">(96)</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Primary Colors Swatches -->
-      <div class="filter-group">
-        <div class="filter-group-header">
-          <span>Primary Colors</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="color-swatches-grid">
-          <button class="color-swatch-btn" style="background: #6B4E9B;" onclick="toggleColorSwatch('purple', this)" title="Violet / Purple" aria-label="Purple"></button>
-          <button class="color-swatch-btn" style="background: #0F6F8E;" onclick="toggleColorSwatch('blue', this)" title="Artist Blue" aria-label="Artist Blue"></button>
-          <button class="color-swatch-btn" style="background: #2E8B57;" onclick="toggleColorSwatch('green', this)" title="Forest Green" aria-label="Green"></button>
-          <button class="color-swatch-btn" style="background: #C99A42;" onclick="toggleColorSwatch('gold', this)" title="Golden Sand" aria-label="Gold"></button>
-          <button class="color-swatch-btn" style="background: #D56A24;" onclick="toggleColorSwatch('orange', this)" title="Burnt Orange" aria-label="Burnt Orange"></button>
-          <button class="color-swatch-btn" style="background: #B22222;" onclick="toggleColorSwatch('red', this)" title="Crimson" aria-label="Red"></button>
-          <button class="color-swatch-btn" style="background: #35241B;" onclick="toggleColorSwatch('walnut', this)" title="Dark Walnut" aria-label="Walnut"></button>
-          <button class="color-swatch-btn" style="background: #EFE4D2; border-color:#8A5A2B;" onclick="toggleColorSwatch('ivory', this)" title="Soft Beige" aria-label="Beige"></button>
-        </div>
-      </div>
-    </aside>
-
-    <!-- ── Right Column: Toolbar & Pinterest Masonry Gallery (Mockup #1) ── -->
-    <section style="min-width: 0;">
-      
-      <!-- Toolbar: Mobile Filter Button, Live Results Count, Sort, Grid/Masonry Toggles -->
-      <div class="explore-toolbar">
-        <div class="explore-toolbar-left">
-          <!-- Mobile Filter Button (opens bottom sheet) -->
-          <button class="mobile-filter-open-btn" onclick="openMobileFilterSheet()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            <span>Filters</span>
+        <!-- Masonry / Uniform Grid View Mode Toggle -->
+        <div class="view-mode-toggle-group">
+          <button class="view-mode-btn active" id="btn-view-masonry" onclick="setViewMode('masonry')" aria-label="Masonry Layout" title="Pinterest Masonry Layout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="11"/><rect x="14" y="3" width="7" height="6"/><rect x="14" y="13" width="7" height="8"/><rect x="3" y="18" width="7" height="3"/></svg>
           </button>
-
-          <span class="results-count-text" id="live-artworks-count">1,248 artworks found</span>
+          <button class="view-mode-btn" id="btn-view-grid" onclick="setViewMode('grid')" aria-label="Uniform Grid Layout" title="Grid Layout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
         </div>
-
-        <div class="explore-toolbar-right">
-          <!-- Sort Dropdown -->
-          <select class="sort-select-dropdown" id="gallery-sort-select" onchange="onSortChange(this.value)">
-            <option value="trending">Sort by: Trending ▾</option>
-            <option value="newest">Newest</option>
-            <option value="popular">Most Popular</option>
-            <option value="rating">Highest Rated</option>
-            <option value="price-asc">Price Low to High</option>
-            <option value="price-desc">Price High to Low</option>
-            <option value="editors-choice">Editor's Choice</option>
-          </select>
-
-          <!-- Masonry / Uniform Grid View Mode Toggle -->
-          <div class="view-mode-toggle-group">
-            <button class="view-mode-btn active" id="btn-view-masonry" onclick="setViewMode('masonry')" aria-label="Masonry Layout" title="Pinterest Masonry Layout">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="11"/><rect x="14" y="3" width="7" height="6"/><rect x="14" y="13" width="7" height="8"/><rect x="3" y="18" width="7" height="3"/></svg>
-            </button>
-            <button class="view-mode-btn" id="btn-view-grid" onclick="setViewMode('grid')" aria-label="Uniform Grid Layout" title="Grid Layout">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pinterest-Style Masonry Gallery Container (Mockup #1) -->
-      <div class="pinterest-masonry-gallery" id="pinterest-gallery-container">
-        <!-- Rendered dynamically via DrawmadooDB and DrawmadooComponents.ArtworkCard -->
-      </div>
-
-      <!-- ═══════════ Section: Popular Collections (Mockup #5) ═══════════ -->
-      <div class="popular-collections-section">
-        <div class="section-editorial-header">
-          <div>
-            <h3 class="section-editorial-title">Popular Collections</h3>
-            <p class="section-editorial-desc">Explore curated collections from our community of artists</p>
-          </div>
-          <a href="index.html#collections" class="section-view-all-link">
-            <span>View All</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-        </div>
-
-        <div class="popular-collections-scroll" id="popular-collections-scroll">
-          <!-- Dynamically populated via DrawmadooComponents.CollectionCard -->
-        </div>
-      </div>
-
-      <!-- ═══════════ Featured Sections: Editor's Picks & Trending Today (Mockup #6) ═══════════ -->
-      <div class="featured-dual-grid">
-        <!-- Editor's Picks Box -->
-        <div class="featured-box">
-          <div class="featured-box-header">
-            <div>
-              <h4 class="featured-box-title">Editor's Picks</h4>
-              <span class="featured-box-subtitle">Handpicked artworks by our team</span>
-            </div>
-            <a href="javascript:void(0)" onclick="filterByCurated('editors-choice')" class="section-view-all-link">
-              <span>View All</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-          </div>
-          <div class="featured-mini-cards-scroll" id="editors-picks-scroll">
-            <!-- Dynamically populated via DrawmadooComponents.MiniArtworkCard -->
-          </div>
-        </div>
-
-        <!-- Trending Today Box -->
-        <div class="featured-box">
-          <div class="featured-box-header">
-            <div>
-              <h4 class="featured-box-title">Trending Today</h4>
-              <span class="featured-box-subtitle">Most loved artworks this week</span>
-            </div>
-            <a href="javascript:void(0)" onclick="filterByCurated('trending')" class="section-view-all-link">
-              <span>View All</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-          </div>
-          <div class="featured-mini-cards-scroll" id="trending-today-scroll">
-            <!-- Dynamically populated via DrawmadooComponents.MiniArtworkCard -->
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════ Popular Verified Artists Slider ═══════════ -->
-      <div style="margin-bottom: var(--space-12);">
-        <div class="section-editorial-header">
-          <div>
-            <h3 class="section-editorial-title">Featured Artists</h3>
-            <p class="section-editorial-desc">Meet the human masters bringing stories to canvas</p>
-          </div>
-          <a href="index.html#artists" class="section-view-all-link">
-            <span>View All</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-        </div>
-
-        <div class="popular-artists-scroll" id="popular-artists-scroll">
-          <!-- Dynamically populated via DrawmadooComponents.ArtistCard -->
-        </div>
-      </div>
-
-    </section>
-  </main>
-
-  <!-- ═══════════ Quick View Modal Container (Mockup #4) ═══════════ -->
-  <div id="quickview-modal-placeholder"></div>
-
-  <!-- ═══════════ Mobile Filter Bottom Sheet (Mockup #3) ═══════════ -->
-  <div class="mobile-filter-sheet-backdrop" id="mobile-filter-backdrop" onclick="closeMobileFilterSheet(event)">
-    <div class="mobile-filter-sheet" onclick="event.stopPropagation()">
-      <div class="mobile-filter-header">
-        <button style="background:none; border:none; cursor:pointer;" onclick="closeMobileFilterSheet()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <span style="font-size: 16px; font-weight: 700;">Filters</span>
-        <button style="background:none; border:none; color:var(--color-primary); font-size:13px; font-weight:600; cursor:pointer;" onclick="resetAllFilters()">Clear all</button>
-      </div>
-
-      <div class="mobile-filter-body">
-        <!-- Price Range -->
-        <div class="filter-group">
-          <div class="filter-group-header"><span>Price Range</span></div>
-          <div class="price-slider-wrap">
-            <div class="price-slider-label" id="mobile-price-slider-label">₹500 – ₹50,000</div>
-            <input type="range" class="price-range-input" min="500" max="50000" step="500" value="50000" oninput="onPriceSliderChange(this.value)">
-          </div>
-        </div>
-
-        <!-- Mediums -->
-        <div class="filter-group">
-          <div class="filter-group-header"><span>Medium</span></div>
-          <div class="filter-checkbox-list">
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Acrylic" onchange="onCheckboxFilterChange('medium', 'Acrylic', this.checked)"><span>Acrylic</span></span>
-              <span class="filter-count-badge">(124)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Oil Painting" onchange="onCheckboxFilterChange('medium', 'Oil Painting', this.checked)"><span>Oil Painting</span></span>
-              <span class="filter-count-badge">(98)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Watercolor" onchange="onCheckboxFilterChange('medium', 'Watercolor', this.checked)"><span>Watercolor</span></span>
-              <span class="filter-count-badge">(76)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Pencil" onchange="onCheckboxFilterChange('medium', 'Pencil', this.checked)"><span>Pencil & Charcoal</span></span>
-              <span class="filter-count-badge">(62)</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Styles -->
-        <div class="filter-group">
-          <div class="filter-group-header"><span>Style</span></div>
-          <div class="filter-checkbox-list">
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Traditional" onchange="onCheckboxFilterChange('style', 'Traditional', this.checked)"><span>Traditional</span></span>
-              <span class="filter-count-badge">(112)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Modern" onchange="onCheckboxFilterChange('style', 'Modern', this.checked)"><span>Modern</span></span>
-              <span class="filter-count-badge">(95)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Abstract" onchange="onCheckboxFilterChange('style', 'Abstract', this.checked)"><span>Abstract</span></span>
-              <span class="filter-count-badge">(84)</span>
-            </label>
-            <label class="filter-checkbox-item">
-              <span class="filter-checkbox-left"><input type="checkbox" value="Realistic" onchange="onCheckboxFilterChange('style', 'Realistic', this.checked)"><span>Realistic</span></span>
-              <span class="filter-count-badge">(68)</span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="mobile-filter-footer">
-        <button class="btn btn-primary mobile-filter-apply-btn" onclick="closeMobileFilterSheet()" id="mobile-filter-apply-btn">
-          Apply Filters (1,248)
-        </button>
       </div>
     </div>
+
+    <!-- ── Full-Width Pinterest-Style Masonry Gallery ── -->
+    <div class="pinterest-masonry-gallery" id="pinterest-gallery-container">
+      <!-- Rendered dynamically via DrawmadooDB and DrawmadooComponents.ArtworkCard -->
+    </div>
+
+    <!-- ═══════════ Section: Popular Collections (Full Width) ═══════════ -->
+    <div class="popular-collections-section">
+      <div class="section-editorial-header">
+        <div>
+          <h3 class="section-editorial-title">Popular Collections</h3>
+          <p class="section-editorial-desc">Explore curated collections from our community of artists</p>
+        </div>
+        <a href="index.html#collections" class="section-view-all-link">
+          <span>View All</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="popular-collections-scroll" id="popular-collections-scroll">
+        <!-- Dynamically populated via DrawmadooComponents.CollectionCard -->
+      </div>
+    </div>
+
+    <!-- ═══════════ Featured Sections: Editor's Picks & Trending Today ═══════════ -->
+    <div class="featured-dual-grid">
+      <!-- Editor's Picks Box -->
+      <div class="featured-box">
+        <div class="featured-box-header">
+          <div>
+            <h4 class="featured-box-title">Editor's Picks</h4>
+            <span class="featured-box-subtitle">Handpicked artworks by our team</span>
+          </div>
+          <a href="javascript:void(0)" onclick="filterByCurated('editors-choice')" class="section-view-all-link">
+            <span>View All</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+        <div class="featured-mini-cards-scroll" id="editors-picks-scroll">
+          <!-- Dynamically populated via DrawmadooComponents.MiniArtworkCard -->
+        </div>
+      </div>
+
+      <!-- Trending Today Box -->
+      <div class="featured-box">
+        <div class="featured-box-header">
+          <div>
+            <h4 class="featured-box-title">Trending Today</h4>
+            <span class="featured-box-subtitle">Most loved artworks this week</span>
+          </div>
+          <a href="javascript:void(0)" onclick="filterByCurated('trending')" class="section-view-all-link">
+            <span>View All</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+        <div class="featured-mini-cards-scroll" id="trending-today-scroll">
+          <!-- Dynamically populated via DrawmadooComponents.MiniArtworkCard -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ Popular Verified Artists Slider ═══════════ -->
+    <div style="margin-bottom: var(--space-12);">
+      <div class="section-editorial-header">
+        <div>
+          <h3 class="section-editorial-title">Featured Artists</h3>
+          <p class="section-editorial-desc">Meet the human masters bringing stories to canvas</p>
+        </div>
+        <a href="index.html#artists" class="section-view-all-link">
+          <span>View All</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="popular-artists-scroll" id="popular-artists-scroll">
+        <!-- Dynamically populated via DrawmadooComponents.ArtistCard -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════ Floating Glassmorphic Filter Pill (On Scroll) ═══════════ -->
+  <button class="floating-filter-pill" id="floating-filter-pill" onclick="openFiltersModal()" aria-label="Open Filters">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+    <span>Filter Masterpieces</span>
+    <span class="btn-filter-badge" id="floating-filter-badge" style="display:none;">0</span>
+  </button>
+
+  <!-- ═══════════ Glassmorphism Filter Popup Modal ═══════════ -->
+  <div class="filter-modal-backdrop" id="filters-popup-modal" onclick="closeFiltersModal(event)">
+    <div class="filter-modal-container" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="filter-modal-header">
+        <div class="filter-modal-title-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2.5"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          <h3 class="filter-modal-title">Filter Artworks</h3>
+          <span class="btn-filter-badge" id="modal-active-badge" style="display:none;">0</span>
+        </div>
+        <div class="filter-modal-actions">
+          <button class="filter-modal-clear" onclick="resetAllFilters()">Clear all</button>
+          <button class="filter-modal-close" onclick="closeFiltersModal()" aria-label="Close filters">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Grid of Filter Controls) -->
+      <div class="filter-modal-body">
+        <div class="filter-grid-layout">
+          
+          <!-- Column 1: Price Range & Mediums -->
+          <div>
+            <!-- Price Range -->
+            <div style="margin-bottom: 24px;">
+              <span class="filter-section-title">Maximum Price</span>
+              <div class="price-slider-label" id="modal-price-slider-label" style="font-size:16px; font-weight:700; color:var(--color-primary); margin-bottom:6px;">₹500 – ₹50,000</div>
+              <input type="range" 
+                     id="modal-price-range-slider" 
+                     class="price-range-input" 
+                     min="500" 
+                     max="50000" 
+                     step="500" 
+                     value="50000" 
+                     oninput="onPriceSliderChange(this.value)">
+              
+              <div class="price-quick-chips">
+                <button class="price-quick-chip" onclick="setQuickPrice(10000)">Under ₹10k</button>
+                <button class="price-quick-chip" onclick="setQuickPrice(20000)">Under ₹20k</button>
+                <button class="price-quick-chip" onclick="setQuickPrice(35000)">Under ₹35k</button>
+                <button class="price-quick-chip active" onclick="setQuickPrice(50000)">All Prices</button>
+              </div>
+            </div>
+
+            <!-- Medium Pills -->
+            <div style="margin-bottom: 24px;">
+              <span class="filter-section-title">Medium</span>
+              <div class="filter-pills-selector">
+                <button class="filter-chip-badge" data-group="medium" data-val="Oil Painting" onclick="toggleFilterBadge(this)">Oil Painting</button>
+                <button class="filter-chip-badge" data-group="medium" data-val="Watercolor" onclick="toggleFilterBadge(this)">Watercolor</button>
+                <button class="filter-chip-badge" data-group="medium" data-val="Acrylic" onclick="toggleFilterBadge(this)">Acrylic</button>
+                <button class="filter-chip-badge" data-group="medium" data-val="Pencil" onclick="toggleFilterBadge(this)">Pencil & Charcoal</button>
+                <button class="filter-chip-badge" data-group="medium" data-val="Digital Art" onclick="toggleFilterBadge(this)">Digital Art</button>
+                <button class="filter-chip-badge" data-group="medium" data-val="Mixed Media" onclick="toggleFilterBadge(this)">Mixed Media</button>
+              </div>
+            </div>
+
+            <!-- Orientation -->
+            <div>
+              <span class="filter-section-title">Orientation</span>
+              <div class="filter-pills-selector">
+                <button class="filter-chip-badge" data-group="orientation" data-val="vertical" onclick="toggleFilterBadge(this)">Portrait (Vertical)</button>
+                <button class="filter-chip-badge" data-group="orientation" data-val="horizontal" onclick="toggleFilterBadge(this)">Landscape (Horizontal)</button>
+                <button class="filter-chip-badge" data-group="orientation" data-val="square" onclick="toggleFilterBadge(this)">Square</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Styles, Sizes, and Colors -->
+          <div>
+            <!-- Styles -->
+            <div style="margin-bottom: 24px;">
+              <span class="filter-section-title">Art Style & Genre</span>
+              <div class="filter-pills-selector">
+                <button class="filter-chip-badge" data-group="style" data-val="Traditional" onclick="toggleFilterBadge(this)">Traditional</button>
+                <button class="filter-chip-badge" data-group="style" data-val="Modern" onclick="toggleFilterBadge(this)">Modern</button>
+                <button class="filter-chip-badge" data-group="style" data-val="Abstract" onclick="toggleFilterBadge(this)">Abstract</button>
+                <button class="filter-chip-badge" data-group="style" data-val="Realistic" onclick="toggleFilterBadge(this)">Realistic</button>
+                <button class="filter-chip-badge" data-group="style" data-val="Fantasy" onclick="toggleFilterBadge(this)">Fantasy</button>
+                <button class="filter-chip-badge" data-group="style" data-val="Spiritual" onclick="toggleFilterBadge(this)">Spiritual</button>
+              </div>
+            </div>
+
+            <!-- Sizes -->
+            <div style="margin-bottom: 24px;">
+              <span class="filter-section-title">Dimensions / Size</span>
+              <div class="filter-pills-selector">
+                <button class="filter-chip-badge" data-group="size" data-val="Small" onclick="toggleFilterBadge(this)">Small (&lt; 20")</button>
+                <button class="filter-chip-badge" data-group="size" data-val="Medium" onclick="toggleFilterBadge(this)">Medium (20" – 36")</button>
+                <button class="filter-chip-badge" data-group="size" data-val="Large" onclick="toggleFilterBadge(this)">Large (&gt; 36")</button>
+              </div>
+            </div>
+
+            <!-- Primary Colors Swatches -->
+            <div>
+              <span class="filter-section-title">Dominant Palette</span>
+              <div class="filter-colors-row">
+                <button class="filter-color-ball" style="background:#6B4E9B;" onclick="toggleColorBall('purple', this)" title="Violet / Purple" aria-label="Purple"></button>
+                <button class="filter-color-ball" style="background:#0F6F8E;" onclick="toggleColorBall('blue', this)" title="Artist Blue" aria-label="Artist Blue"></button>
+                <button class="filter-color-ball" style="background:#2E8B57;" onclick="toggleColorBall('green', this)" title="Forest Green" aria-label="Forest Green"></button>
+                <button class="filter-color-ball" style="background:#C99A42;" onclick="toggleColorBall('gold', this)" title="Golden Sand" aria-label="Golden Sand"></button>
+                <button class="filter-color-ball" style="background:#D56A24;" onclick="toggleColorBall('orange', this)" title="Burnt Orange" aria-label="Burnt Orange"></button>
+                <button class="filter-color-ball" style="background:#B22222;" onclick="toggleColorBall('red', this)" title="Crimson Red" aria-label="Crimson Red"></button>
+                <button class="filter-color-ball" style="background:#35241B;" onclick="toggleColorBall('walnut', this)" title="Dark Walnut" aria-label="Dark Walnut"></button>
+                <button class="filter-color-ball" style="background:#EFE4D2; border:1px solid #8A5A2B;" onclick="toggleColorBall('ivory', this)" title="Soft Beige" aria-label="Soft Beige"></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer with Live Filter Counter -->
+      <div class="filter-modal-footer">
+        <button class="btn btn-outline" style="border-radius:var(--radius-full); padding:10px 22px; font-size:13px;" onclick="resetAllFilters()">Reset All</button>
+        <button class="btn btn-primary filter-modal-apply-btn" id="modal-apply-btn" onclick="applyAndCloseFiltersModal()">
+          Apply Filters (1,248 Artworks)
+        </button>
+      </div>
+
+    </div>
   </div>
+
+  <!-- ═══════════ Quick View Modal Container ═══════════ -->
+  <div id="quickview-modal-placeholder"></div>
 
   <!-- ═══════════ In-Line Admin Artwork Modal ═══════════ -->
   <div class="modal-backdrop" id="admin-artwork-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); z-index:2000; align-items:center; justify-content:center; padding:16px;">
@@ -666,7 +530,7 @@
     </div>
   </div>
 
-  <!-- ═══════════ Mobile App Tab Bar (Mockup #2) ═══════════ -->
+  <!-- ═══════════ Mobile App Tab Bar ═══════════ -->
   <nav class="mobile-bottom-nav">
     <a href="index.html" class="bottom-tab">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -829,7 +693,22 @@
           closeSearchSuggestions();
         }
       });
+
+      // Scroll listener for Floating Glassmorphic Filter Pill
+      window.addEventListener('scroll', handleWindowScroll, { passive: true });
     });
+
+    function handleWindowScroll() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const pill = document.getElementById('floating-filter-pill');
+      if (pill) {
+        if (scrollY > 380) {
+          pill.classList.add('visible');
+        } else {
+          pill.classList.remove('visible');
+        }
+      }
+    }
 
     /* ── Shared Component Hooks ── */
     function initComponentHooks() {
@@ -897,7 +776,7 @@
       C.openAdminArtworkModal = (artId) => openAdminArtworkModal(artId);
     }
 
-    /* ── Render Category Chips (Mockup #1) ── */
+    /* ── Render Category Chips ── */
     function renderCategoryChips() {
       const container = document.getElementById('explore-category-chips');
       if (!container || !window.DrawmadooDB) return;
@@ -918,7 +797,7 @@
       renderGallery();
     }
 
-    /* ── Render Popular Collections (Mockup #5) ── */
+    /* ── Render Popular Collections ── */
     function renderPopularCollections() {
       const container = document.getElementById('popular-collections-scroll');
       if (!container || !window.DrawmadooDB) return;
@@ -926,7 +805,7 @@
       container.innerHTML = cols.map(c => window.DrawmadooComponents.CollectionCard(c)).join('');
     }
 
-    /* ── Render Editor's Picks & Trending Today (Mockup #6) ── */
+    /* ── Render Editor's Picks & Trending Today ── */
     function renderFeaturedBoxes() {
       const db = window.DrawmadooDB;
       if (!db) return;
@@ -965,7 +844,7 @@
     function renderGallery() {
       const container = document.getElementById('pinterest-gallery-container');
       const counterText = document.getElementById('live-artworks-count');
-      const mobileApplyBtn = document.getElementById('mobile-filter-apply-btn');
+      const modalApplyBtn = document.getElementById('modal-apply-btn');
       if (!container || !window.DrawmadooDB) return;
 
       // Query database with current filters
@@ -988,10 +867,21 @@
         artworks = artworks.filter(a => currentFilter.orientations.includes(a.orientation));
       }
 
+      // Calculate total active filters count
+      const activeCount = currentFilter.mediums.length + 
+                          currentFilter.styles.length + 
+                          currentFilter.orientations.length + 
+                          currentFilter.sizes.length + 
+                          currentFilter.colors.length + 
+                          (currentFilter.maxPrice < 50000 ? 1 : 0);
+
+      // Update badges
+      updateFilterBadges(activeCount);
+
       // Update counters
       const countLabel = `${artworks.length.toLocaleString()} artworks found`;
       if (counterText) counterText.textContent = countLabel;
-      if (mobileApplyBtn) mobileApplyBtn.textContent = `Apply Filters (${artworks.length.toLocaleString()})`;
+      if (modalApplyBtn) modalApplyBtn.textContent = `Apply Filters (${artworks.length.toLocaleString()} Artworks)`;
 
       // Wishlist check
       const wishlist = JSON.parse(localStorage.getItem('drawmadoo_wishlist') || '[]');
@@ -1011,35 +901,90 @@
       ).join('');
     }
 
-    /* ── Filter Controls Event Handlers ── */
+    function updateFilterBadges(count) {
+      const b1 = document.getElementById('active-filter-badge');
+      const b2 = document.getElementById('floating-filter-badge');
+      const b3 = document.getElementById('modal-active-badge');
+      const show = count > 0;
+      [b1, b2, b3].forEach(b => {
+        if (b) {
+          b.style.display = show ? 'inline-block' : 'none';
+          b.textContent = count;
+        }
+      });
+    }
+
+    /* ── Filter Popup Modal Controls ── */
+    function openFiltersModal() {
+      const modal = document.getElementById('filters-popup-modal');
+      if (modal) {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeFiltersModal(e) {
+      if (e && e.target && e.target.id !== 'filters-popup-modal' && !e.target.closest('.filter-modal-close')) return;
+      const modal = document.getElementById('filters-popup-modal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function applyAndCloseFiltersModal() {
+      closeFiltersModal();
+      renderGallery();
+      // Scroll smoothly to gallery top if user was far down
+      const toolbar = document.querySelector('.explore-toolbar');
+      if (toolbar && window.scrollY > 400) {
+        toolbar.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
     function onPriceSliderChange(val) {
       currentFilter.maxPrice = Number(val);
       const label = `₹500 – ₹${Number(val).toLocaleString('en-IN')}`;
-      const dLabel = document.getElementById('price-slider-label');
-      const mLabel = document.getElementById('mobile-price-slider-label');
-      if (dLabel) dLabel.textContent = label;
+      const mLabel = document.getElementById('modal-price-slider-label');
       if (mLabel) mLabel.textContent = label;
+
+      // Update quick chips active state
+      document.querySelectorAll('.price-quick-chip').forEach(c => c.classList.remove('active'));
+
       renderGallery();
     }
 
-    function onCheckboxFilterChange(group, value, isChecked) {
+    function setQuickPrice(val) {
+      const slider = document.getElementById('modal-price-range-slider');
+      if (slider) slider.value = val;
+      onPriceSliderChange(val);
+
+      event.target.classList.add('active');
+    }
+
+    function toggleFilterBadge(btn) {
+      btn.classList.toggle('active');
+      const group = btn.dataset.group;
+      const val = btn.dataset.val;
+      const isActive = btn.classList.contains('active');
+
       if (group === 'medium') {
-        if (isChecked) currentFilter.mediums.push(value);
-        else currentFilter.mediums = currentFilter.mediums.filter(v => v !== value);
+        if (isActive) currentFilter.mediums.push(val);
+        else currentFilter.mediums = currentFilter.mediums.filter(v => v !== val);
       } else if (group === 'style') {
-        if (isChecked) currentFilter.styles.push(value);
-        else currentFilter.styles = currentFilter.styles.filter(v => v !== value);
+        if (isActive) currentFilter.styles.push(val);
+        else currentFilter.styles = currentFilter.styles.filter(v => v !== val);
       } else if (group === 'orientation') {
-        if (isChecked) currentFilter.orientations.push(value);
-        else currentFilter.orientations = currentFilter.orientations.filter(v => v !== value);
+        if (isActive) currentFilter.orientations.push(val);
+        else currentFilter.orientations = currentFilter.orientations.filter(v => v !== val);
       } else if (group === 'size') {
-        if (isChecked) currentFilter.sizes.push(value);
-        else currentFilter.sizes = currentFilter.sizes.filter(v => v !== value);
+        if (isActive) currentFilter.sizes.push(val);
+        else currentFilter.sizes = currentFilter.sizes.filter(v => v !== val);
       }
       renderGallery();
     }
 
-    function toggleColorSwatch(colorName, btn) {
+    function toggleColorBall(colorName, btn) {
       btn.classList.toggle('active');
       if (btn.classList.contains('active')) {
         currentFilter.colors.push(colorName);
@@ -1084,18 +1029,18 @@
         sortBy: 'trending'
       };
       // Reset DOM inputs
-      document.querySelectorAll('.filter-checkbox-item input[type="checkbox"]').forEach(c => c.checked = false);
-      document.querySelectorAll('.color-swatch-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter-chip-badge').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter-color-ball').forEach(b => b.classList.remove('active'));
       const sInput = document.getElementById('navbar-search-input');
       if (sInput) sInput.value = '';
-      const pSlider = document.getElementById('price-range-slider');
+      const pSlider = document.getElementById('modal-price-range-slider');
       if (pSlider) pSlider.value = 50000;
       onPriceSliderChange(50000);
       renderCategoryChips();
       renderGallery();
     }
 
-    /* ── Live Search & Autocomplete (Mockup #7) ── */
+    /* ── Live Search & Autocomplete ── */
     function openSearchSuggestions() {
       const drop = document.getElementById('search-suggestions-dropdown');
       if (drop) drop.classList.add('open');
@@ -1131,7 +1076,7 @@
       if (row) row.remove();
     }
 
-    /* ── Quick View Modal (Mockup #4) ── */
+    /* ── Quick View Modal ── */
     function openQuickViewModal(artId) {
       if (!window.DrawmadooDB) return;
       const art = window.DrawmadooDB.getArtworkById(artId);
@@ -1164,20 +1109,6 @@
       document.querySelectorAll('.quickview-thumb-btn').forEach((b, idx) => {
         b.classList.toggle('active', idx === currentQuickViewImgIndex);
       });
-    }
-
-    /* ── Mobile Filter Bottom Sheet (Mockup #3) ── */
-    function openMobileFilterSheet() {
-      const sheet = document.getElementById('mobile-filter-backdrop');
-      if (sheet) sheet.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileFilterSheet(e) {
-      if (e && e.target && e.target.id !== 'mobile-filter-backdrop' && !e.target.closest('button')) return;
-      const sheet = document.getElementById('mobile-filter-backdrop');
-      if (sheet) sheet.classList.remove('open');
-      document.body.style.overflow = '';
     }
 
     /* ── Wishlist & Cart ── */
