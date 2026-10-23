@@ -1874,20 +1874,30 @@ function renderHero() {
           <h1 class="hero-title">${titleHtml}</h1>
           <p class="hero-subtitle">${hero.subtitle || ''}</p>
 
-          <div class="hero-cta-group">
-            <a href="${hero.cta1?.link || '#gallery'}" class="btn btn-primary btn-lg">
-              <span>${hero.cta1?.text || 'Explore Gallery'}</span>
-              ${getIcon(hero.cta1?.icon || 'arrow-right', '', 16)}
-            </a>
-            <a href="${hero.cta2?.link || '#artists'}" class="btn btn-outline btn-lg">
-              ${hero.cta2?.text || 'Meet Artists'}
-            </a>
-            <button id="hero-watch-process-btn" class="hero-process-btn">
-              <span class="play-icon-circle">${getIcon('play', '', 12)}</span>
-              <span>${hero.cta3?.text || 'Watch Artist Process'}</span>
-            </button>
+          <!-- Integrated Hero Search Bar -->
+          <div class="hero-search-wrapper">
+            <form class="hero-search-box" onsubmit="event.preventDefault(); const q = this.querySelector('input').value.trim(); if(q) window.location.href='explore.html?search='+encodeURIComponent(q);">
+              <span class="hero-search-icon">${getIcon('search', '', 18)}</span>
+              <input type="text" placeholder="Search artworks, artists, styles or collections..." aria-label="Search artworks" />
+              <button type="submit" class="btn btn-primary btn-sm" style="border-radius: var(--radius-full); padding: 8px 18px;">Search</button>
+            </form>
           </div>
 
+          <!-- 3 Hero Action Buttons -->
+          <div class="hero-cta-group" style="margin-top: var(--space-6);">
+            <a href="explore.html" class="btn btn-primary btn-lg">
+              <span>Explore Gallery</span>
+              ${getIcon('arrow-right', '', 16)}
+            </a>
+            <a href="admin/index.html" class="btn btn-secondary btn-lg" onclick="showToast('Connecting to artist application portal...');">
+              Become an Artist
+            </a>
+            <a href="#artists-section" class="btn btn-outline btn-lg">
+              Meet Artists
+            </a>
+          </div>
+
+          <!-- Statistics -->
           <div class="hero-stats-row">
             ${statsHtml}
           </div>
@@ -1911,18 +1921,30 @@ function renderHero() {
 }
 
 /**
- * 5. Render Popular Categories
+ * 5. Render Popular Categories (Top 6 Categories)
  */
 function renderCategories() {
   const container = document.getElementById('categories-container');
   if (!container) return;
 
-  const categories = DrawmadooData.categories || [];
+  const targetCategoryNames = ['Portrait', 'Landscape', 'Traditional', 'Abstract', 'Digital Art', 'Sketches'];
+  const allCategories = DrawmadooData.categories || [];
+
+  const categories = targetCategoryNames.map(name => {
+    return (
+      allCategories.find(c => c.name.toLowerCase() === name.toLowerCase()) || {
+        id: name.toLowerCase(),
+        name: name,
+        image: 'https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=400&q=80',
+        count: 1200
+      }
+    );
+  });
 
   const cardsHtml = categories
     .map(
       cat => `
-      <div class="category-card" data-category-id="${cat.id}">
+      <div class="category-card" data-category-id="${cat.id}" onclick="window.location.href='explore.html?category=' + encodeURIComponent('${cat.name}')">
         <div class="category-card-img-wrap">
           <img class="img-loading" data-src="${cat.image}" alt="${cat.name} Art" loading="lazy" />
           <div class="category-card-overlay">
@@ -1939,30 +1961,33 @@ function renderCategories() {
     <div class="section-header animate-on-scroll">
       <div>
         <span class="badge badge-primary">Curated Genres</span>
-        <h2 style="margin-top: var(--space-2);">Explore by Category</h2>
+        <h2 style="margin-top: var(--space-2);">Popular Categories</h2>
       </div>
       <div class="section-header-actions">
         <button class="admin-edit-btn" data-section="categories">${getIcon('edit', '', 12)} Edit</button>
-        <button class="admin-add-btn" data-action="add-category">${getIcon('plus', '', 12)} Add Category</button>
-        <button class="scroll-arrow scroll-arrow-left" data-target="categories-scroll" aria-label="Previous categories">${getIcon('chevron-left')}</button>
-        <button class="scroll-arrow scroll-arrow-right" data-target="categories-scroll" aria-label="Next categories">${getIcon('chevron-right')}</button>
       </div>
     </div>
 
-    <div class="scroll-container" id="categories-scroll">
+    <div class="categories-grid-six animate-on-scroll">
       ${cardsHtml}
+    </div>
+
+    <div class="section-footer-cta animate-on-scroll">
+      <a href="explore.html" class="btn btn-outline btn-lg" style="border-radius: var(--radius-full); padding: 12px 36px;">
+        View All Categories
+      </a>
     </div>
   `;
 }
 
 /**
- * 6. Render Trending Artists
+ * 6. Render Trending Artists (Top 6 Artists Carousel)
  */
 function renderArtists() {
   const container = document.getElementById('artists-container');
   if (!container) return;
 
-  const artists = DrawmadooData.artists || [];
+  const artists = (DrawmadooData.artists || []).slice(0, 6);
 
   const cardsHtml = artists
     .map(
@@ -1974,11 +1999,10 @@ function renderArtists() {
         </div>
         <h3 class="artist-name">${artist.name}</h3>
         <span class="artist-style-pill">${artist.style}</span>
-        <p class="artist-bio">${artist.bio || ''}</p>
-        <div class="artist-stats">
+        <div class="artist-stats" style="margin: 6px 0 12px;">
           <span>${artist.countryFlag || '🌍'} ${artist.country}</span> • <span>${Number(artist.followers).toLocaleString()} Collectors</span>
         </div>
-        <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="showToast('Subscribed to updates from ${artist.name}')">
+        <button class="btn btn-outline btn-sm" style="width: 100%; border-radius: var(--radius-full);" onclick="window.location.href='explore.html?artist=' + encodeURIComponent('${artist.name}')">
           View Studio
         </button>
       </div>
@@ -1990,11 +2014,10 @@ function renderArtists() {
     <div class="section-header animate-on-scroll">
       <div>
         <span class="badge badge-verified">Global Creators</span>
-        <h2 style="margin-top: var(--space-2);">Trending Independent Artists</h2>
+        <h2 style="margin-top: var(--space-2);">Trending Artists</h2>
       </div>
       <div class="section-header-actions">
         <button class="admin-edit-btn" data-section="artists">${getIcon('edit', '', 12)} Edit</button>
-        <button class="admin-add-btn" data-action="add-artist">${getIcon('plus', '', 12)} Add Artist</button>
         <button class="scroll-arrow scroll-arrow-left" data-target="artists-scroll" aria-label="Previous artists">${getIcon('chevron-left')}</button>
         <button class="scroll-arrow scroll-arrow-right" data-target="artists-scroll" aria-label="Next artists">${getIcon('chevron-right')}</button>
       </div>
@@ -2003,17 +2026,23 @@ function renderArtists() {
     <div class="scroll-container" id="artists-scroll">
       ${cardsHtml}
     </div>
+
+    <div class="section-footer-cta animate-on-scroll">
+      <a href="explore.html" class="btn btn-outline btn-lg" style="border-radius: var(--radius-full); padding: 12px 36px;">
+        View All Artists
+      </a>
+    </div>
   `;
 }
 
 /**
- * 7. Render Why Drawmadoo
+ * 7. Render Why Drawmadoo (4 Minimal Standard Cards)
  */
 function renderWhyDrawmadoo() {
   const container = document.getElementById('why-container');
   if (!container) return;
 
-  const items = DrawmadooData.whyDrawmadoo || [];
+  const items = (DrawmadooData.whyDrawmadoo || []).slice(0, 4);
 
   const cardsHtml = items
     .map(
@@ -2030,8 +2059,8 @@ function renderWhyDrawmadoo() {
   container.innerHTML = `
     <div class="section-header animate-on-scroll" style="margin-bottom: var(--space-8);">
       <div>
-        <span class="badge badge-human">Trust & Craft</span>
-        <h2 style="margin-top: var(--space-2);">The Drawmadoo Standard</h2>
+        <span class="badge badge-human">Trust & Authenticity</span>
+        <h2 style="margin-top: var(--space-2);">Why Drawmadoo</h2>
       </div>
       <button class="admin-edit-btn" data-section="whyDrawmadoo">${getIcon('edit', '', 12)} Edit Standard</button>
     </div>
@@ -2092,116 +2121,35 @@ function renderProductCard(artwork) {
 }
 
 /**
- * 8. Render Featured Artwork Spotlight & Curated Artworks Grid
+ * 8. Render Featured Artworks (Top 4 Artworks Grid)
  */
 function renderFeaturedArtwork() {
   const container = document.getElementById('featured-container');
   if (!container) return;
 
-  const fa = DrawmadooData.featuredArtwork || {};
-  const artworks = DrawmadooData.artworks || [];
-  const thumbnails = fa.thumbnails && fa.thumbnails.length > 0 ? fa.thumbnails : [fa.image];
-
-  const thumbsHtml = thumbnails
-    .map(
-      (thumb, idx) => `
-      <button class="featured-thumb-btn ${idx === AppState.currentCarouselIndex ? 'active' : ''}" data-carousel-index="${idx}" aria-label="Show artwork view ${idx + 1}">
-        <img src="${thumb}" alt="Thumbnail ${idx + 1}" />
-      </button>
-    `
-    )
-    .join('');
-
-  const formattedPrice = `${fa.currency || '₹'}${Number(fa.price || 0).toLocaleString('en-IN')}`;
-
+  const artworks = (DrawmadooData.artworks || []).slice(0, 4);
   const productsHtml = artworks.map(art => renderProductCard(art)).join('');
 
   container.innerHTML = `
-    <!-- Artwork Spotlight -->
     <div class="section-header animate-on-scroll">
       <div>
-        <span class="badge badge-featured">Curator's Spotlight</span>
-        <h2 style="margin-top: var(--space-2);">Artwork Spotlight</h2>
-      </div>
-      <button class="admin-edit-btn" data-section="featuredArtwork">${getIcon('edit', '', 12)} Edit Spotlight</button>
-    </div>
-
-    <div class="featured-spotlight-wrapper animate-on-scroll">
-      <div class="featured-spotlight-grid">
-        <div class="featured-carousel-col">
-          <div class="featured-main-visual">
-            <img id="featured-main-img" class="featured-main-img img-loading" data-src="${fa.image}" alt="${fa.title}" />
-          </div>
-          <div class="featured-carousel-nav">
-            <button id="featured-prev-btn" class="scroll-arrow" style="position: static; transform: none;" aria-label="Previous view">${getIcon('chevron-left')}</button>
-            <div style="display: flex; gap: var(--space-2); overflow-x: auto;">
-              ${thumbsHtml}
-            </div>
-            <button id="featured-next-btn" class="scroll-arrow" style="position: static; transform: none;" aria-label="Next view">${getIcon('chevron-right')}</button>
-          </div>
-        </div>
-
-        <div class="featured-info-col">
-          <span class="badge badge-primary" style="width: fit-content; margin-bottom: var(--space-3);">${fa.medium || 'Acrylic on Canvas'}</span>
-          <h3 class="featured-title">${fa.title}</h3>
-
-          <div class="featured-artist-row">
-            <img class="featured-artist-avatar" src="${fa.artist?.avatar}" alt="${fa.artist?.name}" />
-            <div>
-              <div style="font-weight: 600; font-size: var(--text-sm);">${fa.artist?.name}</div>
-              <div style="font-size: 11px; color: var(--color-text-muted);">Verified Independent Master</div>
-            </div>
-          </div>
-
-          <div class="featured-price">${formattedPrice}</div>
-          <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6); line-height: 1.6;">${fa.description || ''}</p>
-
-          <div class="featured-specs-table">
-            <div class="spec-item">
-              <span class="spec-label">Medium</span>
-              <span class="spec-val">${fa.medium || 'N/A'}</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Dimensions</span>
-              <span class="spec-val">${fa.size || 'N/A'}</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Creation Year</span>
-              <span class="spec-val">${fa.year || 2024}</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Authenticity</span>
-              <span class="spec-val">Certificate Included</span>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: var(--space-4); align-items: center;">
-            <button class="btn btn-primary btn-lg" style="flex: 1;" onclick="showToast('Acquisition inquiry initiated for ${fa.title}')">
-              Acquire Artwork
-            </button>
-            <button class="btn btn-outline btn-lg" onclick="showToast('Opening 3D Room Visualizer...')">
-              ${getIcon('home-preview', '', 18)} Room View
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Curated Artworks Gallery Section Header -->
-    <div id="gallery" style="scroll-margin-top: 100px;"></div>
-    <div class="section-header animate-on-scroll" style="margin-top: var(--space-16);">
-      <div>
-        <span class="badge badge-primary">Handpicked Original Artworks</span>
-        <h2 style="margin-top: var(--space-2);">Curated Original Artworks</h2>
+        <span class="badge badge-featured">Curated Masterpieces</span>
+        <h2 style="margin-top: var(--space-2);">Featured Artworks</h2>
       </div>
       <div class="section-header-actions">
-        <button class="admin-edit-btn" data-section="artworks">${getIcon('edit', '', 12)} Edit Gallery</button>
-        <button class="admin-add-btn" data-action="add-artwork">${getIcon('plus', '', 12)} Add Artwork</button>
+        <button class="admin-edit-btn" data-section="artworks">${getIcon('edit', '', 12)} Edit Artworks</button>
       </div>
     </div>
 
-    <div class="products-grid">
+    <div class="featured-artworks-four-grid">
       ${productsHtml}
+    </div>
+
+    <div class="section-footer-cta animate-on-scroll">
+      <a href="explore.html" class="btn btn-primary btn-lg" style="border-radius: var(--radius-full); padding: 14px 36px; display: inline-flex; align-items: center; gap: 8px;">
+        <span>Explore All Artworks</span>
+        ${getIcon('arrow-right', '', 16)}
+      </a>
     </div>
   `;
 }
@@ -3377,6 +3325,7 @@ function initCarousel() {
   const mainImg = document.getElementById('featured-main-img');
   const prevBtn = document.getElementById('featured-prev-btn');
   const nextBtn = document.getElementById('featured-next-btn');
+  if (!mainImg) return;
 
   const fa = DrawmadooData.featuredArtwork || {};
   const thumbs = fa.thumbnails && fa.thumbnails.length > 0 ? fa.thumbnails : [fa.image];
@@ -3593,7 +3542,7 @@ function initApp() {
   document.documentElement.setAttribute('data-theme', AppState.theme);
   if (AppState.adminMode) document.body.classList.add('admin-mode');
 
-  // 2. Call all render functions
+  // 2. Call all render functions (Simplified 8-Section Homepage)
   renderAnnouncementBar();
   renderNavbar();
   renderMobileMenu();
@@ -3602,10 +3551,6 @@ function initApp() {
   renderArtists();
   renderWhyDrawmadoo();
   renderFeaturedArtwork();
-  renderMediums();
-  renderCollections();
-  renderCustomerHomes();
-  renderMeetArtist();
   renderNewsletter();
   renderFooter();
   renderSearchOverlay();

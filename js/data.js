@@ -103,13 +103,12 @@ const DrawmadooData = {
     }
   ],
 
-  /* ── Why Drawmadoo ── */
+  /* ── Why Drawmadoo (4 Minimal Standard Cards) ── */
   whyDrawmadoo: [
-    { icon: 'hand-heart', title: '100% Human Made', description: 'Original artworks from real artists. No AI-generated art, ever.' },
-    { icon: 'certificate', title: 'Certificate Included', description: 'Authenticity with every purchase. Verified and signed.' },
-    { icon: 'shield-check', title: 'Secure Shipping', description: 'Safe and reliable delivery worldwide with tracking.' },
-    { icon: 'heart-handshake', title: 'Support Artists', description: 'Directly support independent creators and their craft.' },
-    { icon: 'globe', title: 'Worldwide Delivery', description: 'Art delivered to your doorstep from 34 countries.' }
+    { icon: 'hand-heart', title: '100% Human Made', description: 'Original artworks created by real artists. Zero AI-generated art, ever.' },
+    { icon: 'users', title: 'Verified Artists', description: 'Direct relationship with vetted, authentic independent creators worldwide.' },
+    { icon: 'certificate', title: 'Certificate of Authenticity', description: 'Every original purchase includes a physical certificate signed by the artist.' },
+    { icon: 'shield-check', title: 'Secure Delivery', description: 'Museum-grade transit packaging with end-to-end insurance across 34 countries.' }
   ],
 
   /* ── Featured Artwork ── */

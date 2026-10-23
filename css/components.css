@@ -3093,3 +3093,119 @@
     padding: 16px 48px 16px 44px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   20. SIMPLIFIED LUXURY HOMEPAGE STYLES (Apple / Linear Grade)
+   ───────────────────────────────────────────────────────────── */
+.hero-search-wrapper {
+  margin-top: 24px;
+  max-width: 540px;
+  width: 100%;
+}
+
+.hero-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-full);
+  padding: 6px 8px 6px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transition: all var(--duration) var(--ease-out);
+}
+
+.hero-search-box:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 35px rgba(138, 90, 43, 0.25);
+  background: #FFFFFF;
+}
+
+[data-theme="dark"] .hero-search-box {
+  background: rgba(45, 34, 27, 0.85);
+  border-color: rgba(239, 228, 210, 0.15);
+}
+
+.hero-search-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--color-text);
+  outline: none;
+}
+
+.hero-search-box input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.hero-search-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* 6-Column Categories Grid */
+.categories-grid-six {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.categories-grid-six .category-card {
+  width: 100%;
+  aspect-ratio: 3/4;
+}
+
+@media (max-width: 1100px) {
+  .categories-grid-six {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .categories-grid-six {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* 4-Column Featured Artworks Grid */
+.featured-artworks-four-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .featured-artworks-four-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .featured-artworks-four-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Section Spacing & Breathing Whitespace */
+.section {
+  padding: 100px 0;
+}
+
+.section-sm {
+  padding: 80px 0;
+}
+
+.section-footer-cta {
+  text-align: center;
+  margin-top: var(--space-10);
+}
+
