@@ -1,0 +1,19 @@
+{
+  "name": "drawmadoo",
+  "version": "2.0.0",
+  "description": "Premium online art gallery & marketplace connecting real independent artists with collectors",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Drawmadoo static assets ready'",
+    "start": "python -m http.server 8080"
+  },
+  "keywords": [
+    "art-marketplace",
+    "gallery",
+    "paintings",
+    "real-artists",
+    "cms"
+  ],
+  "author": "Drawmadoo Team",
+  "license": "MIT"
+}
