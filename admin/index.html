@@ -1,0 +1,5157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Drawmadoo Admin — Museum-grade art marketplace management dashboard.">
+  <title>Drawmadoo — Curator & Admin Dashboard</title>
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='26'>🎨</text></svg>">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN TOKENS & SYSTEM VARIABLES
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      /* Brand Palette */
+      --primary: #8A5A2B;
+      --primary-light: #A5723E;
+      --primary-dark: #6C441D;
+      --primary-bg: rgba(138, 90, 43, 0.08);
+      --primary-glow: rgba(138, 90, 43, 0.25);
+
+      --artist-blue: #0F6F8E;
+      --artist-blue-light: #168EB5;
+      --artist-blue-bg: rgba(15, 111, 142, 0.10);
+
+      --burnt-orange: #D56A24;
+      --burnt-orange-bg: rgba(213, 106, 36, 0.10);
+
+      --golden-sand: #C99A42;
+      --golden-sand-bg: rgba(201, 154, 66, 0.12);
+
+      /* Surface & Typography (Light Mode) */
+      --bg: #F7F2EA;
+      --bg-alt: #F0E9DE;
+      --card: #EFE4D2;
+      --card-hover: #E7DBCA;
+      --surface: #FFFFFF;
+      --surface-glass: rgba(247, 242, 234, 0.85);
+
+      --text: #35241B;
+      --text-secondary: #6B5545;
+      --text-muted: #9B8A7A;
+      --text-inverse: #F7F2EA;
+
+      --border: rgba(138, 90, 43, 0.14);
+      --border-strong: rgba(138, 90, 43, 0.28);
+      --border-card: rgba(138, 90, 43, 0.09);
+
+      --shadow-xs: 0 1px 3px rgba(53, 36, 27, 0.05);
+      --shadow-sm: 0 2px 8px rgba(53, 36, 27, 0.06);
+      --shadow-md: 0 8px 24px rgba(53, 36, 27, 0.08);
+      --shadow-lg: 0 14px 40px rgba(53, 36, 27, 0.12);
+      --shadow-glow: 0 0 30px rgba(138, 90, 43, 0.16);
+
+      /* Status Colors */
+      --success: #2E8555;
+      --success-bg: rgba(46, 133, 85, 0.12);
+      --warning: #D9822B;
+      --warning-bg: rgba(217, 130, 43, 0.12);
+      --danger: #C53929;
+      --danger-bg: rgba(197, 57, 41, 0.12);
+      --info: #0F6F8E;
+      --info-bg: rgba(15, 111, 142, 0.12);
+
+      /* Typography */
+      --font-heading: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-pill: 9999px;
+
+      /* Layout */
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 76px;
+      --header-height: 72px;
+      --bottom-nav-height: 64px;
+
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-slow: 450ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       DARK MODE THEME
+       ═══════════════════════════════════════════════════════════ */
+    [data-theme="dark"] {
+      --bg: #1A1210;
+      --bg-alt: #221815;
+      --card: #2D221B;
+      --card-hover: #362920;
+      --surface: #1E1613;
+      --surface-glass: rgba(26, 18, 16, 0.88);
+
+      --text: #F0E9DE;
+      --text-secondary: #C4B5A3;
+      --text-muted: #8E7F72;
+      --text-inverse: #1A1210;
+
+      --border: rgba(239, 228, 210, 0.10);
+      --border-strong: rgba(239, 228, 210, 0.20);
+      --border-card: rgba(239, 228, 210, 0.08);
+
+      --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.35);
+      --shadow-sm: 0 3px 10px rgba(0, 0, 0, 0.45);
+      --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.55);
+      --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.70);
+      --shadow-glow: 0 0 35px rgba(201, 154, 66, 0.18);
+
+      --primary-bg: rgba(138, 90, 43, 0.22);
+      --golden-sand-bg: rgba(201, 154, 66, 0.20);
+      --artist-blue-bg: rgba(15, 111, 142, 0.20);
+      --burnt-orange-bg: rgba(213, 106, 36, 0.20);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       BASE STYLES & RESET
+       ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      transition: background-color var(--transition), color var(--transition);
+      background-image: radial-gradient(circle at 10% 20%, rgba(138, 90, 43, 0.03) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(201, 154, 66, 0.03) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    p, span, label, input, button, select, textarea {
+      font-family: var(--font-body);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+
+    input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(138, 90, 43, 0.22);
+      border-radius: var(--radius-pill);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(138, 90, 43, 0.4);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       APP SHELL LAYOUT
+       ═══════════════════════════════════════════════════════════ */
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       LEFT SIDEBAR
+       ═══════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      transition: width var(--transition), transform var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar-header {
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid var(--border);
+      gap: 0.75rem;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-heading);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      flex-shrink: 0;
+    }
+
+    .sidebar-collapse-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+    }
+
+    .sidebar-collapse-btn:hover {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .sidebar-nav-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-group-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0.75rem 0.75rem 0.35rem;
+      white-space: nowrap;
+      transition: opacity var(--transition-fast);
+    }
+
+    .sidebar.collapsed .nav-group-label {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 4px 16px var(--primary-glow);
+    }
+
+    .nav-item.active .nav-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+    }
+
+    .nav-item.active svg {
+      stroke: #FFFFFF;
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity var(--transition-fast);
+    }
+
+    .sidebar.collapsed .nav-text {
+      opacity: 0;
+      width: 0;
+      display: none;
+    }
+
+    .nav-badge {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-pill);
+      background: var(--golden-sand-bg);
+      color: var(--burnt-orange);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .sidebar.collapsed .nav-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      font-size: 0;
+      background: var(--burnt-orange);
+    }
+
+    /* Sidebar Footer */
+    .sidebar-footer {
+      padding: 1rem 0.85rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--surface);
+    }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: var(--radius-md);
+      transition: background var(--transition-fast);
+    }
+
+    .sidebar-user:hover {
+      background: var(--card);
+    }
+
+    .user-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-pill);
+      object-fit: cover;
+      border: 2px solid var(--golden-sand);
+    }
+
+    .user-online-dot {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 10px;
+      height: 10px;
+      background: var(--success);
+      border: 2px solid var(--surface);
+      border-radius: 50%;
+    }
+
+    .user-meta {
+      flex: 1;
+      overflow: hidden;
+      line-height: 1.25;
+    }
+
+    .user-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar.collapsed .user-meta {
+      display: none;
+    }
+
+    .sidebar-links {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .sidebar.collapsed .sidebar-links {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-link-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .sidebar-link-btn:hover {
+      background: var(--card);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .theme-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--card);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAIN CONTENT CONTAINER
+       ═══════════════════════════════════════════════════════════ */
+    .main-wrapper {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-width: 0;
+      transition: margin-left var(--transition);
+    }
+
+    .sidebar.collapsed ~ .main-wrapper {
+      margin-left: var(--sidebar-collapsed-width);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TOP HEADER
+       ═══════════════════════════════════════════════════════════ */
+    .top-header {
+      height: var(--header-height);
+      background: var(--surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      gap: 1.25rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mobile-menu-trigger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .header-title-wrap h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .header-breadcrumb {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .header-center {
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 0.45rem 1rem;
+      gap: 0.65rem;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .search-box:focus-within {
+      background: var(--surface);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-bg);
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-kbd {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.15rem;
+      border-radius: var(--radius-md);
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+      box-shadow: 0 4px 14px var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-hover);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline-primary {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--primary-bg);
+    }
+
+    .btn-artist {
+      background: var(--artist-blue);
+      color: #FFFFFF;
+    }
+
+    .btn-artist:hover {
+      background: var(--artist-blue-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.78rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .icon-badge-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--burnt-orange);
+      border-radius: 50%;
+      border: 2px solid var(--surface);
+    }
+
+    .header-user-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .header-user-btn:hover {
+      background: var(--card);
+      border-color: var(--border-strong);
+    }
+
+    .header-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .header-user-name {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       PAGE CONTENT SECTIONS
+       ═══════════════════════════════════════════════════════════ */
+    .page-body {
+      flex: 1;
+      padding: 2rem 2rem 4rem;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .view-section {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CARDS & CONTAINERS
+       ═══════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-card);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .card-surface {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      gap: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       DASHBOARD VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .dashboard-welcome {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .welcome-text h2 {
+      font-size: 2.2rem;
+      color: var(--text);
+    }
+
+    .welcome-text p {
+      color: var(--text-secondary);
+      font-size: 0.96rem;
+      margin-top: 0.35rem;
+    }
+
+    .date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .stat-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #FFF;
+    }
+
+    .stat-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-pill);
+    }
+
+    .stat-trend.up {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .stat-trend.down {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Dashboard Layout Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Popular Artworks Grid */
+    .artworks-spotlight-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .art-spotlight-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .art-spotlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .art-spotlight-img-wrap {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .art-spotlight-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+
+    .art-spotlight-card:hover .art-spotlight-img {
+      transform: scale(1.05);
+    }
+
+    .art-spotlight-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      background: rgba(26, 18, 16, 0.75);
+      color: #FFF;
+      backdrop-filter: blur(8px);
+    }
+
+    .art-spotlight-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .art-spotlight-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .art-spotlight-artist {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .art-spotlight-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .art-spotlight-price {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .art-spotlight-stats {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    /* Artist Pending / Recent List */
+    .artist-action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .artist-action-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      gap: 0.85rem;
+      transition: all var(--transition-fast);
+    }
+
+    .artist-action-item:hover {
+      border-color: var(--golden-sand);
+    }
+
+    .artist-action-info {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 0;
+    }
+
+    .artist-avatar-sm {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--golden-sand);
+    }
+
+    .artist-action-names {
+      min-width: 0;
+    }
+
+    .artist-name-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .artist-style-pill {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .artist-action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .btn-approve {
+      background: var(--success);
+      color: #FFF;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+
+    .btn-reject {
+      background: var(--danger-bg);
+      color: var(--danger);
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TABLES COMPONENT
+       ═══════════════════════════════════════════════════════════ */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .data-table th {
+      background: var(--card);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.95rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .data-table th.sortable {
+      cursor: pointer;
+    }
+
+    .data-table th.sortable:hover {
+      color: var(--primary);
+    }
+
+    .data-table td {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+      transition: background-color var(--transition-fast);
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tbody tr:hover td {
+      background-color: var(--card);
+    }
+
+    /* Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .badge-delivered, .badge-approved, .badge-active {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .badge-shipped, .badge-verified {
+      background: var(--artist-blue-bg);
+      color: var(--artist-blue);
+    }
+
+    .badge-processing, .badge-pending {
+      background: var(--golden-sand-bg);
+      color: #97650C;
+    }
+
+    .badge-cancelled, .badge-rejected {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    /* Checkbox & Inputs */
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid var(--border-strong);
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Table Pagination */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .table-info {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      transition: all var(--transition-fast);
+    }
+
+    .page-btn:hover {
+      background: var(--card);
+      border-color: var(--primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary);
+      color: #FFF;
+      border-color: var(--primary);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FILTER CONTROLS BAR
+       ═══════════════════════════════════════════════════════════ */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      padding: 0.3rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      gap: 0.2rem;
+    }
+
+    .filter-tab {
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .filter-tab:hover {
+      color: var(--text);
+    }
+
+    .filter-tab.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .select-dropdown {
+      padding: 0.5rem 0.95rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .select-dropdown:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-bg);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ARTWORKS GRID & VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .artwork-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .artwork-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .artwork-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .artwork-img-box {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .artwork-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+
+    .artwork-card:hover .artwork-img {
+      transform: scale(1.04);
+    }
+
+    .artwork-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 0.4rem;
+      z-index: 2;
+    }
+
+    .artwork-badge-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-pill);
+      background: rgba(26, 18, 16, 0.75);
+      color: #FFF;
+      backdrop-filter: blur(6px);
+    }
+
+    .artwork-badge-tag.gold {
+      background: var(--golden-sand);
+      color: #1A1210;
+    }
+
+    .artwork-actions-hover {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 0.4rem;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+
+    .artwork-card:hover .artwork-actions-hover {
+      opacity: 1;
+    }
+
+    .action-icon-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0,0,0,0.1);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .action-icon-circle:hover {
+      background: var(--primary);
+      color: #FFF;
+    }
+
+    .artwork-info-box {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .artwork-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+
+    .artwork-artist-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .artwork-artist-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .artwork-meta-specs {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .artwork-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+
+    .artwork-price {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ARTISTS GRID & CARDS
+       ═══════════════════════════════════════════════════════════ */
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .artist-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      transition: all var(--transition-fast);
+    }
+
+    .artist-card:hover {
+      border-color: var(--artist-blue);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .artist-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .artist-card-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--golden-sand);
+      flex-shrink: 0;
+    }
+
+    .artist-card-bio-head h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .artist-card-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .artist-card-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--card);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .artist-stat-val {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .artist-stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .artist-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HOMEPAGE BUILDER VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .builder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .builder-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.35rem;
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      gap: 1.25rem;
+      transition: all var(--transition-fast);
+    }
+
+    .builder-item:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .builder-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .builder-reorder-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .reorder-btn {
+      width: 26px;
+      height: 22px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      background: var(--card);
+      transition: all var(--transition-fast);
+    }
+
+    .reorder-btn:hover {
+      background: var(--primary);
+      color: #FFF;
+      border-color: var(--primary);
+    }
+
+    .builder-icon-tag {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--card);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .builder-titles h4 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .builder-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .builder-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    /* Switch Component */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--border-strong);
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    }
+
+    input:checked + .slider {
+      background-color: var(--success);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ANALYTICS VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .analytics-grid-2 {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-box {
+      width: 100%;
+      height: 280px;
+      display: flex;
+      align-items: flex-end;
+      padding-top: 1rem;
+    }
+
+    .svg-chart {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .geo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .geo-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .geo-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .geo-bar-track {
+      height: 8px;
+      background: var(--card);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .geo-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background: var(--primary);
+      transition: width 1s ease-out;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SETTINGS VIEW
+       ═══════════════════════════════════════════════════════════ */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 2rem;
+    }
+
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .settings-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: left;
+      transition: all var(--transition-fast);
+    }
+
+    .settings-tab-btn:hover {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .settings-tab-btn.active {
+      background: var(--card);
+      color: var(--primary);
+      font-weight: 600;
+      border-left: 3px solid var(--primary);
+    }
+
+    .settings-panel {
+      display: none;
+    }
+
+    .settings-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.45rem;
+    }
+
+    .form-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 0.65rem 0.95rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-bg);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .upload-dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      background: var(--card);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .upload-dropzone:hover {
+      border-color: var(--primary);
+      background: var(--card-hover);
+    }
+
+    .upload-preview-img {
+      max-height: 140px;
+      border-radius: var(--radius-md);
+      margin: 0 auto 0.75rem;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODALS
+       ═══════════════════════════════════════════════════════════ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 18, 16, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition);
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      transform: translateY(20px) scale(0.98);
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-backdrop.open .modal-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 2;
+    }
+
+    .modal-header h3 {
+      font-size: 1.45rem;
+      font-weight: 600;
+    }
+
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all var(--transition-fast);
+      border: 1px solid var(--border);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 1.75rem;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: var(--surface);
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+       ═══════════════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      font-weight: 500;
+      animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 380px;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .toast-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .toast.success .toast-icon {
+      background: var(--success);
+      color: #FFF;
+    }
+
+    .toast.info .toast-icon {
+      background: var(--artist-blue);
+      color: #FFF;
+    }
+
+    .toast.warning .toast-icon {
+      background: var(--warning);
+      color: #FFF;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOBILE BOTTOM NAVIGATION & FAB
+       ═══════════════════════════════════════════════════════════ */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-nav-height);
+      background: var(--surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 95;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.3rem 0.5rem;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-fast);
+      flex: 1;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .bottom-nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-fab {
+      display: none;
+      position: fixed;
+      bottom: calc(var(--bottom-nav-height) + 16px);
+      right: 18px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #FFF;
+      box-shadow: 0 6px 20px var(--primary-glow);
+      z-index: 96;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: transform var(--transition-fast);
+    }
+
+    .mobile-fab:active {
+      transform: scale(0.95);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE MEDIA QUERIES
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .artworks-spotlight-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .analytics-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      :root {
+        --sidebar-width: 76px;
+      }
+      .sidebar {
+        width: var(--sidebar-collapsed-width);
+      }
+      .sidebar-logo span,
+      .sidebar .nav-text,
+      .sidebar .user-meta,
+      .sidebar .nav-group-label {
+        display: none !important;
+      }
+      .sidebar-collapse-btn {
+        display: none;
+      }
+      .main-wrapper {
+        margin-left: var(--sidebar-collapsed-width);
+      }
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .sidebar.mobile-open .sidebar-logo span,
+      .sidebar.mobile-open .nav-text,
+      .sidebar.mobile-open .user-meta,
+      .sidebar.mobile-open .nav-group-label {
+        display: block !important;
+      }
+      .main-wrapper {
+        margin-left: 0 !important;
+        padding-bottom: var(--bottom-nav-height);
+      }
+      .mobile-menu-trigger {
+        display: flex;
+      }
+      .header-center {
+        display: none;
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .mobile-fab {
+        display: flex;
+      }
+      .page-body {
+        padding: 1.25rem 1rem 5rem;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .artworks-spotlight-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .header-right .btn-hide-mobile {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         LEFT SIDEBAR
+         ═══════════════════════════════════════════════════════════ -->
+    <aside id="sidebar" class="sidebar">
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <a href="#dashboard" class="sidebar-logo" onclick="switchView('dashboard')">
+          <div class="logo-badge">🎨</div>
+          <span>Drawmadoo</span>
+        </a>
+        <button id="sidebar-toggle" class="sidebar-collapse-btn" title="Toggle Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Sidebar Nav Items -->
+      <nav class="sidebar-nav-container">
+        <span class="nav-group-label">Overview</span>
+        <div class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <span class="nav-text">Dashboard</span>
+        </div>
+
+        <div class="nav-item" data-view="orders" onclick="switchView('orders')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <span class="nav-text">Orders</span>
+          <span class="nav-badge" id="sidebar-orders-badge">234</span>
+        </div>
+
+        <span class="nav-group-label">Curation & Gallery</span>
+        <div class="nav-item" data-view="artists" onclick="switchView('artists')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <span class="nav-text">Artists</span>
+          <span class="nav-badge" style="background:var(--burnt-orange-bg); color:var(--burnt-orange);" id="sidebar-artists-badge">3</span>
+        </div>
+
+        <div class="nav-item" data-view="artworks" onclick="switchView('artworks')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="nav-text">Artworks</span>
+        </div>
+
+        <div class="nav-item" data-view="collections" onclick="switchView('collections')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <span class="nav-text">Collections</span>
+        </div>
+
+        <div class="nav-item" data-view="categories" onclick="switchView('categories')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <span class="nav-text">Categories</span>
+        </div>
+
+        <div class="nav-item" data-view="customers" onclick="switchView('customers')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          </div>
+          <span class="nav-text">Customers</span>
+        </div>
+
+        <span class="nav-group-label">Intelligence & Store</span>
+        <div class="nav-item" data-view="analytics" onclick="switchView('analytics')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <span class="nav-text">Analytics</span>
+        </div>
+
+        <div class="nav-item" data-view="builder" onclick="switchView('builder')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <span class="nav-text">Homepage Builder</span>
+        </div>
+
+        <div class="nav-item" data-view="cms" onclick="switchView('cms')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <span class="nav-text">CMS Editorial</span>
+        </div>
+
+        <div class="nav-item" data-view="notifications" onclick="switchView('notifications')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <span class="nav-text">Notifications</span>
+          <span class="nav-badge" id="sidebar-notifs-badge">4</span>
+        </div>
+
+        <div class="nav-item" data-view="settings" onclick="switchView('settings')">
+          <div class="nav-icon">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <span class="nav-text">Settings</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt="Aanya Sen" class="user-avatar">
+            <div class="user-online-dot"></div>
+          </div>
+          <div class="user-meta">
+            <div class="user-name">Aanya Sen</div>
+            <div class="user-role">Super Admin</div>
+          </div>
+        </div>
+
+        <div class="sidebar-links">
+          <a href="../index.html" class="sidebar-link-btn" title="Go to storefront">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>Live Site</span>
+          </a>
+          <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+            <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         MAIN CONTENT WRAPPER
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="main-wrapper">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-trigger" onclick="toggleMobileMenu()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="header-title-wrap">
+            <h1 id="header-page-title">Dashboard</h1>
+            <div class="header-breadcrumb" id="header-page-breadcrumb">Drawmadoo / Overview & Analytics</div>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <div class="search-box" onclick="openSearchModal()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search orders, artists, artworks..." readonly>
+            <span class="search-kbd">⌘K</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn btn-primary" onclick="openAddArtworkModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Add Artwork</span>
+          </button>
+          <button class="btn btn-artist btn-hide-mobile" onclick="openAddArtistModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span>Add Artist</span>
+          </button>
+          <button class="icon-btn" onclick="switchView('notifications')" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div class="icon-badge-dot"></div>
+          </button>
+          <button class="header-user-btn" onclick="switchView('settings')">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt="Aanya" class="header-user-avatar">
+            <span class="header-user-name">Aanya</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- ═══════════════════════════════════════════════════════════
+             1. DASHBOARD VIEW (DEFAULT)
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-dashboard" class="view-section active">
+          <!-- Welcome -->
+          <div class="dashboard-welcome">
+            <div class="welcome-text">
+              <h2>Good morning, Aanya 🌿</h2>
+              <p>Drawmadoo marketplace health is steady. 3 new artist applications and 18 pending shipments await review.</p>
+            </div>
+            <div class="date-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="current-date-display">Friday, 23 October 2026</span>
+            </div>
+          </div>
+
+          <!-- Stats 4-Card Row -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon-wrap" style="background: var(--primary);">
+                  ₹
+                </div>
+                <span class="stat-trend up">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+                  12.4%
+                </span>
+              </div>
+              <div class="stat-value">₹12,45,000</div>
+              <div class="stat-label">Total Revenue (This Month)</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon-wrap" style="background: var(--burnt-orange);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                </div>
+                <span class="stat-trend up">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+                  8.2%
+                </span>
+              </div>
+              <div class="stat-value">234</div>
+              <div class="stat-label">Orders Placed (October)</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon-wrap" style="background: var(--artist-blue);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                </div>
+                <span class="stat-trend up">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+                  24.0%
+                </span>
+              </div>
+              <div class="stat-value">18</div>
+              <div class="stat-label">New Artists Onboarded</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon-wrap" style="background: var(--golden-sand);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="stat-trend up">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+                  5.1%
+                </span>
+              </div>
+              <div class="stat-value">2,340</div>
+              <div class="stat-label">Active Listed Artworks</div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard Split -->
+          <div class="dashboard-grid">
+            <!-- Left: Recent Orders -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Recent Collector Orders</h3>
+                  <p class="card-subtitle">Real-time acquisitions from authenticated Indian & global collectors.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="switchView('orders')">
+                  View All Orders →
+                </button>
+              </div>
+
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Collector</th>
+                      <th>Artwork Item</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-recent-orders-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Pending Artist Applications -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Curation Queue</h3>
+                  <p class="card-subtitle">Review new independent artists applying for verification.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="switchView('artists')">
+                  All (3)
+                </button>
+              </div>
+
+              <div class="artist-action-list" id="dashboard-pending-artists-list">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Popular Artworks Grid -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Most Coveted Artworks</h3>
+                <p class="card-subtitle">Highest impressions and collector inquiries this week.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="switchView('artworks')">
+                Manage Artworks Catalog →
+              </button>
+            </div>
+
+            <div class="artworks-spotlight-grid" id="dashboard-spotlight-artworks">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             2. ORDERS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-orders" class="view-section">
+          <!-- Filters & Actions -->
+          <div class="filter-bar">
+            <div class="filter-tabs">
+              <button class="filter-tab active" onclick="filterOrdersByStatus('all', this)">All Orders (234)</button>
+              <button class="filter-tab" onclick="filterOrdersByStatus('Processing', this)">Processing (18)</button>
+              <button class="filter-tab" onclick="filterOrdersByStatus('Shipped', this)">Shipped (42)</button>
+              <button class="filter-tab" onclick="filterOrdersByStatus('Delivered', this)">Delivered (168)</button>
+              <button class="filter-tab" onclick="filterOrdersByStatus('Cancelled', this)">Cancelled (6)</button>
+            </div>
+
+            <div class="filter-actions">
+              <select class="select-dropdown" id="orders-bulk-action" onchange="handleOrdersBulkAction(this.value)">
+                <option value="">Bulk Actions...</option>
+                <option value="mark-shipped">Mark as Shipped</option>
+                <option value="mark-delivered">Mark as Delivered</option>
+                <option value="export-csv">Export Selected to CSV</option>
+                <option value="cancel-orders">Cancel Orders</option>
+              </select>
+              <button class="btn btn-secondary" onclick="exportOrdersCSV()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Orders Table Card -->
+          <div class="card">
+            <div class="table-container">
+              <table class="data-table" id="full-orders-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;">
+                      <input type="checkbox" class="custom-checkbox" onchange="toggleSelectAllOrders(this)">
+                    </th>
+                    <th class="sortable" onclick="sortOrders('id')">Order ID ↕</th>
+                    <th>Customer</th>
+                    <th>Artwork & Artist</th>
+                    <th class="sortable" onclick="sortOrders('amount')">Amount (₹) ↕</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th class="sortable" onclick="sortOrders('date')">Date ↕</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="full-orders-tbody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <div class="table-info" id="orders-pagination-info">Showing 1 to 8 of 234 orders</div>
+              <div class="pagination-controls">
+                <button class="page-btn" disabled>«</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">»</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             3. ARTWORKS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-artworks" class="view-section">
+          <div class="filter-bar">
+            <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+              <select class="select-dropdown" id="artwork-filter-category" onchange="applyArtworkFilters()">
+                <option value="all">All Categories</option>
+                <option value="Traditional">Traditional / Heritage</option>
+                <option value="Landscape">Landscape</option>
+                <option value="Portrait">Portrait</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Digital Art">Digital Art</option>
+                <option value="Watercolor">Watercolor</option>
+                <option value="Oil Painting">Oil Painting</option>
+              </select>
+
+              <select class="select-dropdown" id="artwork-filter-medium" onchange="applyArtworkFilters()">
+                <option value="all">All Mediums</option>
+                <option value="Oil on Canvas">Oil on Canvas</option>
+                <option value="Acrylic on Canvas">Acrylic</option>
+                <option value="Watercolor">Watercolor</option>
+                <option value="Ink">Ink & Gold Leaf</option>
+              </select>
+
+              <select class="select-dropdown" id="artwork-filter-status" onchange="applyArtworkFilters()">
+                <option value="all">All Stock Statuses</option>
+                <option value="inStock">Available (In Stock)</option>
+                <option value="sold">Sold / Reserved</option>
+              </select>
+            </div>
+
+            <div class="filter-actions">
+              <div class="filter-tabs">
+                <button class="filter-tab active" id="view-grid-btn" onclick="toggleArtworkViewMode('grid')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </button>
+                <button class="filter-tab" id="view-list-btn" onclick="toggleArtworkViewMode('list')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+              </div>
+
+              <button class="btn btn-primary" onclick="openAddArtworkModal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Add Artwork</span>
+              </button>
+
+              <button class="btn btn-secondary" onclick="cleanWipeDemoData()" title="Purges all placeholder demo items so you can launch with authentic artworks">
+                <span>🧹 Purge Demo Artworks</span>
+              </button>
+
+              <button class="btn btn-secondary" onclick="restoreDemoArtworks()" title="Restores sample artwork dataset">
+                <span>🔄 Reset Sample Art</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Artwork Grid Container -->
+          <div id="artworks-grid-container" class="artwork-grid">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Artwork List Container (hidden by default) -->
+          <div id="artworks-list-container" class="card" style="display: none;">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Medium & Size</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="artworks-list-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             4. ARTISTS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-artists" class="view-section">
+          <div class="filter-bar">
+            <div class="filter-tabs">
+              <button class="filter-tab active" onclick="filterArtists('all', this)">All Creators (8)</button>
+              <button class="filter-tab" onclick="filterArtists('approved', this)">Verified Masters (5)</button>
+              <button class="filter-tab" onclick="filterArtists('pending', this)">Pending Review (3)</button>
+            </div>
+
+            <button class="btn btn-artist" onclick="openAddArtistModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              <span>Add New Artist</span>
+            </button>
+          </div>
+
+          <div class="artists-grid" id="artists-grid-container">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             5. COLLECTIONS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-collections" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Curated Collections</h3>
+              <p class="card-subtitle">Themed gallery rooms curated for discerning art lovers and collectors.</p>
+            </div>
+            <button class="btn btn-primary" onclick="showToast('Curated collections editor opened', 'info')">
+              + New Collection
+            </button>
+          </div>
+
+          <div class="artworks-spotlight-grid" id="collections-grid-container">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             6. CATEGORIES VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-categories" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Artwork Categories & Genres</h3>
+              <p class="card-subtitle">Taxonomy classification for gallery discovery and filtering.</p>
+            </div>
+            <button class="btn btn-primary" onclick="showToast('Category creator modal ready', 'info')">
+              + Add Category
+            </button>
+          </div>
+
+          <div class="artworks-spotlight-grid" id="categories-grid-container">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             7. CUSTOMERS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-customers" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Art Patrons & Private Collectors</h3>
+              <p class="card-subtitle">Directory of verified art buyers, connoisseurs, and gallery members.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="showToast('Exporting VIP Patrons list...', 'info')">
+              Export Patrons CRM
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Patron Name</th>
+                    <th>City & Region</th>
+                    <th>Artworks Owned</th>
+                    <th>Total Investment (₹)</th>
+                    <th>Patron Tier</th>
+                    <th>Last Active</th>
+                    <th style="text-align: right;">Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-table-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             8. ANALYTICS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-analytics" class="view-section">
+          <div class="dashboard-welcome" style="margin-bottom: 1.5rem;">
+            <div class="welcome-text">
+              <h2>Marketplace Performance & Insights</h2>
+              <p>Key metrics, financial GMV breakdown, and regional collector distribution.</p>
+            </div>
+          </div>
+
+          <!-- Top Row Charts -->
+          <div class="analytics-grid-2">
+            <!-- Revenue Bar Chart -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Monthly Revenue (2026 YTD)</h3>
+                  <p class="card-subtitle">Gross marketplace volume in INR Lakhs</p>
+                </div>
+                <span class="status-badge badge-delivered">+18.4% YoY</span>
+              </div>
+              <div class="chart-box" id="revenue-chart-box">
+                <!-- SVG Bar Chart Generated via JS -->
+              </div>
+            </div>
+
+            <!-- Categories Share Donut Chart -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Genre & Medium Share</h3>
+                  <p class="card-subtitle">Collector demand by artistic style</p>
+                </div>
+              </div>
+              <div class="chart-box" id="donut-chart-box" style="justify-content: center; align-items: center;">
+                <!-- SVG Donut Chart Generated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Grid: Top Selling Artworks & Geo -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Top Grossing Artworks</h3>
+                  <p class="card-subtitle">Highest revenue generators across all gallery editions.</p>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Artwork</th>
+                      <th>Artist</th>
+                      <th>Sales</th>
+                      <th>Total Gross</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong style="color:var(--golden-sand)">#1</strong></td>
+                      <td><strong>Evening at Hampi</strong></td>
+                      <td>Rohan Deshpande</td>
+                      <td>14 sold</td>
+                      <td><strong>₹1,75,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color:var(--text-muted)">#2</strong></td>
+                      <td><strong>The Blue City Jaali</strong></td>
+                      <td>Meera Joshi</td>
+                      <td>8 sold</td>
+                      <td><strong>₹3,40,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color:var(--text-muted)">#3</strong></td>
+                      <td><strong>Pichwai Lotus Symphony</strong></td>
+                      <td>Raghavendra Rao</td>
+                      <td>5 sold</td>
+                      <td><strong>₹4,25,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color:var(--text-muted)">#4</strong></td>
+                      <td><strong>Gond Tree of Life</strong></td>
+                      <td>Suresh Maravi</td>
+                      <td>12 sold</td>
+                      <td><strong>₹1,74,000</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Patron Geographic Demographics</h3>
+                  <p class="card-subtitle">Where Drawmadoo collectors reside.</p>
+                </div>
+              </div>
+              <div class="geo-list">
+                <div class="geo-item">
+                  <div class="geo-head">
+                    <span>Mumbai & MMR</span>
+                    <strong>34%</strong>
+                  </div>
+                  <div class="geo-bar-track">
+                    <div class="geo-bar-fill" style="width: 34%; background: var(--primary);"></div>
+                  </div>
+                </div>
+                <div class="geo-item">
+                  <div class="geo-head">
+                    <span>Delhi NCR & Jaipur</span>
+                    <strong>28%</strong>
+                  </div>
+                  <div class="geo-bar-track">
+                    <div class="geo-bar-fill" style="width: 28%; background: var(--artist-blue);"></div>
+                  </div>
+                </div>
+                <div class="geo-item">
+                  <div class="geo-head">
+                    <span>Bengaluru & Hyderabad</span>
+                    <strong>18%</strong>
+                  </div>
+                  <div class="geo-bar-track">
+                    <div class="geo-bar-fill" style="width: 18%; background: var(--burnt-orange);"></div>
+                  </div>
+                </div>
+                <div class="geo-item">
+                  <div class="geo-head">
+                    <span>Kolkata & Eastern India</span>
+                    <strong>11%</strong>
+                  </div>
+                  <div class="geo-bar-track">
+                    <div class="geo-bar-fill" style="width: 11%; background: var(--golden-sand);"></div>
+                  </div>
+                </div>
+                <div class="geo-item">
+                  <div class="geo-head">
+                    <span>International (US, UK, UAE)</span>
+                    <strong>9%</strong>
+                  </div>
+                  <div class="geo-bar-track">
+                    <div class="geo-bar-fill" style="width: 9%; background: #6B5545;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             9. HOMEPAGE BUILDER VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-builder" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Storefront Homepage Section Builder</h3>
+              <p class="card-subtitle">Reorder, enable, or customize the 12 sections visible on Drawmadoo.com.</p>
+            </div>
+            <button class="btn btn-primary" onclick="saveBuilderLayout()">
+              Save Layout Configuration
+            </button>
+          </div>
+
+          <div class="builder-list" id="homepage-builder-list">
+            <!-- Sections populated dynamically with up/down arrows and toggles -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             10. CMS EDITORIAL VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-cms" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Editorial & Gallery Journal</h3>
+              <p class="card-subtitle">Manage artist spotlight stories, art collecting guides, and press notices.</p>
+            </div>
+            <button class="btn btn-primary" onclick="showToast('Editorial article editor launched', 'info')">
+              + New Article
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Article Title</th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Read Time</th>
+                    <th>Published Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>The Sacred Geometry of Pichwai Painting</strong></td>
+                    <td><span class="status-badge badge-verified">Heritage Guide</span></td>
+                    <td>Aanya Sen</td>
+                    <td>6 min read</td>
+                    <td>Oct 18, 2026</td>
+                    <td><span class="status-badge badge-active">Published</span></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="showToast('Article loaded in editor', 'info')">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Plein Air in the Himalayas: Meet Vikram Sen</strong></td>
+                    <td><span class="status-badge badge-shipped">Artist Spotlight</span></td>
+                    <td>Rohan Deshpande</td>
+                    <td>4 min read</td>
+                    <td>Oct 12, 2026</td>
+                    <td><span class="status-badge badge-active">Published</span></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="showToast('Article loaded in editor', 'info')">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>How to Care for Original Oil on Canvas Artworks</strong></td>
+                    <td><span class="status-badge badge-approved">Collector Care</span></td>
+                    <td>Meera Joshi</td>
+                    <td>8 min read</td>
+                    <td>Sep 29, 2026</td>
+                    <td><span class="status-badge badge-active">Published</span></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="showToast('Article loaded in editor', 'info')">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Drawmadoo Curators at the India Art Fair 2026</strong></td>
+                    <td><span class="status-badge badge-processing">Press</span></td>
+                    <td>Editorial Team</td>
+                    <td>3 min read</td>
+                    <td>Sep 15, 2026</td>
+                    <td><span class="status-badge badge-active">Published</span></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="showToast('Article loaded in editor', 'info')">Edit</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             11. NOTIFICATIONS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-notifications" class="view-section">
+          <div class="card-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h3 class="card-title">Platform Activity & Notifications</h3>
+              <p class="card-subtitle">Real-time alerts regarding collector acquisitions, inventory, and artist payouts.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="markAllNotificationsAsRead()">
+              Mark All as Read
+            </button>
+          </div>
+
+          <div class="card" style="padding: 0.5rem;" id="notifications-container">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             12. SETTINGS VIEW
+             ═══════════════════════════════════════════════════════════ -->
+        <section id="view-settings" class="view-section">
+          <div class="dashboard-welcome" style="margin-bottom: 1.5rem;">
+            <div class="welcome-text">
+              <h2>Marketplace Configuration & Preferences</h2>
+              <p>Configure brand aesthetics, logistics, SEO parameters, and curated store policies.</p>
+            </div>
+            <button class="btn btn-primary" onclick="saveAllSettings()">
+              Save All Settings
+            </button>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Settings Sidebar -->
+            <div class="settings-nav">
+              <button class="settings-tab-btn active" onclick="switchSettingsTab('general', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Store Identity</span>
+              </button>
+              <button class="settings-tab-btn" onclick="switchSettingsTab('theme', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                <span>Theme & Colors</span>
+              </button>
+              <button class="settings-tab-btn" onclick="switchSettingsTab('shipping', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <span>Logistics & Shipping</span>
+              </button>
+              <button class="settings-tab-btn" onclick="switchSettingsTab('seo', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>SEO & Social OG</span>
+              </button>
+              <button class="settings-tab-btn" onclick="switchSettingsTab('announcement', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>Announcement Bar</span>
+              </button>
+            </div>
+
+            <!-- Settings Content Panels -->
+            <div class="card" style="padding: 2rem;">
+              
+              <!-- Tab 1: General -->
+              <div id="settings-panel-general" class="settings-panel active">
+                <h3 class="card-title" style="margin-bottom: 1.5rem;">Store Identity & Contact</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Marketplace Name</label>
+                    <input type="text" class="form-input" id="setting-site-name" value="Drawmadoo">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Official Tagline</label>
+                    <input type="text" class="form-input" id="setting-site-tagline" value="Where Art Finds Home">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Support Email</label>
+                    <input type="email" class="form-input" value="curators@drawmadoo.com">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Operating Currency</label>
+                    <select class="form-select">
+                      <option value="INR" selected>Indian Rupee (₹ INR)</option>
+                      <option value="USD">US Dollar ($ USD)</option>
+                      <option value="EUR">Euro (€ EUR)</option>
+                      <option value="GBP">British Pound (£ GBP)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Gallery Logo Asset</label>
+                  <div class="upload-dropzone">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
+                    <strong>Drawmadoo SVG / PNG Logo</strong>
+                    <p class="form-hint">Drag & drop 512x512 transparent PNG or SVG icon.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Theme -->
+              <div id="settings-panel-theme" class="settings-panel">
+                <h3 class="card-title" style="margin-bottom: 1.5rem;">Design System & Color Tokens</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Primary Brown Accent</label>
+                    <input type="color" class="form-input" value="#8A5A2B" style="height: 48px; padding: 4px; cursor: pointer;">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Artist Blue</label>
+                    <input type="color" class="form-input" value="#0F6F8E" style="height: 48px; padding: 4px; cursor: pointer;">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Burnt Orange Accent</label>
+                    <input type="color" class="form-input" value="#D56A24" style="height: 48px; padding: 4px; cursor: pointer;">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Golden Sand Highlight</label>
+                    <input type="color" class="form-input" value="#C99A42" style="height: 48px; padding: 4px; cursor: pointer;">
+                  </div>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+                  <div>
+                    <strong>Default to Dark Mode for New Visitors</strong>
+                    <div class="form-hint">Allows night-time collectors to browse in moody museum lighting.</div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="setting-darkmode-default">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Tab 3: Shipping -->
+              <div id="settings-panel-shipping" class="settings-panel">
+                <h3 class="card-title" style="margin-bottom: 1.5rem;">Shipping & Insured Transit</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Free Domestic Shipping Threshold (₹)</label>
+                    <input type="number" class="form-input" value="15000">
+                    <div class="form-hint">Orders at or above this amount automatically receive complimentary white-glove transit.</div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Standard Insured Courier Fee (₹)</label>
+                    <input type="number" class="form-input" value="1200">
+                  </div>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; margin-top:1.5rem;">
+                  <div>
+                    <strong>Enable International Custom Crating & Export</strong>
+                    <div class="form-hint">Ships worldwide with DHL / FedEx Art Courier and export certificate.</div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Tab 4: SEO -->
+              <div id="settings-panel-seo" class="settings-panel">
+                <h3 class="card-title" style="margin-bottom: 1.5rem;">Search Engine Optimization & Social Cards</h3>
+                <div class="form-group">
+                  <label class="form-label">Global Meta Title</label>
+                  <input type="text" class="form-input" value="Drawmadoo — Original Art by Real Artists | Indian Art Marketplace">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Meta Description</label>
+                  <textarea class="form-textarea" rows="3">Discover authentic Indian paintings, Pichwai, Gond art, modern abstracts, and watercolors directly from verified independent creators.</textarea>
+                </div>
+              </div>
+
+              <!-- Tab 5: Announcement -->
+              <div id="settings-panel-announcement" class="settings-panel">
+                <h3 class="card-title" style="margin-bottom: 1.5rem;">Top Banner Announcement</h3>
+                <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+                  <div>
+                    <strong>Display Announcement Banner</strong>
+                    <div class="form-hint">Shows at the very top of all gallery pages.</div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="setting-announcement-enabled" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Announcement Banner Text</label>
+                  <input type="text" class="form-input" id="setting-announcement-text" value="🎨 Free worldwide shipping on orders above ₹15,000">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Link (Optional)</label>
+                  <input type="text" class="form-input" value="#gallery">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MOBILE BOTTOM NAVIGATION
+       ═══════════════════════════════════════════════════════════ -->
+  <nav class="mobile-bottom-nav">
+    <button class="bottom-nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="bottom-nav-item" data-view="orders" onclick="switchView('orders')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Orders</span>
+    </button>
+    <button class="bottom-nav-item" data-view="artworks" onclick="switchView('artworks')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Artworks</span>
+    </button>
+    <button class="bottom-nav-item" data-view="artists" onclick="switchView('artists')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <span>Artists</span>
+    </button>
+    <button class="bottom-nav-item" onclick="toggleMobileMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <!-- Mobile Floating Action Button -->
+  <button class="mobile-fab" onclick="openAddArtworkModal()" title="Add Artwork">
+    +
+  </button>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL 1: ADD / EDIT ARTWORK
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modal-artwork" class="modal-backdrop" onclick="handleBackdropClick(event, 'modal-artwork')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-artwork-title">Add New Original Artwork</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-artwork')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="artwork-form" onsubmit="handleSaveArtwork(event)">
+          <div class="form-group">
+            <label class="form-label">Artwork Photograph / Canvas High-Res</label>
+            <div class="upload-dropzone" onclick="document.getElementById('artwork-file-input').click()">
+              <input type="file" id="artwork-file-input" accept="image/*" style="display:none;" onchange="previewArtworkImage(this)">
+              <img id="artwork-upload-preview" class="upload-preview-img" style="display:none;" src="" alt="Artwork Preview">
+              <div id="artwork-upload-placeholder">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; color:var(--primary);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <div style="font-weight:600;">Upload Artwork High-Res Photo</div>
+                <p class="form-hint">Click to choose or drag PNG, JPG up to 25MB.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Artwork Title *</label>
+            <input type="text" class="form-input" id="artwork-title-input" placeholder="e.g. Dawn over Varanasi Ghats" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Artist Creator *</label>
+              <select class="form-select" id="artwork-artist-select" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price in INR (₹) *</label>
+              <input type="number" class="form-input" id="artwork-price-input" placeholder="25000" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Medium *</label>
+              <input type="text" class="form-input" id="artwork-medium-input" placeholder="e.g. Oil on Linen Canvas" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dimensions *</label>
+              <input type="text" class="form-input" id="artwork-size-input" placeholder="e.g. 36 x 24 inches" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-select" id="artwork-category-select">
+                <option value="Traditional">Traditional / Heritage</option>
+                <option value="Landscape">Landscape</option>
+                <option value="Portrait">Portrait</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Digital Art">Digital Art</option>
+                <option value="Watercolor">Watercolor</option>
+                <option value="Oil Painting">Oil Painting</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock Status</label>
+              <select class="form-select" id="artwork-stock-select">
+                <option value="inStock">In Stock (1 of 1 Original)</option>
+                <option value="limited">Limited Edition Prints</option>
+                <option value="sold">Sold Out</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description & Curatorial Notes</label>
+            <textarea class="form-textarea" id="artwork-desc-input" rows="3" placeholder="Describe the artistic intent, provenance, and historical inspiration..."></textarea>
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; padding-top:0.5rem;">
+            <div>
+              <strong>Feature on Homepage Gallery</strong>
+              <div class="form-hint">Promote in prime showcase carousel.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="artwork-featured-checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="modal-footer" style="padding:1.25rem 0 0 0; margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-artwork')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save to Catalog</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL 2: ADD / EDIT ARTIST
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modal-artist" class="modal-backdrop" onclick="handleBackdropClick(event, 'modal-artist')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-artist-title">Onboard New Independent Artist</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-artist')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="artist-form" onsubmit="handleSaveArtist(event)">
+          <div class="form-group">
+            <label class="form-label">Artist Portrait / Avatar</label>
+            <div class="upload-dropzone" onclick="document.getElementById('artist-avatar-input').click()">
+              <input type="file" id="artist-avatar-input" accept="image/*" style="display:none;" onchange="previewArtistAvatar(this)">
+              <img id="artist-avatar-preview" class="upload-preview-img" style="display:none; width:90px; height:90px; border-radius:50%;" src="" alt="Avatar">
+              <div id="artist-avatar-placeholder">
+                <div style="font-size: 2rem; margin-bottom: 0.35rem;">👩‍🎨</div>
+                <strong>Upload Studio Portrait</strong>
+                <p class="form-hint">Recommended square format (400x400).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" class="form-input" id="artist-name-input" placeholder="e.g. Meera Joshi" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Primary Artistic Style *</label>
+              <input type="text" class="form-input" id="artist-style-input" placeholder="e.g. Pichwai, Kerala Mural" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">City & State *</label>
+              <input type="text" class="form-input" id="artist-city-input" placeholder="e.g. Udaipur, Rajasthan" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Country</label>
+              <input type="text" class="form-input" id="artist-country-input" value="India">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Artist Biography</label>
+            <textarea class="form-textarea" id="artist-bio-input" rows="3" placeholder="Artistic lineage, education, solo exhibitions, and honors..."></textarea>
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <strong>Verify Artist Immediately</strong>
+              <div class="form-hint">Grants verified artist badge on public profile.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="artist-verified-checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="modal-footer" style="padding:1.25rem 0 0 0; margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-artist')">Cancel</button>
+            <button type="submit" class="btn btn-artist">Approve & Onboard</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL 3: VIEW ORDER DETAILS
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modal-order" class="modal-backdrop" onclick="handleBackdropClick(event, 'modal-order')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-order-title">Order #DRW-8821</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-order')">✕</button>
+      </div>
+      <div class="modal-body" id="modal-order-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-order')">Close</button>
+        <button class="btn btn-primary" onclick="showToast('Invoice PDF generated', 'success')">Download Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODAL 4: SEARCH OVERLAY
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="modal-search" class="modal-backdrop" onclick="handleBackdropClick(event, 'modal-search')">
+    <div class="modal-box" style="max-width: 580px;">
+      <div style="padding: 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="global-search-input" placeholder="Type artist name, artwork title, or order ID..." style="width:100%; border:none; outline:none; font-size:1.1rem; background:transparent; color:var(--text);" oninput="handleGlobalSearch(this.value)">
+        <button class="modal-close-btn" onclick="closeModal('modal-search')">✕</button>
+      </div>
+      <div style="padding: 1.25rem; max-height: 400px; overflow-y: auto;" id="global-search-results">
+        <div style="color:var(--text-muted); font-size:0.86rem; text-align:center; padding:2rem;">Start typing to search across orders, artworks, and artists...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TOAST CONTAINER
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT APPLICATION ENGINE
+       ═══════════════════════════════════════════════════════════ -->
+  <script src="../js/db.js"></script>
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       STATE & DATA LAYER
+       ═══════════════════════════════════════════════════════════ */
+    const AdminApp = {
+      theme: 'light',
+      currentView: 'dashboard',
+      selectedOrders: new Set(),
+      
+      // Artworks Store
+      artworks: [
+        {
+          id: 1,
+          title: "Evening at Hampi",
+          artist: "Rohan Deshpande",
+          artistAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+          price: 12500,
+          medium: "Acrylic on Canvas",
+          size: "24 x 18 inches",
+          category: "Landscape",
+          image: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&q=80",
+          inStock: true,
+          isFeatured: true,
+          views: 3420,
+          sales: 14
+        },
+        {
+          id: 2,
+          title: "The Blue City Jaali",
+          artist: "Meera Joshi",
+          artistAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80",
+          price: 42500,
+          medium: "Oil on Linen",
+          size: "36 x 36 inches",
+          category: "Traditional",
+          image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80",
+          inStock: true,
+          isFeatured: true,
+          views: 4890,
+          sales: 8
+        },
+        {
+          id: 3,
+          title: "Pichwai Lotus Symphony",
+          artist: "Raghavendra Rao",
+          artistAvatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
+          price: 85000,
+          medium: "Natural Pigment on Cloth",
+          size: "48 x 36 inches",
+          category: "Traditional",
+          image: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=600&q=80",
+          inStock: true,
+          isFeatured: true,
+          views: 6120,
+          sales: 5
+        },
+        {
+          id: 4,
+          title: "Monsoon in Shantiniketan",
+          artist: "Devika Sen",
+          artistAvatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+          price: 18000,
+          medium: "Watercolor on Arches 300gsm",
+          size: "20 x 28 inches",
+          category: "Watercolor",
+          image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&q=80",
+          inStock: true,
+          isFeatured: false,
+          views: 2190,
+          sales: 6
+        },
+        {
+          id: 5,
+          title: "Gond Tree of Life",
+          artist: "Suresh Maravi",
+          artistAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+          price: 14500,
+          medium: "Acrylic on Handmade Canvas",
+          size: "30 x 24 inches",
+          category: "Traditional",
+          image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80",
+          inStock: true,
+          isFeatured: false,
+          views: 3100,
+          sales: 12
+        },
+        {
+          id: 6,
+          title: "Mystic Varanasi Ghats",
+          artist: "Amitabh Das",
+          artistAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+          price: 120000,
+          medium: "Oil on Belgian Linen",
+          size: "60 x 48 inches",
+          category: "Oil Painting",
+          image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80",
+          inStock: true,
+          isFeatured: true,
+          views: 7890,
+          sales: 3
+        }
+      ],
+
+      // Artists Store
+      artists: [
+        {
+          id: 1,
+          name: "Rohan Deshpande",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+          style: "Acrylic & Heritage Plein Air",
+          city: "Pune, Maharashtra",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 145,
+          totalSales: "₹18,40,000",
+          status: "Approved",
+          bio: "Sir J.J. School of Art alumnus. Captures the architectural grandeur of western India."
+        },
+        {
+          id: 2,
+          name: "Meera Joshi",
+          avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80",
+          style: "Pichwai & Gold Leaf Master",
+          city: "Udaipur, Rajasthan",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 38,
+          totalSales: "₹24,80,000",
+          status: "Approved",
+          bio: "4th generation traditional temple artist, preserving miniature brushwork."
+        },
+        {
+          id: 3,
+          name: "Raghavendra Rao",
+          avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
+          style: "Tanjore & Sacred Art",
+          city: "Thanjavur, Tamil Nadu",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 62,
+          totalSales: "₹31,00,000",
+          status: "Approved",
+          bio: "National Awardee artisan working exclusively with certified 24-carat gold foil."
+        },
+        {
+          id: 4,
+          name: "Devika Sen",
+          avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+          style: "Bengal School & Watercolor",
+          city: "Kolkata, West Bengal",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 84,
+          totalSales: "₹14,20,000",
+          status: "Pending",
+          bio: "Visva-Bharati graduate exploring lyrical water washes and monsoon moods."
+        },
+        {
+          id: 5,
+          name: "Suresh Maravi",
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+          style: "Gond Tribal & Folk Lore",
+          city: "Bhopal, Madhya Pradesh",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 51,
+          totalSales: "₹9,80,000",
+          status: "Pending",
+          bio: "Descendant of Jangarh Singh Shyam, depicting animist forest folklore."
+        },
+        {
+          id: 6,
+          name: "Lakshmi Pillai",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80",
+          style: "Kerala Mural & Natural Dyes",
+          city: "Kochi, Kerala",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 29,
+          totalSales: "₹11,50,000",
+          status: "Pending",
+          bio: "Specializing in traditional Panchavarna wall mural conservation."
+        },
+        {
+          id: 7,
+          name: "Amitabh Das",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+          style: "Contemporary Oils",
+          city: "Varanasi, Uttar Pradesh",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 42,
+          totalSales: "₹28,60,000",
+          status: "Approved",
+          bio: "Breathtaking large-scale oils exploring spiritual ghats and river reflections."
+        },
+        {
+          id: 8,
+          name: "Aisha Khan",
+          avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80",
+          style: "Botanical Watercolor",
+          city: "Bengaluru, Karnataka",
+          country: "India",
+          countryFlag: "🇮🇳",
+          artworksCount: 96,
+          totalSales: "₹16,30,000",
+          status: "Approved",
+          bio: "Plein air botanical illustrations celebrating endangered flora of the Western Ghats."
+        }
+      ],
+
+      // Orders Store
+      orders: [
+        {
+          id: "DRW-8821",
+          customer: "Pooja Sharma",
+          city: "Mumbai, MH",
+          artwork: "The Blue City Jaali",
+          artworkImg: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&q=80",
+          artist: "Meera Joshi",
+          amount: 42500,
+          status: "Processing",
+          payment: "UPI / Net Banking",
+          date: "Oct 23, 2026",
+          tracking: "DTDC-EXP-9921"
+        },
+        {
+          id: "DRW-8820",
+          customer: "Rohan Mehta",
+          city: "New Delhi, DL",
+          artwork: "Pichwai Lotus Symphony",
+          artworkImg: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=200&q=80",
+          artist: "Raghavendra Rao",
+          amount: 85000,
+          status: "Shipped",
+          payment: "HDFC Credit Card",
+          date: "Oct 22, 2026",
+          tracking: "BLUEDART-8812"
+        },
+        {
+          id: "DRW-8819",
+          customer: "Vikram Singhania",
+          city: "Kolkata, WB",
+          artwork: "Mystic Varanasi Ghats",
+          artworkImg: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80",
+          artist: "Amitabh Das",
+          amount: 120000,
+          status: "Delivered",
+          payment: "Wire Transfer",
+          date: "Oct 21, 2026",
+          tracking: "FEDEX-IND-4011"
+        },
+        {
+          id: "DRW-8818",
+          customer: "Ananya Roy",
+          city: "Bengaluru, KA",
+          artwork: "Monsoon in Shantiniketan",
+          artworkImg: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=200&q=80",
+          artist: "Devika Sen",
+          amount: 18000,
+          status: "Delivered",
+          payment: "UPI (Google Pay)",
+          date: "Oct 20, 2026",
+          tracking: "DELHIVERY-2291"
+        },
+        {
+          id: "DRW-8817",
+          customer: "Deepak Verma",
+          city: "Jaipur, RJ",
+          artwork: "Gond Tree of Life",
+          artworkImg: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80",
+          artist: "Suresh Maravi",
+          amount: 14500,
+          status: "Processing",
+          payment: "Axis Bank Card",
+          date: "Oct 20, 2026",
+          tracking: "DTDC-EXP-9831"
+        },
+        {
+          id: "DRW-8816",
+          customer: "Sunita Deshmukh",
+          city: "Pune, MH",
+          artwork: "Evening at Hampi",
+          artworkImg: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=200&q=80",
+          artist: "Rohan Deshpande",
+          amount: 12500,
+          status: "Shipped",
+          payment: "ICICI Net Banking",
+          date: "Oct 19, 2026",
+          tracking: "BLUEDART-8790"
+        },
+        {
+          id: "DRW-8815",
+          customer: "Kabir Bedi",
+          city: "Hyderabad, TS",
+          artwork: "Kerala Kathakali Soul",
+          artworkImg: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80",
+          artist: "Lakshmi Pillai",
+          amount: 32000,
+          status: "Cancelled",
+          payment: "Refunded via UPI",
+          date: "Oct 18, 2026",
+          tracking: "N/A"
+        }
+      ],
+
+      // Curated Collections
+      collections: [
+        { id: 1, name: "Royal Rajasthan Heritage", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=500&q=80", count: 250, description: "Authentic Pichwai and Rajputana court paintings." },
+        { id: 2, name: "Monsoon Whispers", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=80", count: 180, description: "Atmospheric landscapes and Bengal watercolor washes." },
+        { id: 3, name: "Contemporary Living", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80", count: 120, description: "Abstract canvases designed for luxury modern spaces." },
+        { id: 4, name: "Sacred & Folk Narratives", image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80", count: 95, description: "Gond, Madhubani, and Warli indigenous stories." }
+      ],
+
+      // Categories
+      categories: [
+        { id: 1, name: "Traditional Indian", count: 980, image: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=400&q=80" },
+        { id: 2, name: "Landscape & Plein Air", count: 1850, image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" },
+        { id: 3, name: "Modern Abstract", count: 3120, image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&q=80" },
+        { id: 4, name: "Fine Watercolor", count: 2100, image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&q=80" }
+      ],
+
+      // Patrons
+      customers: [
+        { name: "Pooja Sharma", city: "Mumbai, MH", owned: 6, spent: "₹2,84,000", tier: "Connoisseur", lastActive: "Today" },
+        { name: "Vikram Singhania", city: "Kolkata, WB", owned: 11, spent: "₹7,45,000", tier: "Royal Patron", lastActive: "Yesterday" },
+        { name: "Rohan Mehta", city: "New Delhi, DL", owned: 4, spent: "₹1,90,000", tier: "Patron", lastActive: "2 days ago" },
+        { name: "Ananya Roy", city: "Bengaluru, KA", owned: 5, spent: "₹1,42,000", tier: "Patron", lastActive: "3 days ago" },
+        { name: "Sunita Deshmukh", city: "Pune, MH", owned: 8, spent: "₹3,15,000", tier: "Connoisseur", lastActive: "Oct 19" }
+      ],
+
+      // Homepage Builder Layout
+      homepageSections: [
+        { id: "hero", name: "Hero Showcase", desc: "Main headline with video CTA & real artist counter", enabled: true, icon: "✨" },
+        { id: "categories", name: "Popular Categories", desc: "Horizontal scrollable genre pills with counts", enabled: true, icon: "🏷️" },
+        { id: "artists", name: "Trending Artists", desc: "Top independent verified artists cards", enabled: true, icon: "👩‍🎨" },
+        { id: "why", name: "Why Drawmadoo", desc: "100% Human Made guarantee and certificates", enabled: true, icon: "🛡️" },
+        { id: "featured", name: "Featured Artwork of the Week", desc: "Spotlight showcase on 'Evening at Hampi'", enabled: true, icon: "🖼️" },
+        { id: "mediums", name: "Shop by Medium", desc: "Interactive grid (Oil, Acrylic, Watercolor, Ink)", enabled: true, icon: "🖌️" },
+        { id: "collections", name: "Curated Collections", desc: "Themed rooms: Royal Heritage & Monsoon", enabled: true, icon: "📁" },
+        { id: "homes", name: "Art in Real Homes", desc: "Customer interior showcase from Mumbai & Bangalore", enabled: true, icon: "🏡" },
+        { id: "meet-artist", name: "Meet the Artist Spotlight", desc: "Deep dive profile of Rohan Deshpande", enabled: true, icon: "⭐" },
+        { id: "newsletter", name: "Collector's Circle Newsletter", desc: "VIP early access to new releases", enabled: true, icon: "💌" }
+      ],
+
+      // Notifications Feed
+      notifications: [
+        { id: 1, title: "New Acquisition #DRW-8821", desc: "Pooja Sharma acquired 'The Blue City Jaali' (₹42,500)", time: "12m ago", unread: true, type: "order" },
+        { id: 2, title: "Artist Onboarding Application", desc: "Devika Sen (Kolkata) submitted 5 watercolor artworks for review.", time: "1h ago", unread: true, type: "artist" },
+        { id: 3, title: "Inventory Reserve Alert", desc: "'Pichwai Lotus Symphony' original copy marked as Reserved.", time: "3h ago", unread: true, type: "inventory" },
+        { id: 4, title: "Bi-Weekly Artist Payout Disbursed", desc: "₹8,45,000 successfully disbursed to 18 verified creators.", time: "Yesterday", unread: false, type: "system" }
+      ]
+    };
+
+    /* ═══════════════════════════════════════════════════════════
+       CMS & DATABASE SYNCHRONIZER
+       ═══════════════════════════════════════════════════════════ */
+    function syncAdminAppFromDB() {
+      if (!window.DrawmadooDB) return;
+      const dbArtworks = window.DrawmadooDB.getArtworks({ includeHidden: true });
+      AdminApp.artworks = dbArtworks.map(a => ({
+        id: a.id,
+        title: a.title,
+        artist: a.artist,
+        artistAvatar: a.artistAvatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+        price: a.price,
+        medium: a.medium,
+        size: a.size,
+        category: a.category,
+        image: (a.images && a.images.length > 0) ? a.images[0] : (a.image || "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80"),
+        images: a.images || [a.image],
+        inStock: a.status === "available",
+        isFeatured: Boolean(a.featured),
+        status: a.status,
+        isPlaceholder: Boolean(a.isPlaceholder),
+        views: a.reviewsCount ? a.reviewsCount * 45 : 120,
+        sales: a.status === "sold" ? 1 : 0
+      }));
+
+      const dbArtists = window.DrawmadooDB.getArtists();
+      AdminApp.artists = dbArtists.map(a => ({
+        id: a.id,
+        name: a.name,
+        avatar: a.avatar,
+        style: a.style,
+        city: a.city,
+        country: a.country,
+        countryFlag: "🇮🇳",
+        artworksCount: dbArtworks.filter(art => art.artistId === a.id || art.artist === a.name).length,
+        totalSales: `₹${((a.salesCount || 10) * 22000).toLocaleString('en-IN')}`,
+        status: a.status === "verified" ? "Approved" : "Pending",
+        bio: a.bio,
+        isPlaceholder: Boolean(a.isPlaceholder)
+      }));
+
+      const hp = window.DrawmadooDB.getHomepageConfig();
+      if (hp && Array.isArray(hp.sections)) {
+        AdminApp.homepageSections = hp.sections.map(s => {
+          let desc = "Configurable gallery block for Drawmadoo storefront";
+          if (s.id === 'hero') desc = `Hero Artwork: ${window.DrawmadooDB.getArtworkById(hp.heroArtworkId)?.title || 'Selected'}`;
+          if (s.id === 'featured') desc = `Spotlight Artwork: ${window.DrawmadooDB.getArtworkById(hp.featuredArtworkId)?.title || 'Selected'}`;
+          return {
+            id: s.id,
+            name: s.name,
+            desc,
+            icon: s.id === 'hero' ? '🖼️' : (s.id === 'artists' ? '🧑‍🎨' : (s.id === 'featured' ? '✨' : '🏛️')),
+            enabled: s.enabled
+          };
+        });
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INITIALIZATION
+       ═══════════════════════════════════════════════════════════ */
+    document.addEventListener("DOMContentLoaded", () => {
+      initTheme();
+      if (window.DrawmadooDB) {
+        syncAdminAppFromDB();
+        window.DrawmadooDB.onChange(() => {
+          syncAdminAppFromDB();
+          renderDashboard();
+          renderArtworksGrid(AdminApp.artworks);
+          renderArtistsGrid(AdminApp.artists);
+          renderHomepageBuilder();
+          populateArtistSelectDropdown();
+        });
+      }
+
+      renderDashboard();
+      renderOrdersTable(AdminApp.orders);
+      renderArtworksGrid(AdminApp.artworks);
+      renderArtistsGrid(AdminApp.artists);
+      renderCollections();
+      renderCategories();
+      renderCustomers();
+      renderHomepageBuilder();
+      renderNotifications();
+      renderSVGCharts();
+      populateArtistSelectDropdown();
+
+      // Keyboard shortcut ⌘K or Ctrl+K for search
+      document.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          openSearchModal();
+        }
+        if (e.key === "Escape") {
+          closeAllModals();
+        }
+      });
+
+      // Sidebar collapse toggle
+      const sidebarToggleBtn = document.getElementById("sidebar-toggle");
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener("click", () => {
+          document.getElementById("sidebar").classList.toggle("collapsed");
+        });
+      }
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       THEME CONTROLLER
+       ═══════════════════════════════════════════════════════════ */
+    function initTheme() {
+      const savedTheme = localStorage.getItem("drawmadoo_admin_theme") || "light";
+      setTheme(savedTheme);
+    }
+
+    function toggleTheme() {
+      const newTheme = AdminApp.theme === "light" ? "dark" : "light";
+      setTheme(newTheme);
+      showToast(`Switched to ${newTheme} theme`, "info");
+    }
+
+    function setTheme(theme) {
+      AdminApp.theme = theme;
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("drawmadoo_admin_theme", theme);
+
+      const themeIcon = document.getElementById("theme-icon");
+      if (themeIcon) {
+        if (theme === "dark") {
+          themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+        } else {
+          themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+        }
+      }
+      renderSVGCharts();
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAVIGATION CONTROLLER
+       ═══════════════════════════════════════════════════════════ */
+    function switchView(viewName) {
+      AdminApp.currentView = viewName;
+
+      // Update Section Visibility
+      document.querySelectorAll(".view-section").forEach(sec => sec.classList.remove("active"));
+      const targetSec = document.getElementById(`view-${viewName}`);
+      if (targetSec) targetSec.classList.add("active");
+
+      // Update Sidebar Nav active pill
+      document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-view") === viewName);
+      });
+
+      // Update Mobile Bottom Nav
+      document.querySelectorAll(".bottom-nav-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-view") === viewName);
+      });
+
+      // Update Top Header Title & Breadcrumb
+      const pageTitleMap = {
+        dashboard: ["Dashboard", "Drawmadoo / Overview & Analytics"],
+        orders: ["Orders Management", "Drawmadoo / Collector Transactions & Invoices"],
+        artworks: ["Original Artworks", "Drawmadoo / Curated Catalog & Inventory"],
+        artists: ["Verified Artists", "Drawmadoo / Creator Profiles & Applications"],
+        collections: ["Curated Collections", "Drawmadoo / Gallery Themed Rooms"],
+        categories: ["Categories & Taxonomy", "Drawmadoo / Art Genres & Styles"],
+        customers: ["Patrons & VIP CRM", "Drawmadoo / Private Collectors Directory"],
+        analytics: ["Intelligence & Metrics", "Drawmadoo / Gross Merchandise Volume & Insights"],
+        builder: ["Homepage Builder", "Drawmadoo / Storefront Section Organizer"],
+        cms: ["Editorial CMS", "Drawmadoo / Stories & Care Guides"],
+        notifications: ["Activity Feed", "Drawmadoo / Real-time System Alerts"],
+        settings: ["Marketplace Settings", "Drawmadoo / Logistics, Branding & SEO"]
+      };
+
+      const titleEl = document.getElementById("header-page-title");
+      const breadcrumbEl = document.getElementById("header-page-breadcrumb");
+      if (pageTitleMap[viewName]) {
+        titleEl.textContent = pageTitleMap[viewName][0];
+        breadcrumbEl.textContent = pageTitleMap[viewName][1];
+      }
+
+      // Close mobile drawer if open
+      document.getElementById("sidebar").classList.remove("mobile-open");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById("sidebar").classList.toggle("mobile-open");
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       1. DASHBOARD RENDERER
+       ═══════════════════════════════════════════════════════════ */
+    function renderDashboard() {
+      // Recent orders table
+      const tbody = document.getElementById("dashboard-recent-orders-tbody");
+      if (tbody) {
+        tbody.innerHTML = AdminApp.orders.slice(0, 5).map(order => `
+          <tr onclick="openOrderModal('${order.id}')" style="cursor: pointer;">
+            <td><strong>#${order.id}</strong></td>
+            <td>
+              <div style="font-weight:600;">${order.customer}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${order.city}</div>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.6rem;">
+                <img src="${order.artworkImg}" style="width:34px; height:34px; border-radius:6px; object-fit:cover;" alt="Art">
+                <div>
+                  <div style="font-weight:500;">${order.artwork}</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">${order.artist}</div>
+                </div>
+              </div>
+            </td>
+            <td><strong>₹${order.amount.toLocaleString('en-IN')}</strong></td>
+            <td><span class="status-badge badge-${order.status.toLowerCase()}">${order.status}</span></td>
+            <td>${order.date}</td>
+          </tr>
+        `).join("");
+      }
+
+      // Pending Artists queue
+      const pendingList = document.getElementById("dashboard-pending-artists-list");
+      if (pendingList) {
+        const pending = AdminApp.artists.filter(a => a.status === "Pending").slice(0, 3);
+        pendingList.innerHTML = pending.map(a => `
+          <div class="artist-action-item">
+            <div class="artist-action-info">
+              <img src="${a.avatar}" alt="${a.name}" class="artist-avatar-sm">
+              <div class="artist-action-names">
+                <div class="artist-name-title">${a.name}</div>
+                <div class="artist-style-pill">${a.style} · ${a.city}</div>
+              </div>
+            </div>
+            <div class="artist-action-buttons">
+              <button class="btn-approve" onclick="approveArtist(${a.id}, event)">Approve</button>
+              <button class="btn-reject" onclick="rejectArtist(${a.id}, event)">Decline</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Popular Artworks Grid
+      const spotlightGrid = document.getElementById("dashboard-spotlight-artworks");
+      if (spotlightGrid) {
+        spotlightGrid.innerHTML = AdminApp.artworks.slice(0, 4).map(art => `
+          <div class="art-spotlight-card">
+            <div class="art-spotlight-img-wrap">
+              <img src="${art.image}" class="art-spotlight-img" alt="${art.title}">
+              <span class="art-spotlight-badge">${art.medium.split(" ")[0]}</span>
+            </div>
+            <div class="art-spotlight-body">
+              <div>
+                <h4 class="art-spotlight-title">${art.title}</h4>
+                <div class="art-spotlight-artist">${art.artist}</div>
+              </div>
+              <div class="art-spotlight-footer">
+                <div class="art-spotlight-price">₹${art.price.toLocaleString('en-IN')}</div>
+                <div class="art-spotlight-stats">
+                  <span>👁️ ${art.views}</span>
+                  <span>🛍️ ${art.sales}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       2. ORDERS VIEW RENDERER
+       ═══════════════════════════════════════════════════════════ */
+    function renderOrdersTable(ordersToRender) {
+      const tbody = document.getElementById("full-orders-tbody");
+      if (!tbody) return;
+
+      tbody.innerHTML = ordersToRender.map(order => `
+        <tr>
+          <td>
+            <input type="checkbox" class="custom-checkbox order-row-checkbox" value="${order.id}" onchange="handleOrderCheck('${order.id}', this.checked)">
+          </td>
+          <td><strong>#${order.id}</strong></td>
+          <td>
+            <div style="font-weight:600;">${order.customer}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${order.city}</div>
+          </td>
+          <td>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <img src="${order.artworkImg}" style="width:36px; height:36px; border-radius:6px; object-fit:cover;" alt="Art">
+              <div>
+                <div style="font-weight:500;">${order.artwork}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${order.artist}</div>
+              </div>
+            </div>
+          </td>
+          <td><strong>₹${order.amount.toLocaleString('en-IN')}</strong></td>
+          <td><span style="font-size:0.8rem; color:var(--text-secondary);">${order.payment}</span></td>
+          <td><span class="status-badge badge-${order.status.toLowerCase()}">${order.status}</span></td>
+          <td>${order.date}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-secondary btn-sm" onclick="openOrderModal('${order.id}')">Details</button>
+          </td>
+        </tr>
+      `).join("");
+
+      document.getElementById("orders-pagination-info").textContent = `Showing 1 to ${ordersToRender.length} of ${AdminApp.orders.length} orders`;
+    }
+
+    function filterOrdersByStatus(status, tabBtn) {
+      if (tabBtn) {
+        tabBtn.parentElement.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+        tabBtn.classList.add("active");
+      }
+
+      if (status === 'all') {
+        renderOrdersTable(AdminApp.orders);
+      } else {
+        const filtered = AdminApp.orders.filter(o => o.status.toLowerCase() === status.toLowerCase());
+        renderOrdersTable(filtered);
+      }
+    }
+
+    function handleOrderCheck(orderId, isChecked) {
+      if (isChecked) AdminApp.selectedOrders.add(orderId);
+      else AdminApp.selectedOrders.delete(orderId);
+    }
+
+    function toggleSelectAllOrders(masterCheckbox) {
+      const checkboxes = document.querySelectorAll(".order-row-checkbox");
+      checkboxes.forEach(cb => {
+        cb.checked = masterCheckbox.checked;
+        handleOrderCheck(cb.value, masterCheckbox.checked);
+      });
+    }
+
+    function handleOrdersBulkAction(action) {
+      if (!action) return;
+      if (AdminApp.selectedOrders.size === 0) {
+        showToast("Please select at least one order", "warning");
+        document.getElementById("orders-bulk-action").value = "";
+        return;
+      }
+
+      if (action === "mark-shipped") {
+        AdminApp.orders.forEach(o => {
+          if (AdminApp.selectedOrders.has(o.id)) o.status = "Shipped";
+        });
+        showToast(`Marked ${AdminApp.selectedOrders.size} orders as Shipped`, "success");
+      } else if (action === "mark-delivered") {
+        AdminApp.orders.forEach(o => {
+          if (AdminApp.selectedOrders.has(o.id)) o.status = "Delivered";
+        });
+        showToast(`Marked ${AdminApp.selectedOrders.size} orders as Delivered`, "success");
+      } else if (action === "cancel-orders") {
+        AdminApp.orders.forEach(o => {
+          if (AdminApp.selectedOrders.has(o.id)) o.status = "Cancelled";
+        });
+        showToast(`Cancelled ${AdminApp.selectedOrders.size} orders`, "warning");
+      } else if (action === "export-csv") {
+        exportOrdersCSV();
+      }
+
+      renderOrdersTable(AdminApp.orders);
+      renderDashboard();
+      document.getElementById("orders-bulk-action").value = "";
+    }
+
+    function exportOrdersCSV() {
+      let csv = "Order ID,Customer,City,Artwork,Artist,Amount,Status,Date\n";
+      AdminApp.orders.forEach(o => {
+        csv += `"${o.id}","${o.customer}","${o.city}","${o.artwork}","${o.artist}",${o.amount},"${o.status}","${o.date}"\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("href", url);
+      a.setAttribute("download", `drawmadoo-orders-${Date.now()}.csv`);
+      a.click();
+      showToast("Orders exported successfully as CSV", "success");
+    }
+
+    function openOrderModal(orderId) {
+      const order = AdminApp.orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById("modal-order-title").textContent = `Order Details #${order.id}`;
+      const body = document.getElementById("modal-order-body");
+      body.innerHTML = `
+        <div style="display:flex; align-items:center; gap:1.25rem; margin-bottom:1.5rem; background:var(--card); padding:1rem; border-radius:var(--radius-md);">
+          <img src="${order.artworkImg}" style="width:72px; height:72px; border-radius:var(--radius-sm); object-fit:cover;" alt="${order.artwork}">
+          <div style="flex:1;">
+            <div class="artwork-title" style="font-size:1.25rem;">${order.artwork}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted);">Original painting by ${order.artist}</div>
+            <div style="font-family:var(--font-heading); font-size:1.3rem; font-weight:700; color:var(--primary); margin-top:0.25rem;">₹${order.amount.toLocaleString('en-IN')}</div>
+          </div>
+          <span class="status-badge badge-${order.status.toLowerCase()}">${order.status}</span>
+        </div>
+
+        <div class="form-row" style="margin-bottom:1.25rem;">
+          <div>
+            <label class="form-label">Customer Information</label>
+            <div style="font-weight:600;">${order.customer}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted);">${order.city}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted);">+91 98201 44820 · verified</div>
+          </div>
+          <div>
+            <label class="form-label">Payment & Tracking</label>
+            <div style="font-weight:600;">${order.payment}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted);">Insured Courier Tracking:</div>
+            <div style="font-family:monospace; font-size:0.85rem; color:var(--primary); font-weight:700;">${order.tracking}</div>
+          </div>
+        </div>
+
+        <div class="form-group" style="padding-top:1rem; border-top:1px solid var(--border);">
+          <label class="form-label">Quick Update Order Status</label>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="updateOrderStatus('${order.id}', 'Processing')">Processing</button>
+            <button class="btn btn-secondary btn-sm" onclick="updateOrderStatus('${order.id}', 'Shipped')">Mark Shipped</button>
+            <button class="btn btn-secondary btn-sm" onclick="updateOrderStatus('${order.id}', 'Delivered')">Mark Delivered</button>
+            <button class="btn btn-secondary btn-sm" style="color:var(--danger);" onclick="updateOrderStatus('${order.id}', 'Cancelled')">Cancel Order</button>
+          </div>
+        </div>
+      `;
+      openModal("modal-order");
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+      const order = AdminApp.orders.find(o => o.id === orderId);
+      if (order) {
+        order.status = newStatus;
+        showToast(`Order #${orderId} marked as ${newStatus}`, "success");
+        closeModal("modal-order");
+        renderOrdersTable(AdminApp.orders);
+        renderDashboard();
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       3. ARTWORKS VIEW RENDERER
+       ═══════════════════════════════════════════════════════════ */
+    function renderArtworksGrid(artworks) {
+      const grid = document.getElementById("artworks-grid-container");
+      const listTbody = document.getElementById("artworks-list-tbody");
+      if (!grid) return;
+
+      // Grid View
+      grid.innerHTML = artworks.map(art => `
+        <div class="artwork-card">
+          <div class="artwork-img-box">
+            <img src="${art.image}" class="artwork-img" alt="${art.title}">
+            <div class="artwork-badges">
+              ${art.isFeatured ? '<span class="artwork-badge-tag gold">Featured</span>' : ''}
+              ${art.isPlaceholder ? '<span class="artwork-badge-tag" style="background:rgba(213,106,36,0.18); color:var(--burnt-orange);">Sample Demo</span>' : '<span class="artwork-badge-tag" style="background:rgba(46,133,85,0.18); color:var(--success);">✓ Verified Art</span>'}
+              <span class="artwork-badge-tag">${art.category}</span>
+            </div>
+            <div class="artwork-actions-hover">
+              <button class="action-icon-circle" onclick="replaceArtworkImage('${art.id}', event)" title="Replace Artwork Image">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </button>
+              <button class="action-icon-circle" onclick="duplicateArtwork('${art.id}', event)" title="Duplicate Artwork">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+              <button class="action-icon-circle" onclick="deleteArtwork('${art.id}', event)" title="Delete Artwork">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="artwork-info-box">
+            <h3 class="artwork-title">${art.title}</h3>
+            <div class="artwork-artist-row">
+              <img src="${art.artistAvatar}" class="artwork-artist-avatar" alt="${art.artist}">
+              <span>${art.artist}</span>
+            </div>
+            <div class="artwork-meta-specs">
+              <span>${art.medium}</span>
+              <span>·</span>
+              <span>${art.size}</span>
+            </div>
+            <div class="artwork-price-row">
+              <div class="artwork-price">₹${art.price.toLocaleString('en-IN')}</div>
+              <span class="status-badge ${art.inStock ? 'badge-active' : 'badge-cancelled'}">
+                ${art.inStock ? 'In Stock (1 of 1)' : 'Sold Out'}
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      // List View Table
+      if (listTbody) {
+        listTbody.innerHTML = artworks.map(art => `
+          <tr>
+            <td>
+              <img src="${art.image}" style="width:50px; height:50px; border-radius:8px; object-fit:cover;" alt="${art.title}">
+            </td>
+            <td>
+              <strong style="font-family:var(--font-heading); font-size:1.1rem;">${art.title}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${art.category}</div>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <img src="${art.artistAvatar}" style="width:20px; height:20px; border-radius:50%;" alt="${art.artist}">
+                <span>${art.artist}</span>
+              </div>
+            </td>
+            <td>${art.medium} (${art.size})</td>
+            <td><strong style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary);">₹${art.price.toLocaleString('en-IN')}</strong></td>
+            <td><span class="status-badge ${art.inStock ? 'badge-active' : 'badge-cancelled'}">${art.inStock ? 'In Stock' : 'Sold'}</span></td>
+            <td>
+              <button class="btn btn-secondary btn-sm" style="color:var(--danger);" onclick="deleteArtwork(${art.id}, event)">Delete</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+    }
+
+    function toggleArtworkViewMode(mode) {
+      const grid = document.getElementById("artworks-grid-container");
+      const list = document.getElementById("artworks-list-container");
+      const gridBtn = document.getElementById("view-grid-btn");
+      const listBtn = document.getElementById("view-list-btn");
+
+      if (mode === "grid") {
+        grid.style.display = "grid";
+        list.style.display = "none";
+        gridBtn.classList.add("active");
+        listBtn.classList.remove("active");
+      } else {
+        grid.style.display = "none";
+        list.style.display = "block";
+        gridBtn.classList.remove("active");
+        listBtn.classList.add("active");
+      }
+    }
+
+    function applyArtworkFilters() {
+      const cat = document.getElementById("artwork-filter-category").value;
+      const med = document.getElementById("artwork-filter-medium").value;
+      const stock = document.getElementById("artwork-filter-status").value;
+
+      let filtered = AdminApp.artworks;
+      if (cat !== "all") filtered = filtered.filter(a => a.category === cat);
+      if (med !== "all") filtered = filtered.filter(a => a.medium.includes(med));
+      if (stock === "inStock") filtered = filtered.filter(a => a.inStock);
+      if (stock === "sold") filtered = filtered.filter(a => !a.inStock);
+
+      renderArtworksGrid(filtered);
+    }
+
+    function deleteArtwork(artId, e) {
+      if (e) e.stopPropagation();
+      if (!confirm("Are you sure you wish to remove this original artwork from the gallery?")) return;
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.deleteArtwork(artId);
+        syncAdminAppFromDB();
+      } else {
+        AdminApp.artworks = AdminApp.artworks.filter(a => a.id !== artId);
+      }
+      showToast("Artwork removed from gallery catalog and synced with storefront", "warning");
+      renderArtworksGrid(AdminApp.artworks);
+      renderDashboard();
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       4. ARTISTS VIEW RENDERER
+       ═══════════════════════════════════════════════════════════ */
+    function renderArtistsGrid(artistsToRender) {
+      const container = document.getElementById("artists-grid-container");
+      if (!container) return;
+
+      container.innerHTML = artistsToRender.map(a => `
+        <div class="artist-card">
+          <div class="artist-card-header">
+            <img src="${a.avatar}" class="artist-card-avatar" alt="${a.name}">
+            <div class="artist-card-bio-head">
+              <h3>${a.name}</h3>
+              <div class="artist-card-meta">
+                <span>${a.countryFlag} ${a.city}</span>
+              </div>
+              <div style="font-size:0.8rem; color:var(--primary); font-weight:600; margin-top:0.2rem;">
+                ${a.style}
+              </div>
+            </div>
+          </div>
+
+          <div class="artist-card-stats">
+            <div>
+              <div class="artist-stat-val">${a.artworksCount}</div>
+              <div class="artist-stat-lbl">Artworks</div>
+            </div>
+            <div>
+              <div class="artist-stat-val">${a.totalSales}</div>
+              <div class="artist-stat-lbl">Sales</div>
+            </div>
+            <div>
+              <div class="artist-stat-val">
+                <span class="status-badge ${a.status === 'Approved' ? 'badge-approved' : 'badge-pending'}">${a.status}</span>
+              </div>
+              <div class="artist-stat-lbl">Status</div>
+            </div>
+          </div>
+
+          <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.4;">
+            ${a.bio}
+          </p>
+
+          <div class="artist-card-footer">
+            ${a.status === "Pending" ? `
+              <button class="btn-approve" style="flex:1;" onclick="approveArtist(${a.id}, event)">Approve Verification</button>
+              <button class="btn-reject" onclick="rejectArtist(${a.id}, event)">Decline</button>
+            ` : `
+              <span class="status-badge badge-verified">✓ Verified Creator</span>
+              <button class="btn btn-secondary btn-sm" onclick="showToast('Viewing ${a.name} public studio...', 'info')">View Studio →</button>
+            `}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function filterArtists(filter, tabBtn) {
+      if (tabBtn) {
+        tabBtn.parentElement.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+        tabBtn.classList.add("active");
+      }
+
+      if (filter === "all") renderArtistsGrid(AdminApp.artists);
+      else if (filter === "approved") renderArtistsGrid(AdminApp.artists.filter(a => a.status === "Approved"));
+      else if (filter === "pending") renderArtistsGrid(AdminApp.artists.filter(a => a.status === "Pending"));
+    }
+
+    function approveArtist(artistId, e) {
+      if (e) e.stopPropagation();
+      const artist = AdminApp.artists.find(a => a.id === artistId);
+      if (artist) {
+        artist.status = "Approved";
+        showToast(`${artist.name} is now approved and verified!`, "success");
+        renderArtistsGrid(AdminApp.artists);
+        renderDashboard();
+        updatePendingBadges();
+      }
+    }
+
+    function rejectArtist(artistId, e) {
+      if (e) e.stopPropagation();
+      const artist = AdminApp.artists.find(a => a.id === artistId);
+      if (artist) {
+        artist.status = "Rejected";
+        showToast(`Application for ${artist.name} was declined`, "warning");
+        renderArtistsGrid(AdminApp.artists);
+        renderDashboard();
+        updatePendingBadges();
+      }
+    }
+
+    function updatePendingBadges() {
+      const pendingCount = AdminApp.artists.filter(a => a.status === "Pending").length;
+      const badge = document.getElementById("sidebar-artists-badge");
+      if (badge) badge.textContent = pendingCount;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       5. COLLECTIONS, CATEGORIES, CUSTOMERS RENDERERS
+       ═══════════════════════════════════════════════════════════ */
+    function renderCollections() {
+      const c = document.getElementById("collections-grid-container");
+      if (!c) return;
+      c.innerHTML = AdminApp.collections.map(col => `
+        <div class="art-spotlight-card">
+          <div class="art-spotlight-img-wrap">
+            <img src="${col.image}" class="art-spotlight-img" alt="${col.name}">
+            <span class="art-spotlight-badge">${col.count} Works</span>
+          </div>
+          <div class="art-spotlight-body">
+            <h4 class="art-spotlight-title">${col.name}</h4>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">${col.description}</p>
+            <div class="art-spotlight-footer">
+              <span class="status-badge badge-active">Live in Gallery</span>
+              <button class="btn btn-secondary btn-sm" onclick="showToast('Collection room opened', 'info')">Edit</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderCategories() {
+      const c = document.getElementById("categories-grid-container");
+      if (!c) return;
+      c.innerHTML = AdminApp.categories.map(cat => `
+        <div class="art-spotlight-card">
+          <div class="art-spotlight-img-wrap">
+            <img src="${cat.image}" class="art-spotlight-img" alt="${cat.name}">
+            <span class="art-spotlight-badge">${cat.count} Items</span>
+          </div>
+          <div class="art-spotlight-body">
+            <h4 class="art-spotlight-title">${cat.name}</h4>
+            <div class="art-spotlight-footer">
+              <span class="status-badge badge-active">Active</span>
+              <button class="btn btn-secondary btn-sm" onclick="showToast('Category settings opened', 'info')">Configure</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderCustomers() {
+      const tbody = document.getElementById("customers-table-tbody");
+      if (!tbody) return;
+      tbody.innerHTML = AdminApp.customers.map(cust => `
+        <tr>
+          <td><strong>${cust.name}</strong></td>
+          <td>${cust.city}</td>
+          <td>${cust.owned} originals</td>
+          <td><strong style="color:var(--primary);">${cust.spent}</strong></td>
+          <td><span class="status-badge badge-verified">${cust.tier}</span></td>
+          <td>${cust.lastActive}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-secondary btn-sm" onclick="showToast('VIP Collector Concierge email opened', 'info')">Send Curated Picks</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       6. HOMEPAGE BUILDER RENDERER
+       ═══════════════════════════════════════════════════════════ */
+    function renderHomepageBuilder() {
+      const list = document.getElementById("homepage-builder-list");
+      if (!list) return;
+
+      list.innerHTML = AdminApp.homepageSections.map((sec, idx) => `
+        <div class="builder-item">
+          <div class="builder-left">
+            <div class="builder-reorder-btns">
+              <button class="reorder-btn" onclick="moveBuilderSection(${idx}, -1)" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+              <button class="reorder-btn" onclick="moveBuilderSection(${idx}, 1)" ${idx === AdminApp.homepageSections.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+            </div>
+            <div class="builder-icon-tag">${sec.icon}</div>
+            <div class="builder-titles">
+              <h4>${sec.name}</h4>
+              <p>${sec.desc}</p>
+            </div>
+          </div>
+          <div class="builder-right">
+            <span class="status-badge ${sec.enabled ? 'badge-active' : 'badge-cancelled'}">
+              ${sec.enabled ? 'Visible' : 'Hidden'}
+            </span>
+            <label class="switch">
+              <input type="checkbox" ${sec.enabled ? 'checked' : ''} onchange="toggleBuilderSection(${idx}, this.checked)">
+              <span class="slider"></span>
+            </label>
+            <button class="btn btn-secondary btn-sm" onclick="openSectionConfig('${sec.id}')">
+              Configure
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openSectionConfig(sectionId) {
+      if (!window.DrawmadooDB) return;
+      const artworks = window.DrawmadooDB.getArtworks({ includeHidden: true });
+      const hp = window.DrawmadooDB.getHomepageConfig();
+
+      if (sectionId === 'hero') {
+        const optionsList = artworks.map((a, i) => `${i + 1}. [${a.id}] "${a.title}" by ${a.artist}`).join("\n");
+        const chosen = prompt(`Select which uploaded artwork to feature as the HERO banner:\n\n${optionsList}\n\nEnter Artwork ID or Number (1-${artworks.length}):`, hp.heroArtworkId || "1");
+        if (chosen) {
+          const matched = artworks.find(a => a.id === chosen.trim()) || artworks[parseInt(chosen) - 1];
+          if (matched) {
+            window.DrawmadooDB.setHeroArtwork(matched.id);
+            syncAdminAppFromDB();
+            renderHomepageBuilder();
+            showToast(`Hero artwork updated to "${matched.title}"! Live on storefront.`, "success");
+          }
+        }
+      } else if (sectionId === 'featured') {
+        const optionsList = artworks.map((a, i) => `${i + 1}. [${a.id}] "${a.title}" by ${a.artist}`).join("\n");
+        const chosen = prompt(`Select which uploaded artwork to feature in the SPOTLIGHT showcase:\n\n${optionsList}\n\nEnter Artwork ID or Number (1-${artworks.length}):`, hp.featuredArtworkId || "1");
+        if (chosen) {
+          const matched = artworks.find(a => a.id === chosen.trim()) || artworks[parseInt(chosen) - 1];
+          if (matched) {
+            window.DrawmadooDB.setFeaturedArtwork(matched.id);
+            syncAdminAppFromDB();
+            renderHomepageBuilder();
+            showToast(`Featured spotlight artwork updated to "${matched.title}"! Live on storefront.`, "success");
+          }
+        }
+      } else if (sectionId === 'spotlight') {
+        const artists = window.DrawmadooDB.getArtists();
+        const optionsList = artists.map((a, i) => `${i + 1}. [${a.id}] ${a.name} (${a.style})`).join("\n");
+        const chosen = prompt(`Select which verified creator to spotlight in "Meet the Artist":\n\n${optionsList}\n\nEnter Artist ID or Number (1-${artists.length}):`, hp.featuredArtistId || "1");
+        if (chosen) {
+          const matched = artists.find(a => a.id === chosen.trim()) || artists[parseInt(chosen) - 1];
+          if (matched) {
+            window.DrawmadooDB.updateHomepageConfig({ featuredArtistId: matched.id });
+            syncAdminAppFromDB();
+            renderHomepageBuilder();
+            showToast(`Spotlight creator updated to ${matched.name}! Live on storefront.`, "success");
+          }
+        }
+      } else {
+        showToast(`Configuration drawer opened for ${sectionId}`, "info");
+      }
+    }
+
+    function moveBuilderSection(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= AdminApp.homepageSections.length) return;
+
+      const temp = AdminApp.homepageSections[index];
+      AdminApp.homepageSections[index] = AdminApp.homepageSections[newIndex];
+      AdminApp.homepageSections[newIndex] = temp;
+
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.updateHomepageConfig({
+          sections: AdminApp.homepageSections.map((s, i) => ({
+            id: s.id,
+            name: s.name,
+            enabled: s.enabled,
+            order: i + 1
+          }))
+        });
+      }
+
+      renderHomepageBuilder();
+      showToast("Storefront section sequence reordered and saved", "info");
+    }
+
+    function toggleBuilderSection(index, isChecked) {
+      AdminApp.homepageSections[index].enabled = isChecked;
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.updateHomepageConfig({
+          sections: AdminApp.homepageSections.map((s, i) => ({
+            id: s.id,
+            name: s.name,
+            enabled: s.enabled,
+            order: i + 1
+          }))
+        });
+      }
+      renderHomepageBuilder();
+      showToast(`${AdminApp.homepageSections[index].name} visibility updated`, "info");
+    }
+
+    function saveBuilderLayout() {
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.updateHomepageConfig({
+          sections: AdminApp.homepageSections.map((s, i) => ({
+            id: s.id,
+            name: s.name,
+            enabled: s.enabled,
+            order: i + 1
+          }))
+        });
+      }
+      showToast("Homepage layout configuration published to Drawmadoo.com storefront!", "success");
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       7. SVG CHARTS GENERATOR (NO LIBRARIES)
+       ═══════════════════════════════════════════════════════════ */
+    function renderSVGCharts() {
+      const chartBox = document.getElementById("revenue-chart-box");
+      const donutBox = document.getElementById("donut-chart-box");
+      if (!chartBox || !donutBox) return;
+
+      const isDark = AdminApp.theme === "dark";
+      const barColor = "#8A5A2B";
+      const barHover = "#C99A42";
+      const textColor = isDark ? "#8E7F72" : "#9B8A7A";
+      const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+
+      // Revenue Bar Chart Data (Jan - Oct in ₹ Lakhs)
+      const data = [
+        { m: "Jan", v: 4.8 }, { m: "Feb", v: 5.4 }, { m: "Mar", v: 6.8 },
+        { m: "Apr", v: 7.2 }, { m: "May", v: 8.5 }, { m: "Jun", v: 9.1 },
+        { m: "Jul", v: 8.9 }, { m: "Aug", v: 10.4 }, { m: "Sep", v: 11.2 },
+        { m: "Oct", v: 12.45 }
+      ];
+
+      const maxVal = 14;
+      const width = 640;
+      const height = 240;
+      const barWidth = 36;
+      const gap = (width - 60 - data.length * barWidth) / (data.length - 1);
+
+      let barsSvg = "";
+      data.forEach((d, i) => {
+        const x = 50 + i * (barWidth + gap);
+        const barH = (d.v / maxVal) * 180;
+        const y = height - 35 - barH;
+        barsSvg += `
+          <g class="chart-bar-group" style="cursor: pointer;">
+            <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="6" fill="${barColor}" opacity="0.9">
+              <animate attributeName="height" from="0" to="${barH}" dur="0.8s" fill="freeze" />
+              <animate attributeName="y" from="${height - 35}" to="${y}" dur="0.8s" fill="freeze" />
+            </rect>
+            <text x="${x + barWidth / 2}" y="${height - 15}" fill="${textColor}" font-size="12" text-anchor="middle">${d.m}</text>
+            <text x="${x + barWidth / 2}" y="${y - 8}" fill="${isDark ? '#F0E9DE' : '#35241B'}" font-size="11" font-weight="600" text-anchor="middle">₹${d.v}L</text>
+          </g>
+        `;
+      });
+
+      chartBox.innerHTML = `
+        <svg class="svg-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
+          <line x1="40" y1="30" x2="${width}" y2="30" stroke="${gridColor}" stroke-dasharray="4"/>
+          <line x1="40" y1="90" x2="${width}" y2="90" stroke="${gridColor}" stroke-dasharray="4"/>
+          <line x1="40" y1="150" x2="${width}" y2="150" stroke="${gridColor}" stroke-dasharray="4"/>
+          <line x1="40" y1="${height - 35}" x2="${width}" y2="${height - 35}" stroke="${isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}"/>
+          ${barsSvg}
+        </svg>
+      `;
+
+      // Donut Chart for Categories
+      donutBox.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+          <div style="position: relative; width: 170px; height: 170px;">
+            <svg viewBox="0 0 42 42" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="${isDark ? '#2D221B' : '#EFE4D2'}" stroke-width="6"/>
+              <!-- Segment 1: Traditional (38%) -->
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#8A5A2B" stroke-width="6" stroke-dasharray="38 62" stroke-dashoffset="0"/>
+              <!-- Segment 2: Contemporary (28%) -->
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#0F6F8E" stroke-width="6" stroke-dasharray="28 72" stroke-dashoffset="-38"/>
+              <!-- Segment 3: Watercolors (20%) -->
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#C99A42" stroke-width="6" stroke-dasharray="20 80" stroke-dashoffset="-66"/>
+              <!-- Segment 4: Folk & Tribal (14%) -->
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#D56A24" stroke-width="6" stroke-dasharray="14 86" stroke-dashoffset="-86"/>
+            </svg>
+            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+              <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; line-height: 1;">2,340</span>
+              <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Artworks</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #8A5A2B;"></span> Traditional & Heritage (38%)</div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #0F6F8E;"></span> Contemporary Oils (28%)</div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #C99A42;"></span> Watercolors & Washes (20%)</div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #D56A24;"></span> Indigenous Folk Art (14%)</div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       8. NOTIFICATIONS CONTROLLER
+       ═══════════════════════════════════════════════════════════ */
+    function renderNotifications() {
+      const container = document.getElementById("notifications-container");
+      if (!container) return;
+
+      container.innerHTML = AdminApp.notifications.map(n => `
+        <div style="display:flex; align-items:flex-start; gap:1rem; padding:1.2rem; border-bottom:1px solid var(--border); ${n.unread ? 'background:var(--primary-bg); border-radius:var(--radius-md); margin-bottom:0.4rem;' : ''}">
+          <div style="width:36px; height:36px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            ${n.type === 'order' ? '🛍️' : n.type === 'artist' ? '👩‍🎨' : n.type === 'inventory' ? '🖼️' : '⚙️'}
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <strong style="font-size:0.92rem;">${n.title}</strong>
+              <span style="font-size:0.75rem; color:var(--text-muted);">${n.time}</span>
+            </div>
+            <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.25rem;">${n.desc}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function markAllNotificationsAsRead() {
+      AdminApp.notifications.forEach(n => n.unread = false);
+      renderNotifications();
+      document.getElementById("sidebar-notifs-badge").textContent = "0";
+      showToast("All marketplace alerts marked as read", "success");
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       9. SETTINGS CONTROLLER
+       ═══════════════════════════════════════════════════════════ */
+    function switchSettingsTab(tabName, tabBtn) {
+      document.querySelectorAll(".settings-tab-btn").forEach(b => b.classList.remove("active"));
+      tabBtn.classList.add("active");
+
+      document.querySelectorAll(".settings-panel").forEach(p => p.classList.remove("active"));
+      const target = document.getElementById(`settings-panel-${tabName}`);
+      if (target) target.classList.add("active");
+    }
+
+    function saveAllSettings() {
+      showToast("All marketplace configurations saved successfully!", "success");
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       10. MODALS LOGIC
+       ═══════════════════════════════════════════════════════════ */
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add("open");
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove("open");
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll(".modal-backdrop").forEach(m => m.classList.remove("open"));
+    }
+
+    function handleBackdropClick(e, modalId) {
+      if (e.target.id === modalId) {
+        closeModal(modalId);
+      }
+    }
+
+    function openAddArtworkModal() {
+      populateArtistSelectDropdown();
+      document.getElementById("artwork-form").reset();
+      document.getElementById("artwork-upload-preview").style.display = "none";
+      document.getElementById("artwork-upload-placeholder").style.display = "block";
+      openModal("modal-artwork");
+    }
+
+    function openAddArtistModal() {
+      document.getElementById("artist-form").reset();
+      document.getElementById("artist-avatar-preview").style.display = "none";
+      document.getElementById("artist-avatar-placeholder").style.display = "block";
+      openModal("modal-artist");
+    }
+
+    function openSearchModal() {
+      openModal("modal-search");
+      setTimeout(() => document.getElementById("global-search-input").focus(), 150);
+    }
+
+    function populateArtistSelectDropdown() {
+      const select = document.getElementById("artwork-artist-select");
+      if (!select) return;
+      select.innerHTML = AdminApp.artists.map(a => `<option value="${a.name}">${a.name} (${a.style})</option>`).join("");
+    }
+
+    function previewArtworkImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById("artwork-upload-preview");
+          preview.src = e.target.result;
+          preview.style.display = "block";
+          document.getElementById("artwork-upload-placeholder").style.display = "none";
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function previewArtistAvatar(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById("artist-avatar-preview");
+          preview.src = e.target.result;
+          preview.style.display = "block";
+          document.getElementById("artist-avatar-placeholder").style.display = "none";
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function handleSaveArtwork(e) {
+      e.preventDefault();
+      const title = document.getElementById("artwork-title-input").value;
+      const artist = document.getElementById("artwork-artist-select").value;
+      const price = parseFloat(document.getElementById("artwork-price-input").value) || 20000;
+      const medium = document.getElementById("artwork-medium-input").value;
+      const size = document.getElementById("artwork-size-input").value;
+      const category = document.getElementById("artwork-category-select").value;
+      const desc = document.getElementById("artwork-desc-input")?.value || "";
+      const previewSrc = document.getElementById("artwork-upload-preview").src;
+      const isFeatured = document.getElementById("artwork-featured-checkbox").checked;
+
+      const fallbackImages = [
+        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80",
+        "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&q=80",
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80"
+      ];
+      const image = (previewSrc && previewSrc.length > 50) ? previewSrc : fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+
+      const newId = `art-${Date.now()}`;
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.createArtwork({
+          id: newId,
+          title,
+          artist,
+          price,
+          medium,
+          size,
+          category,
+          description: desc,
+          image,
+          images: [image],
+          featured: isFeatured,
+          status: 'available',
+          isPlaceholder: false
+        });
+      } else {
+        AdminApp.artworks.unshift({
+          id: newId,
+          title,
+          artist,
+          price,
+          medium,
+          size,
+          category,
+          image,
+          inStock: true,
+          isFeatured,
+          views: 120,
+          sales: 0
+        });
+      }
+
+      closeModal("modal-artwork");
+      showToast(`'${title}' published & updated on live storefront!`, "success");
+      syncAdminAppFromDB();
+      renderArtworksGrid(AdminApp.artworks);
+      renderDashboard();
+    }
+
+    function cleanWipeDemoData() {
+      if (!confirm("⚠️ Are you sure you want to purge all placeholder/demo artworks? This removes all sample items so you can launch with authentic artworks.")) return;
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.clearAllPlaceholders();
+        syncAdminAppFromDB();
+        renderArtworksGrid(AdminApp.artworks);
+        renderArtistsGrid(AdminApp.artists);
+        renderDashboard();
+        showToast("All demo placeholder artworks purged! Gallery is clean for production.", "success");
+      }
+    }
+
+    function restoreDemoArtworks() {
+      if (!confirm("Restore full demo catalog with sample paintings, sketches, and artists?")) return;
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.resetToDefaults();
+        syncAdminAppFromDB();
+        renderArtworksGrid(AdminApp.artworks);
+        renderArtistsGrid(AdminApp.artists);
+        renderDashboard();
+        showToast("Sample artworks restored to default catalog.", "info");
+      }
+    }
+
+    function duplicateArtwork(artId, e) {
+      if (e) e.stopPropagation();
+      if (window.DrawmadooDB) {
+        window.DrawmadooDB.duplicateArtwork(artId);
+        syncAdminAppFromDB();
+        renderArtworksGrid(AdminApp.artworks);
+        showToast("Artwork duplicated as draft.", "success");
+      }
+    }
+
+    function replaceArtworkImage(artId, e) {
+      if (e) e.stopPropagation();
+      const current = window.DrawmadooDB?.getArtworkById(artId);
+      const newUrl = prompt(`Enter new image URL or base64 data for "${current?.title || 'Artwork'}":`, current?.images?.[0] || "");
+      if (newUrl && newUrl.trim()) {
+        window.DrawmadooDB.updateArtwork(artId, {
+          image: newUrl.trim(),
+          images: [newUrl.trim()],
+          isPlaceholder: false
+        });
+        syncAdminAppFromDB();
+        renderArtworksGrid(AdminApp.artworks);
+        renderDashboard();
+        showToast("Artwork image updated and synchronized with storefront!", "success");
+      }
+    }
+
+    function handleSaveArtist(e) {
+      e.preventDefault();
+      const name = document.getElementById("artist-name-input").value;
+      const style = document.getElementById("artist-style-input").value;
+      const city = document.getElementById("artist-city-input").value;
+      const country = document.getElementById("artist-country-input").value || "India";
+      const bio = document.getElementById("artist-bio-input").value || "Independent contemporary artist.";
+      const isVerified = document.getElementById("artist-verified-checkbox").checked;
+      const previewSrc = document.getElementById("artist-avatar-preview").src;
+
+      const avatar = (previewSrc && previewSrc.length > 50) ? previewSrc : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80";
+
+      const newArtist = {
+        id: Date.now(),
+        name,
+        avatar,
+        style,
+        city,
+        country,
+        countryFlag: "🇮🇳",
+        artworksCount: 0,
+        totalSales: "₹0",
+        status: isVerified ? "Approved" : "Pending",
+        bio
+      };
+
+      AdminApp.artists.unshift(newArtist);
+      closeModal("modal-artist");
+      showToast(`Artist ${name} onboarded successfully!`, "success");
+      renderArtistsGrid(AdminApp.artists);
+      renderDashboard();
+      populateArtistSelectDropdown();
+      updatePendingBadges();
+    }
+
+    function handleGlobalSearch(query) {
+      const resultsContainer = document.getElementById("global-search-results");
+      if (!query.trim()) {
+        resultsContainer.innerHTML = `<div style="color:var(--text-muted); font-size:0.86rem; text-align:center; padding:2rem;">Start typing to search across orders, artworks, and artists...</div>`;
+        return;
+      }
+
+      const q = query.toLowerCase();
+      const matchingArt = AdminApp.artworks.filter(a => a.title.toLowerCase().includes(q) || a.artist.toLowerCase().includes(q));
+      const matchingOrders = AdminApp.orders.filter(o => o.id.toLowerCase().includes(q) || o.customer.toLowerCase().includes(q));
+      const matchingArtists = AdminApp.artists.filter(a => a.name.toLowerCase().includes(q) || a.style.toLowerCase().includes(q));
+
+      let html = "";
+
+      if (matchingArt.length > 0) {
+        html += `<div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); margin-bottom:0.5rem;">Artworks</div>`;
+        matchingArt.forEach(a => {
+          html += `
+            <div style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem; border-radius:var(--radius-sm); cursor:pointer;" onclick="closeModal('modal-search'); switchView('artworks');">
+              <img src="${a.image}" style="width:36px; height:36px; border-radius:4px; object-fit:cover;">
+              <div>
+                <strong style="font-size:0.9rem;">${a.title}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${a.artist} · ₹${a.price.toLocaleString('en-IN')}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (matchingArtists.length > 0) {
+        html += `<div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); margin:0.8rem 0 0.5rem;">Artists</div>`;
+        matchingArtists.forEach(a => {
+          html += `
+            <div style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem; border-radius:var(--radius-sm); cursor:pointer;" onclick="closeModal('modal-search'); switchView('artists');">
+              <img src="${a.avatar}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+              <div>
+                <strong style="font-size:0.9rem;">${a.name}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${a.style} · ${a.city}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (matchingOrders.length > 0) {
+        html += `<div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); margin:0.8rem 0 0.5rem;">Orders</div>`;
+        matchingOrders.forEach(o => {
+          html += `
+            <div style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem; border-radius:var(--radius-sm); cursor:pointer;" onclick="closeModal('modal-search'); openOrderModal('${o.id}');">
+              <div style="width:36px; height:36px; border-radius:4px; background:var(--card); display:flex; align-items:center; justify-content:center; font-weight:700;">#</div>
+              <div>
+                <strong style="font-size:0.9rem;">Order #${o.id} (${o.customer})</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${o.artwork} · ₹${o.amount.toLocaleString('en-IN')}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (!html) {
+        html = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No records found matching "${query}".</div>`;
+      }
+
+      resultsContainer.innerHTML = html;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       11. TOAST NOTIFICATION ENGINE
+       ═══════════════════════════════════════════════════════════ */
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+
+      let icon = "ℹ️";
+      if (type === "success") icon = "✓";
+      else if (type === "warning") icon = "⚠️";
+
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100%)";
+        toast.style.transition = "all 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

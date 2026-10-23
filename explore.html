@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Explore original artworks by verified independent artists on Drawmadoo — Paintings, sketches, digital art and sculptures.">
+  <meta name="theme-color" content="#F7F2EA">
+  <title>Explore Artworks — Drawmadoo</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <!-- Design System & Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    /* ── Dedicated Explore Catalog Styles ── */
+    .explore-banner {
+      position: relative;
+      padding: 120px 0 32px;
+      background: linear-gradient(180deg, rgba(239, 228, 210, 0.45) 0%, rgba(247, 242, 234, 0.8) 100%);
+      border-bottom: 1px solid var(--color-border-card);
+      overflow: hidden;
+    }
+
+    .explore-banner-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      mask-image: linear-gradient(to right, transparent, black);
+      -webkit-mask-image: linear-gradient(to right, transparent, black);
+      pointer-events: none;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-3);
+      text-transform: capitalize;
+    }
+
+    .breadcrumbs a {
+      color: var(--color-text-secondary);
+    }
+    .breadcrumbs a:hover {
+      color: var(--color-primary);
+    }
+
+    .explore-title {
+      font-size: var(--text-6xl);
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+      color: var(--color-text);
+      line-height: 1.1;
+    }
+
+    .explore-subtitle {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      max-width: 680px;
+      line-height: 1.5;
+      margin-bottom: var(--space-8);
+    }
+
+    /* Category Pill Carousel with Thumbnails (Mockup Accurate) */
+    .explore-category-scroll {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      overflow-x: auto;
+      padding-bottom: var(--space-2);
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: var(--space-6);
+    }
+    .explore-category-scroll::-webkit-scrollbar { display: none; }
+
+    .cat-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 6px 12px 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all var(--duration) var(--ease-out);
+      min-width: 80px;
+      text-align: center;
+      box-shadow: var(--shadow-xs);
+    }
+    .cat-pill:hover, .cat-pill.active {
+      border-color: var(--color-primary);
+      background: var(--color-card);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .cat-pill.active {
+      border-width: 2px;
+      border-color: var(--color-primary);
+    }
+    .cat-pill-thumb {
+      width: 48px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--color-card);
+    }
+    .cat-pill-name {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+
+    /* Filter & Controls Toolbar (Mockup Accurate) */
+    .catalog-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-6);
+    }
+
+    .filter-pills-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .btn-filter-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      background: var(--color-card);
+      border: 1px solid var(--color-border-strong);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+    }
+    .btn-filter-trigger:hover {
+      background: var(--color-card-hover);
+      border-color: var(--color-primary);
+    }
+
+    .filter-select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 8px 30px 8px 14px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-text);
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B5545' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      transition: border-color var(--duration) var(--ease-out);
+    }
+    .filter-select:hover, .filter-select:focus {
+      border-color: var(--color-primary);
+    }
+
+    .catalog-view-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .view-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+    }
+    .view-toggle-btn.active {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    .results-count-bar {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-6);
+      font-weight: 500;
+    }
+
+    /* Masonry & Responsive Grid (Mockup Accurate) */
+    .explore-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-5);
+    }
+
+    @media (max-width: 1400px) {
+      .explore-gallery-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 1100px) {
+      .explore-gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .explore-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+      }
+      .explore-title { font-size: var(--text-3xl); }
+      .cat-pill {
+        border-radius: 50px;
+        padding: 4px;
+        min-width: 60px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+      .cat-pill-thumb {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+      }
+      .cat-pill.active .cat-pill-thumb {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px var(--color-primary);
+      }
+      .filter-select { display: none; }
+    }
+
+    /* Modern Card Layout */
+    .catalog-card {
+      background: var(--color-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all var(--duration) var(--ease-out);
+    }
+    .catalog-card:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-4px);
+    }
+    .catalog-card-image-wrap {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      background: var(--color-bg-alt);
+    }
+    .catalog-card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out);
+    }
+    .catalog-card:hover .catalog-card-image-wrap img {
+      transform: scale(1.05);
+    }
+    .card-badge-featured {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--color-burnt-orange);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      z-index: 2;
+    }
+    .card-btn-wishlist {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+      cursor: pointer;
+      z-index: 2;
+      transition: all var(--duration) var(--ease-out);
+    }
+    .card-btn-wishlist:hover {
+      background: white;
+      transform: scale(1.1);
+      color: var(--color-burnt-orange);
+    }
+    .card-btn-wishlist.active {
+      color: var(--color-burnt-orange);
+      fill: var(--color-burnt-orange);
+    }
+    .card-btn-cart {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--duration) var(--ease-out);
+    }
+    .card-btn-cart:hover {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+      transform: scale(1.06);
+    }
+    .catalog-card-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 2px;
+      line-height: 1.25;
+    }
+    .card-artist-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+    .card-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--color-golden-sand);
+      margin-bottom: 6px;
+    }
+    .card-price-row {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .card-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: auto;
+    }
+    .card-tag-pill {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      background: rgba(138, 90, 43, 0.08);
+      color: var(--color-text-secondary);
+    }
+
+    /* Empty state */
+    .empty-catalog-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-20) 0;
+    }
+    .empty-catalog-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-4);
+    }
+
+    /* Fixed Bottom App Navigation (Mobile Only) */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--color-border);
+      z-index: 800;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 var(--space-2);
+    }
+    @media (max-width: 768px) {
+      .mobile-bottom-nav { display: flex; }
+      body { padding-bottom: 64px; }
+    }
+    .bottom-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--color-text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .bottom-tab.active {
+      color: var(--color-primary);
+    }
+    .bottom-tab svg {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ Frosted Header ═══════════ -->
+  <header class="navbar scrolled" id="explore-navbar">
+    <div class="container navbar-inner">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <button class="btn-icon mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <a href="index.html" class="navbar-logo">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600; color: #8A5A2B;">Drawmadoo</span>
+        </a>
+      </div>
+
+      <nav class="navbar-links" style="display: flex; gap: var(--space-6);">
+        <a href="index.html">Home</a>
+        <a href="explore.html" style="color: var(--color-primary); font-weight: 600;">Explore</a>
+        <a href="index.html#collections">Collections</a>
+        <a href="index.html#artists">Artists</a>
+        <a href="index.html#custom">Custom Art</a>
+        <a href="index.html#about">About</a>
+      </nav>
+
+      <div class="navbar-actions">
+        <button class="btn-icon" onclick="openSearchOverlay()" aria-label="Search" title="Search Artworks">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="btn-icon" onclick="toggleTheme()" aria-label="Theme toggle" title="Toggle Dark/Light Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/></svg>
+        </button>
+        <a href="admin/index.html" class="btn btn-outline btn-sm" title="Open Admin CMS">
+          <span>Admin CMS</span>
+        </a>
+        <a href="index.html#artists" class="btn-become-artist">Become an Artist</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════ Banner Section (Mockup Accurate) ═══════════ -->
+  <section class="explore-banner">
+    <div class="explore-banner-bg"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <span>Explore</span>
+      </div>
+      <h1 class="explore-title">Explore Artworks</h1>
+      <p class="explore-subtitle">Discover unique paintings, sketches and digital artworks from talented independent artists around the world.</p>
+
+      <!-- Category Filter Pills with Thumbnails -->
+      <div class="explore-category-scroll" id="explore-category-pills"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Catalog Container ═══════════ -->
+  <main class="container" style="padding-top: var(--space-6); padding-bottom: var(--space-20);">
+
+    <!-- Filter & Sort Toolbar -->
+    <div class="catalog-toolbar">
+      <div class="filter-pills-row">
+        <button class="btn-filter-trigger" onclick="toggleFilterDrawer()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          <span>Filters</span>
+        </button>
+
+        <select class="filter-select" id="filter-medium" onchange="applyFilters()">
+          <option value="all">Medium ▾</option>
+          <option value="Oil Painting">Oil Painting</option>
+          <option value="Watercolor">Watercolor</option>
+          <option value="Acrylic">Acrylic</option>
+          <option value="Digital Art">Digital Art</option>
+          <option value="Pencil">Pencil & Charcoal</option>
+        </select>
+
+        <select class="filter-select" id="filter-price" onchange="applyFilters()">
+          <option value="all">Price ▾</option>
+          <option value="0-10000">Under ₹10,000</option>
+          <option value="10000-20000">₹10,000 – ₹20,000</option>
+          <option value="20000-999999">Above ₹20,000</option>
+        </select>
+
+        <select class="filter-select" id="filter-orientation" onchange="applyFilters()">
+          <option value="all">Orientation ▾</option>
+          <option value="vertical">Vertical</option>
+          <option value="horizontal">Horizontal</option>
+          <option value="square">Square</option>
+        </select>
+
+        <select class="filter-select" id="filter-availability" onchange="applyFilters()">
+          <option value="all">Availability ▾</option>
+          <option value="available">Available</option>
+          <option value="sold">Sold Out</option>
+        </select>
+      </div>
+
+      <div class="catalog-view-actions">
+        <select class="filter-select" id="sort-select" onchange="applyFilters()" style="min-width: 140px;">
+          <option value="trending">Sort by: Trending ▾</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="newest">Recently Added</option>
+          <option value="rating">Top Rated</option>
+        </select>
+
+        <button class="view-toggle-btn active" id="btn-grid-view" onclick="setViewMode('grid')" aria-label="Grid View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-toggle-btn" id="btn-list-view" onclick="setViewMode('list')" aria-label="List View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Counter -->
+    <div class="results-count-bar">
+      <span id="results-count-text">Loading catalog...</span>
+    </div>
+
+    <!-- Artworks Grid Container -->
+    <div class="explore-gallery-grid" id="explore-cards-container"></div>
+  </main>
+
+  <!-- ═══════════ Mobile App Tab Bar (Mockup Accurate) ═══════════ -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="bottom-tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="explore.html" class="bottom-tab active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span>Explore</span>
+    </a>
+    <a href="index.html#artists" class="bottom-tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Artists</span>
+    </a>
+    <a href="index.html" class="bottom-tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Cart</span>
+    </a>
+    <a href="admin/index.html" class="bottom-tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- ═══════════ Scripts ═══════════ -->
+  <script src="js/db.js"></script>
+  <script>
+    'use strict';
+
+    let currentFilter = {
+      category: 'All',
+      medium: 'all',
+      priceRange: 'all',
+      orientation: 'all',
+      availability: 'all',
+      sortBy: 'trending'
+    };
+    let viewMode = 'grid';
+
+    function initExplorePage() {
+      renderCategoryPills();
+      loadCatalog();
+
+      // Listen for dynamic database updates across tabs!
+      window.DrawmadooDB.onChange(() => {
+        loadCatalog();
+      });
+
+      // Wishlist check
+      initWishlistButtons();
+    }
+
+    function renderCategoryPills() {
+      const container = document.getElementById('explore-category-pills');
+      const cats = window.DrawmadooDB.getCategories();
+
+      container.innerHTML = cats.map(c => `
+        <button class="cat-pill ${c.name.toLowerCase() === currentFilter.category.toLowerCase() ? 'active' : ''}" onclick="selectCategory('${c.name}')">
+          <img src="${c.image}" class="cat-pill-thumb" alt="${c.name}" loading="lazy">
+          <span class="cat-pill-name">${c.name}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(catName) {
+      currentFilter.category = catName;
+      renderCategoryPills();
+      loadCatalog();
+    }
+
+    function applyFilters() {
+      currentFilter.medium = document.getElementById('filter-medium').value;
+      currentFilter.priceRange = document.getElementById('filter-price').value;
+      currentFilter.orientation = document.getElementById('filter-orientation').value;
+      currentFilter.availability = document.getElementById('filter-availability').value;
+      currentFilter.sortBy = document.getElementById('sort-select').value;
+      loadCatalog();
+    }
+
+    function loadCatalog() {
+      const container = document.getElementById('explore-cards-container');
+      const counterText = document.getElementById('results-count-text');
+
+      // Build options for DrawmadooDB query
+      const opts = {
+        category: currentFilter.category,
+        medium: currentFilter.medium,
+        sortBy: currentFilter.sortBy
+      };
+
+      if (currentFilter.availability !== 'all') {
+        opts.status = currentFilter.availability;
+      }
+      if (currentFilter.priceRange !== 'all') {
+        const [min, max] = currentFilter.priceRange.split('-').map(Number);
+        opts.minPrice = min;
+        opts.maxPrice = max;
+      }
+
+      const artworks = window.DrawmadooDB.getArtworks(opts);
+
+      // Update counter
+      counterText.textContent = `${artworks.length.toLocaleString()} artworks found`;
+
+      // Handle Empty State Gracefully
+      if (artworks.length === 0) {
+        container.innerHTML = `
+          <div class="empty-catalog-state">
+            <div class="empty-catalog-icon">🎨</div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 8px;">No artworks match your curation criteria</h3>
+            <p style="color: var(--color-text-secondary); max-width: 400px; margin: 0 auto 16px;">Try adjusting your filters or medium preferences to discover original creations.</p>
+            <button class="btn btn-primary btn-sm" onclick="resetFilters()">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      // Render Artwork Cards
+      container.innerHTML = artworks.map(art => {
+        const primaryImg = art.images && art.images.length > 0 ? art.images[0] : (art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80');
+        const formattedPrice = `₹${Number(art.price).toLocaleString('en-IN')}`;
+
+        return `
+          <article class="catalog-card" data-id="${art.id}">
+            <div class="catalog-card-image-wrap">
+              ${art.featured ? `<span class="card-badge-featured">Featured</span>` : ''}
+              ${art.status === 'sold' ? `<span class="card-badge-featured" style="background:#35241B;">Sold Out</span>` : ''}
+              
+              <button class="card-btn-wishlist" onclick="toggleWishlist('${art.id}', this)" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+
+              <button class="card-btn-cart" onclick="addToCart('${art.id}')" aria-label="Acquire Artwork" title="Acquire Artwork">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </button>
+
+              <img src="${primaryImg}" alt="${art.title}" loading="lazy">
+            </div>
+
+            <div class="catalog-card-body">
+              <h3 class="card-title">${art.title}</h3>
+              <div class="card-artist-row">
+                <span>${art.artist}</span>
+                <span class="verified-icon" style="width:14px; height:14px; display:inline-flex;">
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </div>
+
+              <div class="card-rating-row">
+                <span>★</span>
+                <span style="font-weight: 600; color: var(--color-text);">${art.rating || '4.9'}</span>
+                <span style="color: var(--color-text-muted);">(${art.reviewsCount || '75'})</span>
+              </div>
+
+              <div class="card-price-row">${formattedPrice}</div>
+
+              <div class="card-tags-row">
+                <span class="card-tag-pill">${art.medium}</span>
+                <span class="card-tag-pill">${art.category}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function resetFilters() {
+      currentFilter = {
+        category: 'All',
+        medium: 'all',
+        priceRange: 'all',
+        orientation: 'all',
+        availability: 'all',
+        sortBy: 'trending'
+      };
+      document.getElementById('filter-medium').value = 'all';
+      document.getElementById('filter-price').value = 'all';
+      document.getElementById('filter-orientation').value = 'all';
+      document.getElementById('filter-availability').value = 'all';
+      document.getElementById('sort-select').value = 'trending';
+      renderCategoryPills();
+      loadCatalog();
+    }
+
+    function toggleWishlist(artId, btn) {
+      let wishlist = JSON.parse(localStorage.getItem('drawmadoo_wishlist') || '[]');
+      if (wishlist.includes(artId)) {
+        wishlist = wishlist.filter(id => id !== artId);
+        btn.classList.remove('active');
+        btn.querySelector('svg').setAttribute('fill', 'none');
+      } else {
+        wishlist.push(artId);
+        btn.classList.add('active');
+        btn.querySelector('svg').setAttribute('fill', '#D56A24');
+      }
+      localStorage.setItem('drawmadoo_wishlist', JSON.stringify(wishlist));
+    }
+
+    function initWishlistButtons() {
+      const wishlist = JSON.parse(localStorage.getItem('drawmadoo_wishlist') || '[]');
+      document.querySelectorAll('.catalog-card').forEach(card => {
+        const id = card.dataset.id;
+        if (wishlist.includes(id)) {
+          const btn = card.querySelector('.card-btn-wishlist');
+          if (btn) {
+            btn.classList.add('active');
+            btn.querySelector('svg').setAttribute('fill', '#D56A24');
+          }
+        }
+      });
+    }
+
+    function addToCart(artId) {
+      const art = window.DrawmadooDB.getArtworkById(artId);
+      alert(`🎨 Added "${art?.title || 'Original Masterpiece'}" to your collection acquisition cart!`);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('drawmadoo_theme', next);
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('drawmadoo_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      initExplorePage();
+    });
+  </script>
+</body>
+</html>

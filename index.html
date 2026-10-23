@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Drawmadoo — A premium online art gallery connecting real artists with collectors. Discover unique paintings, sketches and digital artworks from talented independent artists.">
+  <meta name="keywords" content="art, gallery, paintings, original art, artists, collectors, watercolor, oil painting, digital art, sketches">
+  <meta name="author" content="Drawmadoo">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Drawmadoo — Original Art by Real Artists">
+  <meta property="og:description" content="Discover unique paintings, sketches and digital artworks from talented independent artists around the world.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://drawmadoo.com">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#F7F2EA">
+  
+  <title>Drawmadoo — Original Art by Real Artists</title>
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🎨</text></svg>">
+</head>
+<body>
+
+  <!-- ═══════════ Announcement Bar ═══════════ -->
+  <div id="announcement-bar" class="announcement-bar">
+    <div class="container">
+      <p id="announcement-text"></p>
+      <button class="announcement-close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════ Navbar ═══════════ -->
+  <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+
+  <!-- ═══════════ Mobile Menu ═══════════ -->
+  <div id="mobile-menu" class="mobile-menu" role="dialog" aria-label="Mobile navigation"></div>
+
+  <!-- ═══════════ Search Overlay ═══════════ -->
+  <div id="search-overlay" class="search-overlay" role="dialog" aria-label="Search artworks"></div>
+
+  <!-- ═══════════ Main Content ═══════════ -->
+  <main>
+    <!-- Hero Section -->
+    <section id="hero-section" class="hero" aria-label="Featured artwork showcase"></section>
+
+    <!-- Popular Categories -->
+    <section id="categories-section" class="section" aria-label="Art categories">
+      <div class="container" id="categories-container"></div>
+    </section>
+
+    <!-- Trending Artists -->
+    <section id="artists-section" class="section" aria-label="Trending artists">
+      <div class="container" id="artists-container"></div>
+    </section>
+
+    <!-- Why Drawmadoo -->
+    <section id="why-section" class="section-sm" aria-label="Why choose Drawmadoo">
+      <div class="container" id="why-container"></div>
+    </section>
+
+    <!-- Featured Artwork -->
+    <section id="featured-section" class="section" aria-label="Featured artwork">
+      <div class="container" id="featured-container"></div>
+    </section>
+
+    <!-- Shop by Medium -->
+    <section id="mediums-section" class="section" aria-label="Shop by medium">
+      <div class="container" id="mediums-container"></div>
+    </section>
+
+    <!-- Curated Collections -->
+    <section id="collections-section" class="section" aria-label="Curated collections">
+      <div class="container" id="collections-container"></div>
+    </section>
+
+    <!-- Art in Real Homes -->
+    <section id="homes-section" class="section" aria-label="Art in real homes">
+      <div class="container" id="homes-container"></div>
+    </section>
+
+    <!-- Meet the Artist -->
+    <section id="artist-spotlight-section" class="section-lg" aria-label="Meet the artist">
+      <div class="container" id="artist-spotlight-container"></div>
+    </section>
+
+    <!-- Newsletter -->
+    <section id="newsletter-section" class="section" aria-label="Newsletter signup">
+      <div class="container" id="newsletter-container"></div>
+    </section>
+  </main>
+
+  <!-- ═══════════ Footer ═══════════ -->
+  <footer id="footer" class="footer" role="contentinfo"></footer>
+
+  <!-- ═══════════ Admin Sidebar ═══════════ -->
+  <div id="admin-sidebar" class="admin-sidebar" role="dialog" aria-label="Admin panel"></div>
+  <div id="admin-sidebar-overlay" class="admin-sidebar-overlay"></div>
+
+  <!-- ═══════════ Recently Sold Popup ═══════════ -->
+  <div id="recently-sold" class="recently-sold" style="display:none"></div>
+
+  <!-- ═══════════ Scripts ═══════════ -->
+  <script src="js/db.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
