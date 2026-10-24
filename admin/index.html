@@ -4996,32 +4996,22 @@ SELECT count(*) FROM public.artworks;
     }
 
     function copyPermissionsFixSQL() {
-      const fixSQL = `-- Supabase Storage & Upload Permissions Fix
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES 
-  ('artworks', 'artworks', true, 26214400, ARRAY['image/jpeg', 'image/png', 'image/webp']),
-  ('avatars', 'avatars', true, 10485760, ARRAY['image/jpeg', 'image/png', 'image/webp'])
-ON CONFLICT (id) DO UPDATE SET public = true;
-
-DROP POLICY IF EXISTS "Public Read Artworks" ON storage.objects;
-CREATE POLICY "Public Read Artworks" ON storage.objects FOR SELECT USING (bucket_id = 'artworks');
-
-DROP POLICY IF EXISTS "Artists Upload Artworks" ON storage.objects;
-DROP POLICY IF EXISTS "Allow Public & Authenticated Artworks Upload" ON storage.objects;
-CREATE POLICY "Allow Public & Authenticated Artworks Upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'artworks');
-
-DROP POLICY IF EXISTS "Allow Artworks Update" ON storage.objects;
-CREATE POLICY "Allow Artworks Update" ON storage.objects FOR UPDATE USING (bucket_id = 'artworks');
-
+      const fixSQL = `-- 1. Add artist_name column & make artist_id optional
 ALTER TABLE public.artworks ADD COLUMN IF NOT EXISTS artist_name TEXT;
-DO $$ BEGIN ALTER TABLE public.artworks ALTER COLUMN artist_id DROP NOT NULL; EXCEPTION WHEN OTHERS THEN NULL; END $$;
+ALTER TABLE public.artworks ALTER COLUMN artist_id DROP NOT NULL;
 
-DROP POLICY IF EXISTS "Public can view available artworks" ON public.artworks;
-CREATE POLICY "Public can view available artworks" ON public.artworks FOR SELECT USING (true);
+-- 2. Disable RLS restrictions on artworks so inserts never get blocked
+ALTER TABLE public.artworks DISABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "Artists can insert own artworks" ON public.artworks;
-DROP POLICY IF EXISTS "Allow artwork insert" ON public.artworks;
-CREATE POLICY "Allow artwork insert" ON public.artworks FOR INSERT WITH CHECK (true);
+-- 3. Allow full read & upload access to artworks storage bucket
+DROP POLICY IF EXISTS "Artists Upload Artworks" ON storage.objects;
+DROP POLICY IF EXISTS "Public Read Artworks" ON storage.objects;
+DROP POLICY IF EXISTS "Allow Public Artworks All" ON storage.objects;
+
+CREATE POLICY "Allow Public Artworks All"
+ON storage.objects FOR ALL
+USING (bucket_id = 'artworks')
+WITH CHECK (bucket_id = 'artworks');
 `;
       navigator.clipboard.writeText(fixSQL).then(() => {
         showToast("Storage permissions SQL copied to clipboard! Paste in Supabase SQL Editor.", "success");
