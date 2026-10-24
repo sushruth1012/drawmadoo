@@ -1,5 +1,8 @@
 FROM nginx:alpine
 
+# Copy custom Nginx configuration with clean URL and fallback routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy all static website assets into Nginx html directory
 COPY . /usr/share/nginx/html
 
