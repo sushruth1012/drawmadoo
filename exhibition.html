@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Drawmadoo Virtual Art Exhibition — Immersive 3D museum experience exploring original curated masterpieces from real independent artists.">
+  <meta name="theme-color" content="#0c0b0a">
+  <title>Virtual Art Exhibition — Drawmadoo</title>
+
+  <!-- Preconnect Fonts & Assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <!-- Design System Tokens & Exhibition CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/exhibition.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='26'>🏛️</text></svg>">
+</head>
+<body>
+
+  <!-- ═══════════ 3D Canvas Viewport ═══════════ -->
+  <div id="exhibition-canvas-container" role="region" aria-label="Virtual 3D Museum Gallery"></div>
+
+  <!-- ═══════════ Subtle Cinema Vignette ═══════════ -->
+  <div class="cinema-vignette" aria-hidden="true"></div>
+
+  <!-- ═══════════ Floating Top Navigation Bar ═══════════ -->
+  <header class="ex-header" role="banner">
+    <!-- Brand / Return to Home -->
+    <a href="index.html" class="ex-brand" title="Return to Drawmadoo Marketplace">
+      <div class="ex-brand-logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      </div>
+      <div>
+        <div class="ex-brand-name">Drawmadoo</div>
+      </div>
+      <span class="ex-brand-badge">Virtual Exhibition</span>
+    </a>
+
+    <!-- Dynamic Category Halls Navigation Chips -->
+    <nav class="ex-halls-nav" id="ex-halls-nav" aria-label="Museum Exhibition Halls"></nav>
+
+    <!-- Header Action Controls -->
+    <div class="ex-header-actions">
+      <!-- Ambient Audio Toggle -->
+      <button id="ex-ambient-audio-btn" class="ex-btn-icon" onclick="window.DrawmadooExhibitionInstance.toggleAmbientSound()" title="Toggle Ambient Museum Tone" aria-label="Toggle sound">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+
+      <!-- Keyboard Shortcuts Help -->
+      <button class="ex-btn-icon" onclick="window.DrawmadooExhibitionInstance.toggleHelpModal()" title="Navigation Shortcuts (?)" aria-label="Keyboard shortcuts">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </button>
+
+      <!-- Exit to Marketplace -->
+      <a href="index.html" class="ex-btn-pill" title="Exit to Marketplace">
+        <span>Exit Gallery</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ═══════════ Floating Bottom Navigation Dock ═══════════ -->
+  <nav class="ex-bottom-dock" aria-label="Guided Walk Controls">
+    <div class="ex-dock-group">
+      <!-- Previous Painting -->
+      <button class="ex-nav-btn" onclick="window.DrawmadooExhibitionInstance.prevPainting()" title="Previous Artwork (Left Arrow)" aria-label="Previous artwork">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+
+      <!-- Center Metadata Display -->
+      <div class="ex-dock-info">
+        <div class="ex-dock-title" id="ex-dock-art-title">Loading Exhibition...</div>
+        <div class="ex-dock-meta" id="ex-dock-art-meta">Curating Wing</div>
+        <div style="font-size: 10px; color: var(--ex-text-muted); margin-top: 2px;" id="ex-dock-counter">1 of 24</div>
+      </div>
+
+      <!-- Next Painting -->
+      <button class="ex-nav-btn" onclick="window.DrawmadooExhibitionInstance.nextPainting()" title="Next Artwork (Right Arrow)" aria-label="Next artwork">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Guided Auto Tour Play/Pause -->
+    <button id="ex-tour-btn" class="ex-tour-btn" onclick="window.DrawmadooExhibitionInstance.toggleAutoTour()" aria-label="Guided Tour">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Guided Tour</span>
+    </button>
+  </nav>
+
+  <!-- ═══════════ Side Minimap / Orientation ═══════════ -->
+  <div class="ex-minimap" aria-hidden="true">
+    <div class="ex-minimap-compass">
+      <div class="ex-minimap-dot"></div>
+    </div>
+    <span>Click painting or plaque to inspect</span>
+  </div>
+
+  <!-- ═══════════ Elegant Artwork Inspection Side Panel ═══════════ -->
+  <aside id="artwork-inspector-panel" class="ex-side-panel" role="dialog" aria-label="Artwork Inspector">
+    <!-- Header -->
+    <div class="ex-panel-header">
+      <div class="ex-panel-hall-tag" id="panel-hall-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        <span>Landscape Hall</span>
+      </div>
+      <button class="ex-panel-close-btn" onclick="window.DrawmadooExhibitionInstance.closeInspection()" aria-label="Close Inspector">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="ex-panel-body">
+      <!-- Artwork Visual Preview -->
+      <div class="ex-panel-img-box">
+        <img id="panel-art-img" class="ex-panel-img" src="" alt="Artwork Preview">
+        <div class="ex-panel-badge-row">
+          <span class="ex-badge-gold">Verified Original</span>
+          <span class="ex-badge-gold" style="border-color: rgba(255,255,255,0.3); color:#fff;">100% Human Made</span>
+        </div>
+      </div>
+
+      <!-- Title & Artist Identity -->
+      <div class="ex-panel-title-group">
+        <h2 id="panel-art-title" class="ex-panel-title">Artwork Title</h2>
+      </div>
+
+      <div class="ex-panel-artist-row">
+        <img id="panel-artist-avatar" class="ex-panel-artist-avatar" src="" alt="Artist Avatar">
+        <div class="ex-panel-artist-info">
+          <div class="ex-panel-artist-name">
+            <span id="panel-artist-name">Artist Name</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#0F6F8E" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="#0F6F8E"/><polyline points="8 12 11 15 16 9" stroke="white" fill="none"/></svg>
+          </div>
+          <div class="ex-panel-artist-meta" id="panel-artist-country">Verified Independent Artist</div>
+        </div>
+      </div>
+
+      <!-- Price & Availability -->
+      <div class="ex-panel-price-row">
+        <div>
+          <div class="ex-panel-price-label">Acquisition Value</div>
+          <div class="ex-panel-price-val" id="panel-art-price">₹18,500</div>
+        </div>
+        <div style="text-align: right;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#2D8654; margin-right:4px;"></span>
+          <span style="font-size:12px; font-weight:600; color:#fff;">Available for Collection</span>
+        </div>
+      </div>
+
+      <!-- Specifications Grid -->
+      <div class="ex-panel-specs-grid">
+        <div class="ex-panel-spec-item">
+          <span class="ex-panel-spec-label">Medium</span>
+          <span class="ex-panel-spec-val" id="panel-spec-medium">Oil on Canvas</span>
+        </div>
+        <div class="ex-panel-spec-item">
+          <span class="ex-panel-spec-label">Dimensions</span>
+          <span class="ex-panel-spec-val" id="panel-spec-size">24 x 36 inches</span>
+        </div>
+        <div class="ex-panel-spec-item">
+          <span class="ex-panel-spec-label">Creation Year</span>
+          <span class="ex-panel-spec-val" id="panel-spec-year">2024</span>
+        </div>
+        <div class="ex-panel-spec-item">
+          <span class="ex-panel-spec-label">Authenticity</span>
+          <span class="ex-panel-spec-val" id="panel-spec-auth">Signed Certificate</span>
+        </div>
+      </div>
+
+      <!-- Curator Notes & Description -->
+      <p id="panel-art-desc" class="ex-panel-desc"></p>
+
+      <!-- Audio Guide Narration Box -->
+      <div class="ex-audio-guide-card" id="ex-audio-guide-card">
+        <div class="ex-audio-guide-left">
+          <div class="ex-audio-wave">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600; color:#fff;">Museum Audio Guide</div>
+            <div style="font-size:10px; color:var(--ex-text-muted);">Voice narration commentary</div>
+          </div>
+        </div>
+        <button id="panel-audio-guide-btn" class="ex-audio-play-btn" title="Listen to curator commentary">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Listen</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel Footer Action Buttons -->
+    <div class="ex-panel-footer">
+      <button id="panel-acquire-btn" class="ex-btn-acquire">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Acquire Artwork</span>
+      </button>
+
+      <button id="panel-wishlist-btn" class="ex-btn-wishlist" title="Save to Wishlist" aria-label="Wishlist">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════ Grand Entrance Scene ═══════════ -->
+  <div id="ex-entrance-overlay" class="ex-entrance-overlay" role="dialog" aria-label="Exhibition Entrance">
+    <div class="ex-entrance-card">
+      <div class="ex-entrance-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Curated Digital Museum</span>
+      </div>
+
+      <h1 class="ex-entrance-title">
+        Drawmadoo<br>
+        Virtual Art <em>Exhibition</em>
+      </h1>
+
+      <p class="ex-entrance-sub">
+        Step into a curated digital gallery showcasing exceptional artwork from talented artists around the world.
+      </p>
+
+      <!-- Exhibition Stats -->
+      <div class="ex-entrance-stats">
+        <div class="ex-stat-item">
+          <div class="ex-stat-num">100%</div>
+          <div class="ex-stat-lbl">Human Made</div>
+        </div>
+        <div style="width:1px; height:24px; background:rgba(255,255,255,0.1);"></div>
+        <div class="ex-stat-item">
+          <div class="ex-stat-num">2,700+</div>
+          <div class="ex-stat-lbl">Verified Artists</div>
+        </div>
+        <div style="width:1px; height:24px; background:rgba(255,255,255,0.1);"></div>
+        <div class="ex-stat-item">
+          <div class="ex-stat-num">3D Space</div>
+          <div class="ex-stat-lbl">Guided Walk</div>
+        </div>
+      </div>
+
+      <!-- Primary Enter CTA Button -->
+      <button class="ex-enter-btn" onclick="window.DrawmadooExhibitionInstance.enterExhibition()">
+        <span>Enter Exhibition</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+
+      <!-- Ambient Audio Option Hint -->
+      <div class="ex-audio-toggle-hint" onclick="window.DrawmadooExhibitionInstance.toggleAmbientSound()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <span>Click to enable immersive atmospheric soundscape</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Progressive Loading Screen ═══════════ -->
+  <div id="ex-loader-overlay" class="ex-loader-overlay">
+    <div class="ex-loader-spinner"></div>
+    <div id="ex-loader-text" class="ex-loader-text">Loading Museum Exhibition...</div>
+    <div class="ex-loader-bar-wrap">
+      <div id="ex-loader-bar-fill" class="ex-loader-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Toast Notification ═══════════ -->
+  <div id="ex-toast" class="ex-toast"></div>
+
+  <!-- ═══════════ Keyboard Shortcuts Help Modal ═══════════ -->
+  <div id="ex-help-modal" class="ex-help-modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h3 style="font-family:var(--font-heading); font-size:20px; color:#fff;">Gallery Navigation</h3>
+      <button style="background:none; border:none; color:#a69888; cursor:pointer;" onclick="window.DrawmadooExhibitionInstance.toggleHelpModal()">✕</button>
+    </div>
+    <div class="ex-help-row">
+      <span>Next Artwork</span>
+      <span class="ex-kbd">→ or D</span>
+    </div>
+    <div class="ex-help-row">
+      <span>Previous Artwork</span>
+      <span class="ex-kbd">← or A</span>
+    </div>
+    <div class="ex-help-row">
+      <span>Guided Auto Walk</span>
+      <span class="ex-kbd">Space</span>
+    </div>
+    <div class="ex-help-row">
+      <span>Inspect Painting</span>
+      <span class="ex-kbd">Click Artwork</span>
+    </div>
+    <div class="ex-help-row">
+      <span>Close Inspector</span>
+      <span class="ex-kbd">Esc</span>
+    </div>
+    <div class="ex-help-row">
+      <span>Toggle Ambient Sound</span>
+      <span class="ex-kbd">M</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ Scripts & Dependencies ═══════════ -->
+  <!-- 1. Three.js r128 (Production CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- 2. GSAP for Butter-Smooth Cinematic Camera Navigation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- 3. Supabase Client for Cloud Database Sync -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- 4. Drawmadoo Dynamic Core Data & Components -->
+  <script src="js/db.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+
+  <!-- 5. Virtual Art Exhibition Engine -->
+  <script src="js/exhibition.js"></script>
+
+</body>
+</html>

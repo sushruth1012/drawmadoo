@@ -1721,7 +1721,12 @@ function renderNavbar() {
   const navData = DrawmadooData.nav || { links: [] };
 
   const linksHtml = (navData.links || [])
-    .map(link => `<a href="${link.href}" class="nav-link">${link.text}</a>`)
+    .map(link => `
+      <a href="${link.href}" class="nav-link ${link.href.includes('exhibition') ? 'nav-link-exhibition' : ''}">
+        ${link.text}
+        ${link.badge ? `<span class="badge badge-primary" style="font-size: 10px; padding: 2px 7px; margin-left: 4px; border-radius: 999px; letter-spacing: 0.05em; font-weight: 700;">${link.badge}</span>` : ''}
+      </a>
+    `)
     .join('');
 
   navContainer.innerHTML = `
@@ -1883,9 +1888,13 @@ function renderHero() {
             </form>
           </div>
 
-          <!-- 3 Hero Action Buttons -->
-          <div class="hero-cta-group" style="margin-top: var(--space-6);">
-            <a href="explore.html" class="btn btn-primary btn-lg">
+          <!-- Hero Action Buttons -->
+          <div class="hero-cta-group" style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+            <a href="exhibition.html" class="btn btn-primary btn-lg btn-exhibition-glow" style="background: linear-gradient(135deg, #8A5A2B 0%, #D56A24 100%); border: none; box-shadow: 0 8px 24px rgba(213, 106, 36, 0.35); display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              <span>Explore Art Exhibition</span>
+            </a>
+            <a href="explore.html" class="btn btn-outline btn-lg">
               <span>Explore Gallery</span>
               ${getIcon('arrow-right', '', 16)}
             </a>

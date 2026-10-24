@@ -670,6 +670,73 @@ class DrawmadooDatabaseEngine {
   }
 
   /* ──────────────────────────────────────────────────
+     SUPABASE INTEGRATION (CMS-First Cloud Connectivity)
+     ────────────────────────────────────────────────── */
+  getSupabaseConfig() {
+    try {
+      const saved = localStorage.getItem('drawmadoo_supabase_config');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn('Could not read Supabase config', e);
+    }
+    return {
+      url: window.__DRAWMADOO_SUPABASE_URL__ || '',
+      anonKey: window.__DRAWMADOO_SUPABASE_KEY__ || '',
+      table: 'artworks',
+      enabled: Boolean(window.__DRAWMADOO_SUPABASE_URL__)
+    };
+  }
+
+  saveSupabaseConfig(config) {
+    try {
+      localStorage.setItem('drawmadoo_supabase_config', JSON.stringify(config));
+      this.broadcastChange('supabase_config');
+    } catch (e) {
+      console.error('Failed to save Supabase config', e);
+    }
+    return config;
+  }
+
+  async fetchSupabaseArtworks() {
+    const config = this.getSupabaseConfig();
+    if (!config.url || !config.anonKey) {
+      return null;
+    }
+    try {
+      const endpoint = `${config.url.replace(/\/$/, '')}/rest/v1/${config.table || 'artworks'}?select=*&order=created_at.desc`;
+      const res = await fetch(endpoint, {
+        headers: {
+          'apikey': config.anonKey,
+          'Authorization': `Bearer ${config.anonKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!res.ok) throw new Error(`Supabase error HTTP ${res.status}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map(row => ({
+          id: String(row.id || `sup-${Math.random().toString(36).substr(2, 9)}`),
+          title: row.title || 'Untitled Artwork',
+          artist: row.artist || row.artist_name || 'Independent Artist',
+          artistAvatar: row.artist_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
+          price: Number(row.price) || 12000,
+          medium: row.medium || 'Oil Painting',
+          category: row.category || 'Landscape',
+          size: row.size || row.dimensions || '24 x 18 inches',
+          year: row.year || 2024,
+          description: row.description || '',
+          status: row.status || 'available',
+          featured: Boolean(row.featured),
+          images: Array.isArray(row.images) ? row.images : (row.image ? [row.image] : ['https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80'])
+        }));
+      }
+    } catch (e) {
+      console.warn('⚠️ Supabase fetch fallback to local CMS database:', e.message);
+    }
+    return null;
+  }
+
+  /* ──────────────────────────────────────────────────
      ARTWORK CRUD OPERATIONS
      ────────────────────────────────────────────────── */
   getArtworks(filterOpts = {}) {

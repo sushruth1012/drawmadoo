@@ -3209,3 +3209,27 @@
   margin-top: var(--space-10);
 }
 
+/* ═══════════ Virtual Art Exhibition Nav & Hero Badges ═══════════ */
+.btn-exhibition-glow {
+  position: relative;
+  background: linear-gradient(135deg, #8A5A2B 0%, #D56A24 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 10px 28px rgba(213, 106, 36, 0.38) !important;
+  transition: all var(--duration) var(--ease-out) !important;
+}
+
+.btn-exhibition-glow:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(213, 106, 36, 0.5) !important;
+  background: linear-gradient(135deg, #9C6734 0%, #E37731 100%) !important;
+}
+
+.nav-link-exhibition {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-primary) !important;
+  font-weight: 600 !important;
+}
+
+

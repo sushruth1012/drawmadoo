@@ -25,9 +25,10 @@ const DrawmadooData = {
     badge: 'Handmade Creativity',
     title: 'Original Art.\nCreated by Real Artists.',
     subtitle: 'Discover unique paintings, sketches and digital artworks from talented independent artists around the world.',
-    cta1: { text: 'Explore Gallery', link: '#gallery', icon: 'arrow-right' },
-    cta2: { text: 'Meet Artists', link: '#artists' },
-    cta3: { text: 'Watch Artist Process', link: '#', icon: 'play' },
+    ctaExhibition: { text: 'Explore Art Exhibition', link: 'exhibition.html' },
+    cta1: { text: 'Explore Gallery', link: 'explore.html', icon: 'arrow-right' },
+    cta2: { text: 'Meet Artists', link: '#artists-section' },
+    cta3: { text: 'Become an Artist', link: 'admin/index.html' },
     image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80',
     stats: [
       { value: '18,000+', label: 'Original Artworks', icon: 'palette' },
@@ -313,6 +314,7 @@ const DrawmadooData = {
   nav: {
     links: [
       { text: 'Explore', href: 'explore.html' },
+      { text: 'Virtual Exhibition', href: 'exhibition.html', badge: '3D' },
       { text: 'Collections', href: '#collections' },
       { text: 'Artists', href: '#artists' },
       { text: 'Custom Art', href: '#custom' },
