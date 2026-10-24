@@ -4,9 +4,11 @@
  * Signature digital museum experience. Fully dynamic, CMS-driven,
  * Supabase-ready, with luxury museum corridor walkthrough.
  *
- * Desktop: Scroll-driven inertia walkthrough along museum corridor.
- * Mobile: Automatic cinematic guided walkthrough with subtle touch look.
- * Interaction: Smooth glide to inspect artworks front-and-center.
+ * Desktop: Scroll-driven inertia walkthrough (1.5x sensitivity) with
+ *          natural look-around (±35° yaw, ±15° pitch) & auto-centering.
+ * Mobile: Automatic cinematic guided walkthrough with temporary touch
+ *          swipe look-around and smooth return to forward.
+ * Realism: Subtle human walking head movement, natural easing & inertia.
  * ═════════════════════════════════════════════════════════════════════
  */
 
@@ -39,14 +41,28 @@ class DrawmadooExhibition {
     this.currentCorridorZ = 4.0;
     this.targetCorridorZ = 4.0;
     this.savedCorridorZ = 4.0;
+    this.prevCorridorZ = 4.0;
     this.minCorridorZ = -80.0; // Dynamically set based on hall count
     this.maxCorridorZ = 4.0;
+
+    // Natural Walking Feel & Subtle Head Bobbing
+    this.walkPhase = 0;
+    this.headBobX = 0;
+    this.headBobY = 0;
+
+    // Look-Around System (Euler angles in radians: ±35° yaw, ±15° pitch)
+    this.maxYaw = THREE.MathUtils.degToRad(35);   // ~0.6108 rad
+    this.maxPitch = THREE.MathUtils.degToRad(15); // ~0.2618 rad
+    this.lookYaw = 0;
+    this.lookPitch = 0;
+    this.targetLookYaw = 0;
+    this.targetLookPitch = 0;
+    this.lastMouseMoveTime = performance.now();
 
     // Mobile Guided Walk State
     this.mobileWalkSpeed = 1.35; // units per second
     this.mobilePauseTimer = 0;
     this.lastPausedPainting = -1;
-    this.mobileLookOffset = { x: 0, y: 0 };
 
     // Three.js Core
     this.scene = null;
@@ -56,7 +72,6 @@ class DrawmadooExhibition {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.currentLookAt = new THREE.Vector3();
-    this.mouseParallax = { x: 0, y: 0, targetX: 0, targetY: 0 };
 
     // Textures & Caching
     this.textureLoader = new THREE.TextureLoader();
@@ -169,7 +184,7 @@ class DrawmadooExhibition {
       categoryMap.get(catKey).artworks.push(art);
     });
 
-    // Filter out halls with 0 artworks (User requirement: hide empty halls)
+    // Filter out halls with 0 artworks (hide empty halls)
     categoryMap.forEach(hall => {
       if (hall.artworks.length > 0) {
         this.halls.push(hall);
@@ -240,7 +255,7 @@ class DrawmadooExhibition {
      ────────────────────────────────────────────────── */
   buildMuseumArchitecture() {
     const hallLength = 26; // Z distance per hall
-    const hallWidth = 11;  // X distance between opposite walls (corridor is center x=0)
+    const hallWidth = 11;  // X distance between opposite walls (corridor center is x=0)
     const wallHeight = 7.5;
 
     // Materials
@@ -579,6 +594,7 @@ class DrawmadooExhibition {
      ────────────────────────────────────────────────── */
   setupScrollNavigation() {
     // Desktop wheel scroll event: moves camera smoothly along the main corridor
+    // Sensitivity increased ~1.5x for more responsive, effortless movement
     const onWheel = (e) => {
       // Allow standard scrolling inside the inspector side panel if open
       if (e.target && e.target.closest && e.target.closest('#artwork-inspector-panel')) {
@@ -601,7 +617,8 @@ class DrawmadooExhibition {
 
       // Scrolling Down (positive delta) -> walk forward deeper into museum (decrease Z)
       // Scrolling Up (negative delta) -> walk back toward entrance (increase Z)
-      const scrollSensitivity = 0.0085;
+      // 1.5x sensitivity: 0.0128 moves camera noticeably farther with each scroll notch
+      const scrollSensitivity = 0.0128;
       this.targetCorridorZ -= delta * scrollSensitivity;
 
       // Clamped strictly between entrance and the end of the museum
@@ -724,6 +741,12 @@ class DrawmadooExhibition {
     this.savedCorridorZ = this.currentCorridorZ;
     this.targetCorridorZ = this.currentCorridorZ; // Halt walking inertia
 
+    // Reset look yaw and pitch so inspection view is straight-on
+    this.targetLookYaw = 0;
+    this.targetLookPitch = 0;
+    this.lookYaw = 0;
+    this.lookPitch = 0;
+
     // Stop auto-tour if active
     if (this.isAutoTourActive) {
       this.toggleAutoTour();
@@ -734,8 +757,8 @@ class DrawmadooExhibition {
     const isLeft = artPos.x < 0;
 
     // View distance from painting front-and-center
-    // Left wall: artwork faces +X. Camera sits at artPos.x + 2.3
-    // Right wall: artwork faces -X. Camera sits at artPos.x - 2.3
+    // Left wall: artwork faces +X. Camera sits at artPos.x + 2.35
+    // Right wall: artwork faces -X. Camera sits at artPos.x - 2.35
     const inspectDistance = 2.35;
     const inspectX = isLeft ? artPos.x + inspectDistance : artPos.x - inspectDistance;
     const inspectY = artPos.y;
@@ -788,6 +811,10 @@ class DrawmadooExhibition {
     const returnZ = this.savedCorridorZ;
     this.targetCorridorZ = returnZ;
     this.currentCorridorZ = returnZ;
+    this.targetLookYaw = 0;
+    this.targetLookPitch = 0;
+    this.lookYaw = 0;
+    this.lookPitch = 0;
 
     if (window.gsap) {
       gsap.killTweensOf(this.camera.position);
@@ -872,7 +899,7 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     9. INTERACTION, RAYCASTING & TOUCH CONTROLS
+     9. INTERACTION, NATURAL LOOK & TOUCH CONTROLS
      ────────────────────────────────────────────────── */
   setupInteraction() {
     // Click on canvas to inspect artwork
@@ -898,14 +925,24 @@ class DrawmadooExhibition {
       }
     });
 
-    // Subtle desktop mouse look parallax + hover pointer cursor
+    // Desktop look-around: moving mouse rotates camera smoothly left/right (±35°) and up/down (±15°)
     window.addEventListener('mousemove', (e) => {
-      if (this.isMobile) return;
+      if (this.isMobile || this.isInspecting) return;
 
       const halfW = window.innerWidth / 2;
       const halfH = window.innerHeight / 2;
-      this.mouseParallax.targetX = ((e.clientX - halfW) / halfW) * 0.18;
-      this.mouseParallax.targetY = ((e.clientY - halfH) / halfH) * 0.12;
+
+      // Normalized coordinates (-1 to 1) from screen center
+      const normX = Math.max(-1, Math.min(1, (e.clientX - halfW) / halfW));
+      const normY = Math.max(-1, Math.min(1, (e.clientY - halfH) / halfH));
+
+      // Moving mouse right smoothly looks right (-yaw in right-handed Three.js)
+      // Moving mouse up smoothly looks up (+pitch)
+      this.targetLookYaw = -normX * this.maxYaw;
+      this.targetLookPitch = -normY * this.maxPitch;
+
+      // Track active interaction time for natural auto-return
+      this.lastMouseMoveTime = performance.now();
 
       // Hover cursor raycasting
       const rect = this.container.getBoundingClientRect();
@@ -925,7 +962,8 @@ class DrawmadooExhibition {
       this.container.style.cursor = isHoveringPainting ? 'pointer' : 'default';
     });
 
-    // Mobile touch look around (clamped to prevent disorientation)
+    // Mobile touch look-around: swiping temporarily rotates viewing direction
+    // Walks continue uninterrupted; camera smoothly recenters on release
     let touchStartX = 0;
     let touchStartY = 0;
     let isTouching = false;
@@ -943,19 +981,27 @@ class DrawmadooExhibition {
       const diffX = e.touches[0].clientX - touchStartX;
       const diffY = e.touches[0].clientY - touchStartY;
 
-      // Subtle look offset (clamped to prevent free flight / disorientation)
-      this.mobileLookOffset.x = Math.max(-0.35, Math.min(0.35, (diffX / window.innerWidth) * 0.6));
-      this.mobileLookOffset.y = Math.max(-0.2, Math.min(0.2, (diffY / window.innerHeight) * 0.35));
+      // Swiping right/left rotates yaw; swiping up/down tilts pitch
+      const touchYaw = (diffX / window.innerWidth) * this.maxYaw * 1.6;
+      const touchPitch = -(diffY / window.innerHeight) * this.maxPitch * 1.6;
+
+      this.targetLookYaw = Math.max(-this.maxYaw, Math.min(this.maxYaw, touchYaw));
+      this.targetLookPitch = Math.max(-this.maxPitch, Math.min(this.maxPitch, touchPitch));
     }, { passive: true });
 
     this.container.addEventListener('touchend', () => {
       isTouching = false;
-      // Smoothly spring look back to forward center
+      // After gesture ends, smoothly return camera to forward direction
       if (window.gsap) {
-        gsap.to(this.mobileLookOffset, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
+        gsap.to(this, {
+          targetLookYaw: 0,
+          targetLookPitch: 0,
+          duration: 1.1,
+          ease: 'power2.out'
+        });
       } else {
-        this.mobileLookOffset.x = 0;
-        this.mobileLookOffset.y = 0;
+        this.targetLookYaw = 0;
+        this.targetLookPitch = 0;
       }
     }, { passive: true });
   }
@@ -1138,11 +1184,11 @@ class DrawmadooExhibition {
 
       if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
         if (!this.isInspecting) {
-          this.targetCorridorZ = Math.max(this.minCorridorZ, this.targetCorridorZ - 2.2);
+          this.targetCorridorZ = Math.max(this.minCorridorZ, this.targetCorridorZ - 2.8);
         }
       } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
         if (!this.isInspecting) {
-          this.targetCorridorZ = Math.min(this.maxCorridorZ, this.targetCorridorZ + 2.2);
+          this.targetCorridorZ = Math.min(this.maxCorridorZ, this.targetCorridorZ + 2.8);
         }
       } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         this.nextPainting();
@@ -1264,16 +1310,22 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     13. RENDER LOOP & INERTIA DYNAMICS
+     13. RENDER LOOP, REALISTIC GAIT & INERTIA DYNAMICS
      ────────────────────────────────────────────────── */
   animate() {
     requestAnimationFrame(() => this.animate());
 
     const dt = Math.min(this.clock.getDelta(), 0.1);
 
-    // Subtle mouse parallax interpolation
-    this.mouseParallax.x += (this.mouseParallax.targetX - this.mouseParallax.x) * 0.05;
-    this.mouseParallax.y += (this.mouseParallax.targetY - this.mouseParallax.y) * 0.05;
+    // Desktop auto-centering: return look to forward when mouse is idle (>1.2s)
+    if (!this.isMobile && (performance.now() - this.lastMouseMoveTime > 1200)) {
+      this.targetLookYaw += (0 - this.targetLookYaw) * 0.05;
+      this.targetLookPitch += (0 - this.targetLookPitch) * 0.05;
+    }
+
+    // Smooth look-around interpolation (eliminates jitter, creates natural eye movement)
+    this.lookYaw += (this.targetLookYaw - this.lookYaw) * 0.085;
+    this.lookPitch += (this.targetLookPitch - this.lookPitch) * 0.085;
 
     // Mobile automatic walkthrough OR desktop guided auto-tour
     const shouldAutoWalk = (this.isMobile || this.isAutoTourActive) && !this.isInspecting;
@@ -1301,19 +1353,40 @@ class DrawmadooExhibition {
       const lerpAlpha = 1.0 - Math.pow(0.002, dt);
       this.currentCorridorZ += (this.targetCorridorZ - this.currentCorridorZ) * Math.min(lerpAlpha, 0.12);
 
-      // Strictly keep camera centered in corridor
-      this.camera.position.x = this.corridorX;
-      this.camera.position.y = this.corridorY;
+      // Subtle realistic walking head bobbing & sway (human gait cycle)
+      const walkDelta = Math.abs(this.currentCorridorZ - (this.prevCorridorZ || this.currentCorridorZ));
+      this.prevCorridorZ = this.currentCorridorZ;
+
+      if (walkDelta > 0.001) {
+        this.walkPhase += walkDelta * 2.8;
+        const targetBobY = Math.sin(this.walkPhase * 2) * 0.016; // Subtle 1.6cm vertical rise/fall
+        const targetBobX = Math.cos(this.walkPhase) * 0.010;     // Subtle 1.0cm side-to-side weight transfer
+        this.headBobY += (targetBobY - this.headBobY) * 0.12;
+        this.headBobX += (targetBobX - this.headBobX) * 0.12;
+      } else {
+        // Natural settling to rest when stationary
+        this.headBobY *= 0.92;
+        this.headBobX *= 0.92;
+      }
+
+      // Position camera: strictly centered in corridor + subtle human walking motion
+      this.camera.position.x = this.corridorX + this.headBobX;
+      this.camera.position.y = this.corridorY + this.headBobY;
       this.camera.position.z = this.currentCorridorZ;
 
-      // Smooth forward lookAt with subtle clamped parallax
+      // Calculate forward viewing direction based on yaw and pitch
+      // Museum corridor runs down -Z
       const forwardDist = 10.0;
-      const targetLookX = this.corridorX + (this.mouseParallax.x * 2.2) + (this.mobileLookOffset.x * 3.5);
-      const targetLookY = this.corridorY - (this.mouseParallax.y * 0.8) - (this.mobileLookOffset.y * 1.8);
-      const targetLookZ = this.currentCorridorZ - forwardDist;
+      const forwardX = Math.sin(this.lookYaw) * Math.cos(this.lookPitch);
+      const forwardY = Math.sin(this.lookPitch);
+      const forwardZ = -Math.cos(this.lookYaw) * Math.cos(this.lookPitch);
 
-      this.currentLookAt.x += (targetLookX - this.currentLookAt.x) * 0.08;
-      this.currentLookAt.y += (targetLookY - this.currentLookAt.y) * 0.08;
+      const targetLookX = this.camera.position.x + (forwardX * forwardDist);
+      const targetLookY = this.camera.position.y + (forwardY * forwardDist);
+      const targetLookZ = this.camera.position.z + (forwardZ * forwardDist);
+
+      this.currentLookAt.x += (targetLookX - this.currentLookAt.x) * 0.1;
+      this.currentLookAt.y += (targetLookY - this.currentLookAt.y) * 0.1;
       this.currentLookAt.z = targetLookZ;
 
       this.camera.lookAt(this.currentLookAt);
