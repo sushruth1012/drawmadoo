@@ -731,21 +731,26 @@ class DrawmadooDatabaseEngine {
       if (!res.ok) throw new Error(`Supabase error HTTP ${res.status}`);
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        return data.map(row => ({
-          id: String(row.id || `sup-${Math.random().toString(36).substr(2, 9)}`),
-          title: row.title || 'Untitled Artwork',
-          artist: row.artist || row.artist_name || 'Independent Artist',
-          artistAvatar: row.artist_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
-          price: Number(row.price) || 12000,
-          medium: row.medium || 'Oil Painting',
-          category: row.category || 'Landscape',
-          size: row.size || row.dimensions || '24 x 18 inches',
-          year: row.year || 2024,
-          description: row.description || '',
-          status: row.status || 'available',
-          featured: Boolean(row.featured),
-          images: Array.isArray(row.images) ? row.images : (row.image ? [row.image] : ['https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80'])
-        }));
+        return data.map(row => {
+          const imgUrl = row.primary_image_url || (Array.isArray(row.images) ? row.images[0] : row.image) || '';
+          const categoryName = row.category || (Array.isArray(row.tags) && row.tags.length > 0 ? row.tags[0] : 'Traditional');
+          return {
+            id: String(row.id || `sup-${Math.random().toString(36).substr(2, 9)}`),
+            title: row.title || 'Untitled Artwork',
+            artist: row.artist || row.artist_name || 'Independent Artist',
+            artistAvatar: row.artist_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+            price: Number(row.price) || 12000,
+            medium: row.medium || 'Oil Painting',
+            category: categoryName,
+            size: row.size || row.dimensions || '24 x 18 inches',
+            year: row.year || 2026,
+            description: row.description || '',
+            status: row.status || 'available',
+            featured: Boolean(row.featured),
+            image: imgUrl,
+            images: [imgUrl]
+          };
+        });
       }
     } catch (e) {
       console.warn('⚠️ Supabase fetch fallback to local CMS database:', e.message);

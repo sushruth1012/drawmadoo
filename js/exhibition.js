@@ -128,39 +128,63 @@ class DrawmadooExhibition {
      ────────────────────────────────────────────────── */
   async loadDynamicData() {
     try {
-      // 1. Check for Supabase dynamic artworks first
+      // 1. Fetch dynamic artworks from Supabase cloud
+      let supabaseArtworks = [];
       if (window.DrawmadooDB && typeof window.DrawmadooDB.fetchSupabaseArtworks === 'function') {
-        const supabaseArtworks = await window.DrawmadooDB.fetchSupabaseArtworks();
-        if (supabaseArtworks && supabaseArtworks.length > 0) {
-          this.artworks = supabaseArtworks;
-          console.log('✅ Loaded dynamic artworks from Supabase:', this.artworks.length);
+        const fetched = await window.DrawmadooDB.fetchSupabaseArtworks();
+        if (Array.isArray(fetched) && fetched.length > 0) {
+          supabaseArtworks = fetched;
+          console.log('✅ Loaded dynamic artworks from Supabase:', supabaseArtworks.length);
         }
       }
 
-      // 2. Fallback to DrawmadooDB (CMS catalog)
-      if (!this.artworks || this.artworks.length === 0) {
-        if (window.DrawmadooDB) {
-          this.artworks = window.DrawmadooDB.getArtworks({ includeHidden: false });
-          this.categories = window.DrawmadooDB.getCategories() || [];
-        } else if (window.DrawmadooData) {
-          this.artworks = window.DrawmadooData.artworks || [];
-          this.categories = window.DrawmadooData.categories || [];
-        }
+      // 2. Fetch base curated museum catalog
+      let baseArtworks = [];
+      if (window.DrawmadooDB) {
+        baseArtworks = window.DrawmadooDB.getArtworks({ includeHidden: false }) || [];
+        this.categories = window.DrawmadooDB.getCategories() || [];
+      } else if (window.DrawmadooData) {
+        baseArtworks = window.DrawmadooData.artworks || [];
+        this.categories = window.DrawmadooData.categories || [];
       }
 
-      // 3. Fallback default categories if empty
+      // 3. Merge: Supabase artworks lead the exhibition, followed by curated catalog
+      const combined = [];
+      const seenTitles = new Set();
+
+      // Put newly uploaded Supabase artworks first
+      supabaseArtworks.forEach(art => {
+        if (!art || !art.title) return;
+        const normTitle = art.title.toLowerCase().trim();
+        seenTitles.add(normTitle);
+        combined.push(art);
+      });
+
+      // Append curated catalog items without duplicating
+      baseArtworks.forEach(art => {
+        if (!art || !art.title) return;
+        const normTitle = art.title.toLowerCase().trim();
+        if (!seenTitles.has(normTitle)) {
+          seenTitles.add(normTitle);
+          combined.push(art);
+        }
+      });
+
+      this.artworks = combined;
+
+      // 4. Fallback default categories if empty
       if (!this.categories || this.categories.length === 0) {
         this.categories = [
+          { name: 'Traditional', title: 'Traditional Art Hall' },
           { name: 'Landscape', title: 'Landscape Hall' },
           { name: 'Portrait', title: 'Portrait Hall' },
-          { name: 'Traditional', title: 'Traditional Art Hall' },
           { name: 'Abstract', title: 'Abstract Gallery' },
           { name: 'Digital Art', title: 'Digital Art Gallery' },
           { name: 'Sketches', title: 'Sketch Gallery' }
         ];
       }
 
-      // Group artworks by category into halls (hide empty halls automatically)
+      // Group artworks by category into halls
       this.groupArtworksIntoHalls();
     } catch (err) {
       console.error('Error loading exhibition data:', err);
@@ -504,7 +528,7 @@ class DrawmadooExhibition {
     group.add(matteMesh);
 
     // 3. Canvas Artwork Plane
-    const primaryImg = (art.images && art.images[0]) || art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80';
+    const primaryImg = (art.images && art.images[0]) || art.image || art.primary_image_url || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80';
     const canvasGeo = new THREE.PlaneGeometry(width, height);
 
     const defaultCanvasMat = new THREE.MeshStandardMaterial({
@@ -879,14 +903,14 @@ class DrawmadooExhibition {
     const panel = document.getElementById('artwork-inspector-panel');
     if (!panel) return;
 
-    const img = (art.images && art.images[0]) || art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80';
+    const img = (art.images && art.images[0]) || art.image || art.primary_image_url || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80';
     const isWishlisted = (window.AppState && window.AppState.wishlist?.includes(art.id)) || false;
     const formattedPrice = `₹${Number(art.price || 0).toLocaleString('en-IN')}`;
 
     document.getElementById('panel-hall-label').innerText = `${hallName} • Gallery View`;
     document.getElementById('panel-art-img').src = img;
     document.getElementById('panel-art-title').innerText = art.title;
-    document.getElementById('panel-artist-avatar').src = art.artistAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80';
+    document.getElementById('panel-artist-avatar').src = art.artistAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
     document.getElementById('panel-artist-name').innerText = art.artist;
     document.getElementById('panel-artist-country').innerText = `${art.countryFlag || '🌍'} Verified Independent Artist`;
     document.getElementById('panel-art-price').innerText = formattedPrice;
