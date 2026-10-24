@@ -29,8 +29,33 @@
         <button class="btn-icon mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
-        <a href="index.html" class="navbar-logo" style="text-decoration: none;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        <a href="index.html" class="navbar-logo" style="text-decoration: none; display: flex; align-items: center; gap: var(--space-3);">
+          <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius: 50%; box-shadow: 0 4px 12px rgba(44, 34, 26, 0.12);">
+            <defs>
+              <radialGradient id="expNavTeal" cx="32%" cy="32%" r="48%"><stop offset="0%" stop-color="#168EB5"/><stop offset="100%" stop-color="#0F6F8E"/></radialGradient>
+              <radialGradient id="expNavGold" cx="68%" cy="36%" r="52%"><stop offset="0%" stop-color="#F5CE70"/><stop offset="100%" stop-color="#C99A42"/></radialGradient>
+              <radialGradient id="expNavTerra" cx="62%" cy="72%" r="46%"><stop offset="0%" stop-color="#E27236"/><stop offset="100%" stop-color="#C85A24"/></radialGradient>
+              <radialGradient id="expNavDark" cx="42%" cy="42%" r="58%"><stop offset="0%" stop-color="#342820"/><stop offset="100%" stop-color="#140E0A"/></radialGradient>
+              <clipPath id="expNavClip"><circle cx="50" cy="50" r="48"/></clipPath>
+            </defs>
+            <g clip-path="url(#expNavClip)">
+              <circle cx="50" cy="50" r="48" fill="url(#expNavDark)"/>
+              <circle cx="38" cy="38" r="38" fill="url(#expNavTeal)"/>
+              <circle cx="63" cy="40" r="40" fill="url(#expNavGold)"/>
+              <circle cx="56" cy="62" r="36" fill="url(#expNavTerra)"/>
+              <ellipse cx="64" cy="58" rx="4" ry="6" fill="#140E0A" transform="rotate(25 64 58)" opacity="0.6"/>
+            </g>
+            <circle cx="50" cy="50" r="48" stroke="#2C221A" stroke-width="3" fill="none"/>
+            <g transform="translate(33, 67) rotate(45)">
+              <polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/>
+              <polygon points="0,0 -1.2,-4 1.2,-4" fill="#2C221A"/>
+              <rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/>
+              <rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/>
+              <rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/>
+              <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/>
+              <path d="M -3.2,-58 C -3.2,-61 3.2,-61 3.2,-58 Z" fill="#201813"/>
+            </g>
+          </svg>
           <span style="font-family: var(--font-heading); font-size: 1.55rem; font-weight: 600; color: var(--color-primary); letter-spacing: -0.01em;">Drawmadoo</span>
         </a>
       </div>
@@ -575,8 +600,22 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-brand-name">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          <div class="footer-brand-name" style="display: flex; align-items: center; gap: 10px;">
+            <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius: 50%;">
+              <circle cx="50" cy="50" r="48" fill="#201813"/>
+              <circle cx="38" cy="38" r="38" fill="url(#expNavTeal)"/>
+              <circle cx="63" cy="40" r="40" fill="url(#expNavGold)"/>
+              <circle cx="56" cy="62" r="36" fill="url(#expNavTerra)"/>
+              <circle cx="50" cy="50" r="48" stroke="rgba(248, 245, 239, 0.2)" stroke-width="2.5" fill="none"/>
+              <g transform="translate(33, 67) rotate(45)">
+                <polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/>
+                <polygon points="0,0 -1.2,-4 1.2,-4" fill="#2C221A"/>
+                <rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/>
+                <rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/>
+                <rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/>
+                <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/>
+              </g>
+            </svg>
             <span>Drawmadoo</span>
           </div>
           <p class="footer-brand-desc">A premium online art gallery connecting real artists with collectors worldwide. Every artwork is 100% human-made.</p>

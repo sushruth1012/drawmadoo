@@ -1,0 +1,108 @@
+/* ══════════════════════════════════════════════════════════════════
+   DRAWMADOO — CINEMATIC LOGO INTRO ANIMATION
+   A handcrafted, artistic live-sketch reveal of the official logo
+   ══════════════════════════════════════════════════════════════════ */
+
+#drawmadoo-intro-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background-color: #F8F5EF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+#drawmadoo-intro-overlay.intro-exiting {
+  opacity: 0;
+  filter: blur(4px);
+  transform: scale(1.02);
+  pointer-events: none;
+}
+
+#drawmadoo-intro-overlay.intro-hidden {
+  display: none !important;
+}
+
+.intro-stage {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.intro-stage svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 15px 35px rgba(44, 34, 26, 0.05));
+}
+
+/* Subtle skip button for accessible navigation / power users */
+.intro-skip-pill {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  background: rgba(44, 34, 26, 0.04);
+  color: #6E6359;
+  border: 1px solid rgba(44, 34, 26, 0.1);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-body, system-ui, sans-serif);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease, background-color 0.2s ease, color 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.intro-skip-pill:hover {
+  background: rgba(44, 34, 26, 0.08);
+  color: #2C221A;
+}
+
+#drawmadoo-intro-overlay:hover .intro-skip-pill,
+#drawmadoo-intro-overlay.show-skip .intro-skip-pill {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .intro-stage {
+    max-width: 520px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-stage {
+    max-width: 360px;
+    height: 150px;
+  }
+  .intro-skip-pill {
+    bottom: 20px;
+    right: 20px;
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+}

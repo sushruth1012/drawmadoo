@@ -54,7 +54,33 @@ const icons = {
   clock: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
   'trending-up': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
   leaf: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
-  branch: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`
+  branch: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
+  logo: `<svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="navTeal" cx="32%" cy="32%" r="48%"><stop offset="0%" stop-color="#168EB5"/><stop offset="100%" stop-color="#0F6F8E"/></radialGradient>
+      <radialGradient id="navGold" cx="68%" cy="36%" r="52%"><stop offset="0%" stop-color="#F5CE70"/><stop offset="100%" stop-color="#C99A42"/></radialGradient>
+      <radialGradient id="navTerra" cx="62%" cy="72%" r="46%"><stop offset="0%" stop-color="#E27236"/><stop offset="100%" stop-color="#C85A24"/></radialGradient>
+      <radialGradient id="navDark" cx="42%" cy="42%" r="58%"><stop offset="0%" stop-color="#342820"/><stop offset="100%" stop-color="#140E0A"/></radialGradient>
+      <clipPath id="navCircleClip"><circle cx="50" cy="50" r="48"/></clipPath>
+    </defs>
+    <g clip-path="url(#navCircleClip)">
+      <circle cx="50" cy="50" r="48" fill="url(#navDark)"/>
+      <circle cx="38" cy="38" r="38" fill="url(#navTeal)"/>
+      <circle cx="63" cy="40" r="40" fill="url(#navGold)"/>
+      <circle cx="56" cy="62" r="36" fill="url(#navTerra)"/>
+      <ellipse cx="64" cy="58" rx="4" ry="6" fill="#140E0A" transform="rotate(25 64 58)" opacity="0.6"/>
+    </g>
+    <circle cx="50" cy="50" r="48" stroke="#2C221A" stroke-width="3" fill="none"/>
+    <g transform="translate(33, 67) rotate(45)">
+      <polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/>
+      <polygon points="0,0 -1.2,-4 1.2,-4" fill="#2C221A"/>
+      <rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/>
+      <rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/>
+      <rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/>
+      <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/>
+      <path d="M -3.2,-58 C -3.2,-61 3.2,-61 3.2,-58 Z" fill="#201813"/>
+    </g>
+  </svg>`
 };
 
 /**
@@ -231,15 +257,17 @@ function injectRuntimeStyles() {
       text-decoration: none;
     }
     .nav-brand-logo {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: var(--color-primary);
-      color: white;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow-sm);
+      transition: transform var(--duration) var(--ease-out);
+    }
+    .nav-brand:hover .nav-brand-logo {
+      transform: rotate(-8deg) scale(1.06);
     }
     .nav-links {
       display: flex;
@@ -1733,7 +1761,7 @@ function renderNavbar() {
     <div class="container navbar-inner">
       <div style="display: flex; align-items: center; gap: var(--space-4);">
         <a href="#" class="nav-brand" aria-label="Drawmadoo Home">
-          <div class="nav-brand-logo">${getIcon('leaf', '', 20)}</div>
+          <div class="nav-brand-logo">${getIcon('logo', '', 34)}</div>
           <span>${site.name}</span>
         </a>
         <span class="admin-pill-badge">ADMIN</span>
@@ -2417,7 +2445,7 @@ function renderFooter() {
       <div class="footer-grid">
         <div>
           <div class="nav-brand" style="margin-bottom: var(--space-3);">
-            <div class="nav-brand-logo">${getIcon('leaf', '', 20)}</div>
+            <div class="nav-brand-logo">${getIcon('logo', '', 34)}</div>
             <span>${DrawmadooData.site?.name || 'Drawmadoo'}</span>
           </div>
           <p class="footer-brand-about">${f.about || ''}</p>
