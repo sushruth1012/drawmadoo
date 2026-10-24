@@ -3358,6 +3358,7 @@
         <button class="modal-close-btn" onclick="closeModal('modal-artwork')">✕</button>
       </div>
       <div class="modal-body">
+        <div id="artwork-modal-alert" style="display:none; padding:0.9rem 1.1rem; border-radius:8px; margin-bottom:1.25rem; font-size:0.875rem; line-height:1.5;"></div>
         <form id="artwork-form" onsubmit="handleSaveArtwork(event)">
           <div class="form-group">
             <label class="form-label">Artwork Photograph / Canvas High-Res</label>
@@ -5054,6 +5055,8 @@ CREATE POLICY "Allow artwork insert" ON public.artworks FOR INSERT WITH CHECK (t
 
     function openAddArtworkModal() {
       populateArtistSelectDropdown();
+      const alertBox = document.getElementById("artwork-modal-alert");
+      if (alertBox) alertBox.style.display = "none";
       document.getElementById("artwork-form").reset();
       document.getElementById("artwork-upload-preview").style.display = "none";
       document.getElementById("artwork-upload-placeholder").style.display = "block";
@@ -5191,7 +5194,7 @@ CREATE POLICY "Allow artwork insert" ON public.artworks FOR INSERT WITH CHECK (t
           artworkRecord.artist_name = artist;
 
           console.log('[Drawmadoo DB] Inserting artwork into public.artworks table:', artworkRecord);
-          const { data: insertedData, error: insertError } = await client
+          let { data: insertedData, error: insertError } = await client
             .from('artworks')
             .insert([artworkRecord])
             .select();
@@ -5202,15 +5205,34 @@ CREATE POLICY "Allow artwork insert" ON public.artworks FOR INSERT WITH CHECK (t
             if (insertError.message && (insertError.message.includes('foreign key') || insertError.message.includes('artist_id') || insertError.message.includes('artist_name'))) {
               delete artworkRecord.artist_id;
               delete artworkRecord.artist_name;
-              await client.from('artworks').insert([artworkRecord]);
+              const retryRes = await client.from('artworks').insert([artworkRecord]).select();
+              if (retryRes.error) {
+                throw retryRes.error;
+              }
+              insertedData = retryRes.data;
+            } else {
+              throw insertError;
             }
-          } else {
-            console.log('[Drawmadoo DB] Successfully inserted artwork in public.artworks:', insertedData);
           }
+          console.log('[Drawmadoo DB] Successfully inserted artwork in public.artworks:', insertedData);
         }
       } catch (err) {
         console.error('[Upload & Publish Error]:', err);
-        showToast(`Supabase upload issue: ${err.message || 'Check storage RLS'}. Saved to local catalog.`, "warning");
+        const alertBox = document.getElementById("artwork-modal-alert");
+        if (alertBox) {
+          alertBox.style.display = "block";
+          alertBox.style.background = "rgba(220, 53, 69, 0.1)";
+          alertBox.style.border = "1px solid rgba(220, 53, 69, 0.3)";
+          alertBox.style.color = "#a71d2a";
+          alertBox.innerHTML = `
+            <strong>⚠️ Supabase Upload Failed:</strong> ${err.message || 'Row-Level Security (RLS) blocked the operation.'}<br>
+            <div style="margin-top: 8px; font-size: 0.8rem; color: #2C221A;">
+              <strong>Fix:</strong> In your Supabase Dashboard, open <strong>SQL Editor</strong>, run <code>supabase/fix_upload_permissions.sql</code>, then retry.
+            </div>
+          `;
+        }
+        showToast(`Supabase upload failed: ${err.message || 'Row-Level Security policy blocked insert.'}`, "error");
+        return; // Do not close modal when database insert fails
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
