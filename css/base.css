@@ -112,15 +112,19 @@ ul, ol { list-style: none; }
 }
 
 .section {
-  padding: var(--space-20) 0;
+  padding: var(--space-24) 0;
 }
 
 .section-sm {
-  padding: var(--space-12) 0;
+  padding: var(--space-16) 0;
 }
 
 .section-lg {
-  padding: var(--space-24) 0;
+  padding: var(--space-32) 0;
+}
+
+.section-alt {
+  background-color: var(--color-bg-alt);
 }
 
 /* ── Section Headers ── */
@@ -128,14 +132,16 @@ ul, ol { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-12);
   flex-wrap: wrap;
   gap: var(--space-4);
 }
 
 .section-header h2 {
-  font-size: var(--text-3xl);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
 }
 
 .section-header-actions {
@@ -144,57 +150,52 @@ ul, ol { list-style: none; }
   gap: var(--space-3);
 }
 
-/* ── Buttons ── */
+/* ── Buttons (Luxury Gallery & Museum Aesthetic) ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-6);
+  padding: 12px 28px;
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  font-weight: 600;
-  border-radius: var(--radius);
+  font-weight: 500;
+  border-radius: var(--radius-full);
   transition: all var(--duration) var(--ease-out);
   white-space: nowrap;
   line-height: 1.4;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
-
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(rgba(255,255,255,0.1), transparent);
-  opacity: 0;
-  transition: opacity var(--duration) var(--ease-out);
-}
-
-.btn:hover::after { opacity: 1; }
 
 .btn-primary {
   background: var(--color-primary);
-  color: var(--color-text-on-primary);
-  box-shadow: var(--shadow-sm);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(44, 34, 26, 0.16);
+  border: 1.5px solid var(--color-primary);
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dark);
-  color: var(--color-text-on-primary);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(44, 34, 26, 0.22);
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: var(--color-card);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  background: #FFFFFF;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-secondary:hover {
-  background: var(--color-card-hover);
-  transform: translateY(-1px);
+  background: var(--color-bg);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
 .btn-outline {
@@ -206,7 +207,9 @@ ul, ol { list-style: none; }
 .btn-outline:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  transform: translateY(-1px);
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
 .btn-ghost {
@@ -215,8 +218,21 @@ ul, ol { list-style: none; }
 }
 
 .btn-ghost:hover {
-  background: var(--color-card);
+  background: rgba(44, 34, 26, 0.05);
   color: var(--color-text);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  border: 1.5px solid var(--color-accent);
+}
+
+.btn-accent:hover {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-artist-blue {
@@ -268,18 +284,19 @@ ul, ol { list-style: none; }
   height: 20px;
 }
 
-/* ── Cards ── */
+/* ── Cards (Pure White, Thin Borders, Soft Shadows) ── */
 .card {
   background: var(--color-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-card);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   transition: all var(--duration-slow) var(--ease-out);
 }
 
 .card:hover {
   box-shadow: var(--shadow-card-hover);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 .card-glass {
