@@ -8,6 +8,18 @@
     {
       "source": "/explore",
       "destination": "/explore.html"
+    },
+    {
+      "source": "/exhibition",
+      "destination": "/exhibition/index.html"
+    },
+    {
+      "source": "/exhibition/",
+      "destination": "/exhibition/index.html"
+    },
+    {
+      "source": "/exhibition.html",
+      "destination": "/exhibition/index.html"
     }
   ]
 }
