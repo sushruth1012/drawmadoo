@@ -80,6 +80,7 @@ class DrawmadooExhibition {
 
     // Textures & Caching
     this.textureLoader = new THREE.TextureLoader();
+    this.textureLoader.setCrossOrigin('anonymous');
     this.loadedTextures = new Map();
 
     // Web Audio API
@@ -157,6 +158,7 @@ class DrawmadooExhibition {
         if (!art || !art.title) return;
         const normTitle = art.title.toLowerCase().trim();
         seenTitles.add(normTitle);
+        art.isDynamic = true;
         combined.push(art);
       });
 
@@ -205,7 +207,7 @@ class DrawmadooExhibition {
 
     // Populate artworks into their respective halls
     this.artworks.forEach(art => {
-      const catKey = (art.category || 'Landscape').toLowerCase();
+      const catKey = (art.category || 'Traditional').toLowerCase();
       if (!categoryMap.has(catKey)) {
         categoryMap.set(catKey, {
           name: art.category,
@@ -222,6 +224,30 @@ class DrawmadooExhibition {
         this.halls.push(hall);
       }
     });
+
+    // Prioritize hall containing newly uploaded Supabase artworks to be Hall #1 at the entrance
+    const dynamicArts = this.artworks.filter(a => a.isDynamic || (a.id && String(a.id).length > 20) || (a.id && String(a.id).startsWith('sup-')));
+    if (dynamicArts.length > 0) {
+      const topCat = (dynamicArts[0].category || 'Traditional').toLowerCase();
+      this.halls.sort((a, b) => {
+        const aMatch = a.name.toLowerCase() === topCat;
+        const bMatch = b.name.toLowerCase() === topCat;
+        if (aMatch && !bMatch) return -1;
+        if (!aMatch && bMatch) return 1;
+        return 0;
+      });
+
+      // Ensure newly uploaded dynamic artwork is mounted at slot 0 (first painting on front wall)
+      if (this.halls[0] && this.halls[0].artworks) {
+        this.halls[0].artworks.sort((a, b) => {
+          const aDyn = a.isDynamic || (a.id && String(a.id).length > 20);
+          const bDyn = b.isDynamic || (b.id && String(b.id).length > 20);
+          if (aDyn && !bDyn) return -1;
+          if (!aDyn && bDyn) return 1;
+          return 0;
+        });
+      }
+    }
 
     // Fallback if empty
     if (this.halls.length === 0 && this.artworks.length > 0) {
@@ -516,60 +542,56 @@ class DrawmadooExhibition {
     });
     const frameMesh = new THREE.Mesh(frameGeo, frameMat);
     frameMesh.position.z = -frameDepth / 2;
-    frameMesh.castShadow = true;
+    frameMesh.castShadow = false;
     frameMesh.receiveShadow = true;
     group.add(frameMesh);
 
-    // 2. Archival Museum Matte (Soft linen off-white)
-    const matteGeo = new THREE.PlaneGeometry(width + 0.08, height + 0.08);
-    const matteMat = new THREE.MeshStandardMaterial({ color: 0xf5efe6, roughness: 0.9 });
-    const matteMesh = new THREE.Mesh(matteGeo, matteMat);
-    matteMesh.position.z = 0.005;
-    group.add(matteMesh);
-
-    // 3. Canvas Artwork Plane
+    // 2. Canvas Artwork Plane (Mounted cleanly in frame with anti-z-fighting offset)
     const primaryImg = (art.images && art.images[0]) || art.image || art.primary_image_url || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80';
     const canvasGeo = new THREE.PlaneGeometry(width, height);
 
-    const defaultCanvasMat = new THREE.MeshStandardMaterial({
-      color: 0x24201c,
-      roughness: 0.8
+    const canvasMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.82,
+      metalness: 0.02,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1
     });
-    const canvasMesh = new THREE.Mesh(canvasGeo, defaultCanvasMat);
-    canvasMesh.position.z = 0.012;
+    const canvasMesh = new THREE.Mesh(canvasGeo, canvasMat);
+    canvasMesh.position.z = 0.015;
     canvasMesh.userData = { artworkId: art.id, paintingIndex: index, isPainting: true };
     group.add(canvasMesh);
 
     // Asynchronous texture loading with caching & mipmapping
     this.loadArtworkTexture(primaryImg, (texture) => {
-      canvasMesh.material = new THREE.MeshStandardMaterial({
-        map: texture,
-        roughness: 0.42,
-        metalness: 0.05
-      });
+      canvasMesh.material.map = texture;
+      canvasMesh.material.color.setHex(0xffffff);
       canvasMesh.material.needsUpdate = true;
-    });
+    }, art);
 
-    // 4. Museum Brass Plaque beneath painting
+    // 3. Museum Brass Plaque beneath painting
     const plaqueMesh = this.createMuseumPlaque(art, width);
     plaqueMesh.position.set(0, -(height / 2) - 0.32, 0.02);
     plaqueMesh.userData = { artworkId: art.id, paintingIndex: index, isPainting: true };
     group.add(plaqueMesh);
 
-    // 5. Dedicated Warm Museum Spotlight
-    const spotLight = new THREE.SpotLight(0xfff4e0, 2.4, 7.5, Math.PI / 5, 0.65, 1.2);
-    spotLight.position.set(0, (height / 2) + 1.2, 1.8);
+    // 4. Dedicated Warm Museum Spotlight (Optimized lighting without shadow-map overflow)
+    const spotLight = new THREE.SpotLight(0xfff3e0, 1.35, 7.0, Math.PI / 4.5, 0.7, 1.5);
+    spotLight.position.set(0, (height / 2) + 1.1, 1.6);
     spotLight.target = canvasMesh;
-    spotLight.castShadow = true;
-    spotLight.shadow.bias = -0.0005;
-    spotLight.shadow.mapSize.width = 512;
-    spotLight.shadow.mapSize.height = 512;
+    spotLight.castShadow = false; // CRITICAL: Prevents exceeding WebGL MAX_TEXTURE_IMAGE_UNITS (16)
     group.add(spotLight);
 
     return group;
   }
 
-  loadArtworkTexture(url, callback) {
+  loadArtworkTexture(url, callback, art = null) {
+    if (!url || typeof url !== 'string') {
+      const fallback = this.createFallbackTexture(art);
+      callback(fallback);
+      return;
+    }
     if (this.loadedTextures.has(url)) {
       callback(this.loadedTextures.get(url));
       return;
@@ -581,14 +603,89 @@ class DrawmadooExhibition {
         tex.minFilter = THREE.LinearMipmapLinearFilter;
         tex.magFilter = THREE.LinearFilter;
         tex.generateMipmaps = true;
+        tex.needsUpdate = true;
         this.loadedTextures.set(url, tex);
         callback(tex);
       },
       undefined,
       (err) => {
-        console.warn('Failed to load artwork texture:', url, err);
+        console.warn('Artwork texture load error, using high-res fallback canvas:', url, err);
+        const fallbackTex = this.createFallbackTexture(art);
+        this.loadedTextures.set(url, fallbackTex);
+        callback(fallbackTex);
       }
     );
+  }
+
+  createFallbackTexture(art = null) {
+    const title = art?.title || 'Masterpiece';
+    const artist = art?.artist || 'Drawmadoo Artist';
+    const medium = art?.medium || 'Fine Art';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+
+    // Museum gallery textured background
+    const bgGrad = ctx.createRadialGradient(512, 512, 50, 512, 512, 700);
+    bgGrad.addColorStop(0, '#2e261f');
+    bgGrad.addColorStop(0.65, '#1e1914');
+    bgGrad.addColorStop(1, '#110e0c');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 1024, 1024);
+
+    // Subtle linen texture overlay
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 1024; i += 8) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, 1024);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(1024, i);
+      ctx.stroke();
+    }
+
+    // Outer double gold border
+    ctx.strokeStyle = '#c99a42';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(40, 40, 1024 - 80, 1024 - 80);
+
+    ctx.strokeStyle = 'rgba(201, 154, 66, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(55, 55, 1024 - 110, 1024 - 110);
+
+    // Decorative emblem icon
+    ctx.fillStyle = '#c99a42';
+    ctx.font = '64px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🏛️', 512, 380);
+
+    // Artwork Title
+    ctx.fillStyle = '#f8f5ef';
+    ctx.font = 'bold 52px "Cormorant Garamond", Georgia, serif';
+    const displayTitle = title.length > 24 ? title.substr(0, 22) + '...' : title;
+    ctx.fillText(displayTitle, 512, 500);
+
+    // Artist Name
+    ctx.fillStyle = '#e0c9a6';
+    ctx.font = '500 32px "Inter", sans-serif';
+    ctx.fillText(artist, 512, 570);
+
+    // Medium & Year
+    ctx.fillStyle = '#8c7e72';
+    ctx.font = '400 24px "Inter", sans-serif';
+    ctx.fillText(medium, 512, 630);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.encoding = THREE.sRGBEncoding;
+    texture.generateMipmaps = true;
+    texture.needsUpdate = true;
+    return texture;
   }
 
   createMuseumPlaque(art, artworkWidth) {
