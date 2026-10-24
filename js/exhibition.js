@@ -4,11 +4,14 @@
  * Signature digital museum experience. Fully dynamic, CMS-driven,
  * Supabase-ready, with luxury museum corridor walkthrough.
  *
- * Desktop: Scroll-driven inertia walkthrough (1.5x sensitivity) with
- *          natural look-around (±35° yaw, ±15° pitch) & auto-centering.
- * Mobile: Automatic cinematic guided walkthrough with temporary touch
- *          swipe look-around and smooth return to forward.
- * Realism: Subtle human walking head movement, natural easing & inertia.
+ * Flow: Direct seamless entry from website. No intermediate intro page.
+ * Desktop: Scroll-driven inertia walkthrough (1.5x sensitivity).
+ *          Normal Mode: Free cursor for effortless artwork clicking.
+ *          Look Mode (Hold Right Mouse Button): Smooth rotation (±35° yaw, ±15° pitch),
+ *          gracefully easing back to forward walking direction on release.
+ * Mobile: Automatic cinematic guided walkthrough with touch swipe look
+ *         and auto-centering.
+ * Space: Compact 35% reduced artwork spacing, rich size mix, closer viewing.
  * ═════════════════════════════════════════════════════════════════════
  */
 
@@ -38,26 +41,28 @@ class DrawmadooExhibition {
     // Corridor Navigation Coordinates & Inertia Physics
     this.corridorX = 0;
     this.corridorY = 1.85; // Human standing eye level in meters
-    this.currentCorridorZ = 4.0;
-    this.targetCorridorZ = 4.0;
-    this.savedCorridorZ = 4.0;
-    this.prevCorridorZ = 4.0;
-    this.minCorridorZ = -80.0; // Dynamically set based on hall count
-    this.maxCorridorZ = 4.0;
+    this.currentCorridorZ = 4.5;
+    this.targetCorridorZ = 4.5;
+    this.savedCorridorZ = 4.5;
+    this.prevCorridorZ = 4.5;
+    this.minCorridorZ = -80.0; // Dynamically calculated
+    this.maxCorridorZ = 4.5;
 
     // Natural Walking Feel & Subtle Head Bobbing
     this.walkPhase = 0;
     this.headBobX = 0;
     this.headBobY = 0;
 
-    // Look-Around System (Euler angles in radians: ±35° yaw, ±15° pitch)
+    // Right-Click Look-Around System (Euler angles in radians: ±35° yaw, ±15° pitch)
+    this.isRightMouseDown = false;
+    this.lastMouseX = 0;
+    this.lastMouseY = 0;
     this.maxYaw = THREE.MathUtils.degToRad(35);   // ~0.6108 rad
     this.maxPitch = THREE.MathUtils.degToRad(15); // ~0.2618 rad
     this.lookYaw = 0;
     this.lookPitch = 0;
     this.targetLookYaw = 0;
     this.targetLookPitch = 0;
-    this.lastMouseMoveTime = performance.now();
 
     // Mobile Guided Walk State
     this.mobileWalkSpeed = 1.35; // units per second
@@ -87,14 +92,14 @@ class DrawmadooExhibition {
   }
 
   async init() {
-    this.showLoader(10, 'Initializing digital museum...');
+    this.showLoader(15, 'Preparing your immersive art exhibition...');
     await this.loadDynamicData();
 
-    this.showLoader(40, 'Constructing exhibition halls...');
+    this.showLoader(45, 'Curating exhibition halls & architecture...');
     this.setupThreeScene();
     this.buildMuseumArchitecture();
 
-    this.showLoader(75, 'Curating museum lighting & frames...');
+    this.showLoader(75, 'Mounting original artworks & spotlights...');
     this.setupInteraction();
     this.setupScrollNavigation();
     this.setupAudio();
@@ -102,9 +107,12 @@ class DrawmadooExhibition {
     this.setupKeyboardControls();
 
     this.showLoader(100, 'Exhibition ready.');
+
+    // Direct, seamless entry without intermediate intro page
     setTimeout(() => {
       this.hideLoader();
-    }, 600);
+      this.enterExhibition();
+    }, 450);
 
     this.animate();
 
@@ -184,14 +192,14 @@ class DrawmadooExhibition {
       categoryMap.get(catKey).artworks.push(art);
     });
 
-    // Filter out halls with 0 artworks (hide empty halls)
+    // Filter out halls with 0 artworks
     categoryMap.forEach(hall => {
       if (hall.artworks.length > 0) {
         this.halls.push(hall);
       }
     });
 
-    // Fallback if somehow all were empty
+    // Fallback if empty
     if (this.halls.length === 0 && this.artworks.length > 0) {
       this.halls.push({
         name: 'Masterpieces',
@@ -210,15 +218,15 @@ class DrawmadooExhibition {
     const width = this.container.clientWidth || window.innerWidth;
     const height = this.container.clientHeight || window.innerHeight;
 
-    // Scene with soft atmospheric fog for museum depth
+    // Atmospheric fog for natural museum gallery depth
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0e0d0c);
-    this.scene.fog = new THREE.FogExp2(0x0e0d0c, 0.018);
+    this.scene.fog = new THREE.FogExp2(0x0e0d0c, 0.02);
 
     // Perspective Camera strictly at human standing eye-level (1.85m)
     this.camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 250);
-    this.camera.position.set(this.corridorX, this.corridorY, 5.5);
-    this.currentLookAt.set(this.corridorX, this.corridorY, -4.5);
+    this.camera.position.set(this.corridorX, this.corridorY, 4.5);
+    this.currentLookAt.set(this.corridorX, this.corridorY, -5.5);
     this.camera.lookAt(this.currentLookAt);
 
     // High performance WebGL Renderer
@@ -242,7 +250,7 @@ class DrawmadooExhibition {
     this.scene.add(ambientLight);
 
     // Directional Ceiling Track Light
-    const trackLight = new THREE.DirectionalLight(0xfff3e0, 0.6);
+    const trackLight = new THREE.DirectionalLight(0xfff3e0, 0.65);
     trackLight.position.set(0, 12, 10);
     this.scene.add(trackLight);
 
@@ -251,12 +259,15 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     3. MUSEUM ARCHITECTURE & WALLS BUILDER
+     3. MUSEUM ARCHITECTURE & COMPACT ARTWORK SPACING
      ────────────────────────────────────────────────── */
   buildMuseumArchitecture() {
-    const hallLength = 26; // Z distance per hall
-    const hallWidth = 11;  // X distance between opposite walls (corridor center is x=0)
-    const wallHeight = 7.5;
+    // Intimate museum corridor width (7.8m): puts paintings comfortably close (3.7m from center)
+    const hallWidth = 7.8;
+    const wallHeight = 7.2;
+
+    // Reduced spacing between artworks (~35% reduction from old 7-10m down to 4.2m)
+    const zSpacing = 4.2;
 
     // Materials
     const wallMaterial = new THREE.MeshStandardMaterial({
@@ -282,35 +293,16 @@ class DrawmadooExhibition {
       metalness: 0.4
     });
 
-    const totalHalls = this.halls.length;
-    const totalLength = totalHalls * hallLength;
-
-    // Configure corridor walk boundaries
-    this.minCorridorZ = -(totalLength) + 1.0;
-    this.maxCorridorZ = 4.0;
-
-    // Continuous Grand Museum Floor with subtle gloss
-    const floorGeo = new THREE.PlaneGeometry(hallWidth + 4, totalLength + 30);
-    const floor = new THREE.Mesh(floorGeo, floorMaterial);
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.set(0, 0, -(totalLength / 2) + 10);
-    floor.receiveShadow = true;
-    this.scene.add(floor);
-
-    // Museum Ceiling with warm recessed cove
-    const ceilingGeo = new THREE.PlaneGeometry(hallWidth + 4, totalLength + 30);
-    const ceiling = new THREE.Mesh(ceilingGeo, ceilingMaterial);
-    ceiling.rotation.x = Math.PI / 2;
-    ceiling.position.set(0, wallHeight, -(totalLength / 2) + 10);
-    this.scene.add(ceiling);
-
     this.paintingMeshes = [];
     let globalIndex = 0;
+    let currentHallZStart = 0;
 
-    // Iterate each hall and build architecture + frames
-    this.halls.forEach((hall, hIndex) => {
-      const hallZStart = -(hIndex * hallLength);
-      const hallZCenter = hallZStart - (hallLength / 2);
+    // Build each hall dynamically based on its artwork count
+    this.halls.forEach((hall) => {
+      const artworksInHall = hall.artworks;
+      const slotsPerSide = Math.max(Math.ceil(artworksInHall.length / 2), 1);
+      const hallLength = Math.max(slotsPerSide * zSpacing + 6.0, 16.0);
+      const hallZCenter = currentHallZStart - (hallLength / 2);
 
       // Left Wall
       const leftWallGeo = new THREE.BoxGeometry(0.3, wallHeight, hallLength);
@@ -335,17 +327,13 @@ class DrawmadooExhibition {
       this.scene.add(rightBaseboard);
 
       // Hall Archway & Overhead Sign
-      this.createHallArchway(hall.title, -(hallWidth / 2), (hallWidth / 2), wallHeight, hallZStart);
+      this.createHallArchway(hall.title, -(hallWidth / 2), (hallWidth / 2), wallHeight, currentHallZStart);
 
-      // Mount Paintings along Left and Right walls
-      const artworksInHall = hall.artworks;
-      const slotsPerSide = Math.max(Math.ceil(artworksInHall.length / 2), 1);
-      const zSpacing = (hallLength - 6) / slotsPerSide;
-
+      // Mount Paintings along Left and Right walls with balanced visual rhythm
       artworksInHall.forEach((art, aIdx) => {
         const isLeft = aIdx % 2 === 0;
         const sideSlot = Math.floor(aIdx / 2);
-        const zPos = hallZStart - 3.5 - (sideSlot * zSpacing);
+        const zPos = currentHallZStart - 3.2 - (sideSlot * zSpacing);
 
         const xPos = isLeft ? -(hallWidth / 2) + 0.18 : (hallWidth / 2) - 0.18;
         const yPos = 2.1; // Art eye level
@@ -368,7 +356,28 @@ class DrawmadooExhibition {
 
         globalIndex++;
       });
+
+      currentHallZStart -= hallLength;
     });
+
+    const totalLength = Math.abs(currentHallZStart);
+    this.minCorridorZ = currentHallZStart + 1.5;
+    this.maxCorridorZ = 4.5;
+
+    // Continuous Grand Museum Floor
+    const floorGeo = new THREE.PlaneGeometry(hallWidth + 4, totalLength + 30);
+    const floor = new THREE.Mesh(floorGeo, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, 0, -(totalLength / 2) + 5);
+    floor.receiveShadow = true;
+    this.scene.add(floor);
+
+    // Museum Ceiling with warm recessed cove
+    const ceilingGeo = new THREE.PlaneGeometry(hallWidth + 4, totalLength + 30);
+    const ceiling = new THREE.Mesh(ceilingGeo, ceilingMaterial);
+    ceiling.rotation.x = Math.PI / 2;
+    ceiling.position.set(0, wallHeight, -(totalLength / 2) + 5);
+    this.scene.add(ceiling);
 
     console.info(`🖼️ Mounted ${this.paintingMeshes.length} framed artworks with museum spotlights.`);
   }
@@ -409,7 +418,7 @@ class DrawmadooExhibition {
     const signTexture = new THREE.CanvasTexture(canvas);
     signTexture.encoding = THREE.sRGBEncoding;
 
-    const signGeo = new THREE.PlaneGeometry(4.2, 1.05);
+    const signGeo = new THREE.PlaneGeometry(3.8, 0.95);
     const signMat = new THREE.MeshStandardMaterial({
       map: signTexture,
       roughness: 0.4,
@@ -438,22 +447,38 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     5. FRAMED PAINTING BUILDER WITH WARM SPOTLIGHT
+     5. FRAMED PAINTING BUILDER WITH REALISTIC SIZE MIX
      ────────────────────────────────────────────────── */
   createFramedPainting(art, x, y, z, rotY, index, hallName) {
     const group = new THREE.Group();
     group.position.set(x, y, z);
     group.rotation.y = rotY;
 
-    // Aspect ratio auto-detection
-    let width = 2.1;
-    let height = 1.6;
+    // Mix Large, Medium, Small paintings to create realistic exhibition compositions
+    let width = 2.0;
+    let height = 1.5;
+    const variant = index % 4;
+    if (variant === 0) {
+      // Large Statement Masterpiece
+      width = 2.3;
+      height = 1.65;
+    } else if (variant === 1) {
+      // Vertical / Portrait
+      width = 1.55;
+      height = 2.05;
+    } else if (variant === 2) {
+      // Intimate Medium Fine Art
+      width = 1.85;
+      height = 1.38;
+    } else {
+      // Balanced Square
+      width = 1.7;
+      height = 1.7;
+    }
+
     if (art.orientation === 'vertical' || art.category === 'Portrait') {
-      width = 1.6;
-      height = 2.1;
-    } else if (art.orientation === 'square') {
-      width = 1.8;
-      height = 1.8;
+      width = 1.55;
+      height = 2.05;
     }
 
     // 1. Frame Geometry (Deep 3D Bevel)
@@ -461,7 +486,7 @@ class DrawmadooExhibition {
     const frameBorder = 0.14;
     const frameGeo = new THREE.BoxGeometry(width + (frameBorder * 2), height + (frameBorder * 2), frameDepth);
     const frameMat = new THREE.MeshStandardMaterial({
-      color: 0x8a5a2b, // Brand walnut brown
+      color: 0x8a5a2b, // Walnut brown
       roughness: 0.35,
       metalness: 0.28
     });
@@ -482,7 +507,6 @@ class DrawmadooExhibition {
     const primaryImg = (art.images && art.images[0]) || art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80';
     const canvasGeo = new THREE.PlaneGeometry(width, height);
 
-    // Placeholder canvas while remote texture streams in
     const defaultCanvasMat = new THREE.MeshStandardMaterial({
       color: 0x24201c,
       roughness: 0.8
@@ -593,20 +617,17 @@ class DrawmadooExhibition {
      6. SCROLL NAVIGATION & CORRIDOR GLIDING SYSTEM
      ────────────────────────────────────────────────── */
   setupScrollNavigation() {
-    // Desktop wheel scroll event: moves camera smoothly along the main corridor
-    // Sensitivity increased ~1.5x for more responsive, effortless movement
+    // Desktop wheel scroll: moves camera smoothly along the center corridor
+    // Sensitivity increased 1.5x for responsive, effortless walking
     const onWheel = (e) => {
-      // Allow standard scrolling inside the inspector side panel if open
       if (e.target && e.target.closest && e.target.closest('#artwork-inspector-panel')) {
         return;
       }
 
       if (this.isInspecting) return;
 
-      // Prevent page scrolling/bouncing
       e.preventDefault();
 
-      // Pause guided tour if active so user takes immediate natural control
       if (this.isAutoTourActive) {
         this.toggleAutoTour();
       }
@@ -615,10 +636,9 @@ class DrawmadooExhibition {
       if (e.deltaMode === 1) delta *= 33;
       if (e.deltaMode === 2) delta *= 100;
 
-      // Scrolling Down (positive delta) -> walk forward deeper into museum (decrease Z)
-      // Scrolling Up (negative delta) -> walk back toward entrance (increase Z)
-      // 1.5x sensitivity: 0.0128 moves camera noticeably farther with each scroll notch
-      const scrollSensitivity = 0.0128;
+      // Scrolling Down -> walk forward deeper into museum (decrease Z)
+      // Scrolling Up -> walk back toward entrance (increase Z)
+      const scrollSensitivity = 0.013;
       this.targetCorridorZ -= delta * scrollSensitivity;
 
       // Clamped strictly between entrance and the end of the museum
@@ -739,7 +759,7 @@ class DrawmadooExhibition {
 
     this.isInspecting = true;
     this.savedCorridorZ = this.currentCorridorZ;
-    this.targetCorridorZ = this.currentCorridorZ; // Halt walking inertia
+    this.targetCorridorZ = this.currentCorridorZ; // Halt walking momentum
 
     // Reset look yaw and pitch so inspection view is straight-on
     this.targetLookYaw = 0;
@@ -752,14 +772,14 @@ class DrawmadooExhibition {
       this.toggleAutoTour();
     }
 
-    // Artwork position in world space
+    // Artwork world position
     const artPos = target.mesh.position;
     const isLeft = artPos.x < 0;
 
-    // View distance from painting front-and-center
-    // Left wall: artwork faces +X. Camera sits at artPos.x + 2.35
-    // Right wall: artwork faces -X. Camera sits at artPos.x - 2.35
-    const inspectDistance = 2.35;
+    // Optimal inspection viewing distance (2.1m)
+    // Left wall: camera at artPos.x + 2.1
+    // Right wall: camera at artPos.x - 2.1
+    const inspectDistance = 2.1;
     const inspectX = isLeft ? artPos.x + inspectDistance : artPos.x - inspectDistance;
     const inspectY = artPos.y;
     const inspectZ = artPos.z;
@@ -899,11 +919,87 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     9. INTERACTION, NATURAL LOOK & TOUCH CONTROLS
+     9. INTERACTION: NORMAL MODE & RIGHT-CLICK LOOK AROUND
      ────────────────────────────────────────────────── */
   setupInteraction() {
-    // Click on canvas to inspect artwork
+    this.isRightMouseDown = false;
+    this.lastMouseX = 0;
+    this.lastMouseY = 0;
+
+    // 1. Right Mouse Button Look Around Mode
+    window.addEventListener('mousedown', (e) => {
+      if (e.button === 2) { // Right Click
+        e.preventDefault();
+        if (this.isInspecting || this.isMobile) return;
+        this.isRightMouseDown = true;
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+        document.body.style.cursor = 'none';
+        if (this.container) this.container.style.cursor = 'none';
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      // Look Around Mode active while Right Mouse Button is held
+      if (this.isRightMouseDown && !this.isInspecting && !this.isMobile) {
+        const deltaX = e.clientX - this.lastMouseX;
+        const deltaY = e.clientY - this.lastMouseY;
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+
+        // Smooth rotation sensitivity
+        const lookSens = 0.0035;
+        this.targetLookYaw -= deltaX * lookSens;
+        this.targetLookPitch -= deltaY * lookSens;
+
+        // Clamped: horizontal ±35°, vertical ±15°
+        this.targetLookYaw = Math.max(-this.maxYaw, Math.min(this.maxYaw, this.targetLookYaw));
+        this.targetLookPitch = Math.max(-this.maxPitch, Math.min(this.maxPitch, this.targetLookPitch));
+        return;
+      }
+
+      // Normal Mode: Cursor is completely free! Raycast for hover state on artworks
+      if (!this.isMobile && !this.isRightMouseDown) {
+        const rect = this.container.getBoundingClientRect();
+        this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+
+        let isHovering = false;
+        for (let i = 0; i < intersects.length; i++) {
+          if (intersects[i].object.userData?.isPainting) {
+            isHovering = true;
+            break;
+          }
+        }
+        this.container.style.cursor = isHovering ? 'pointer' : 'default';
+        document.body.style.cursor = isHovering ? 'pointer' : 'default';
+      }
+    });
+
+    window.addEventListener('mouseup', (e) => {
+      if (e.button === 2 && this.isRightMouseDown) {
+        this.isRightMouseDown = false;
+        document.body.style.cursor = 'default';
+        if (this.container) this.container.style.cursor = 'default';
+
+        // Smoothly interpolate camera back to forward walking direction
+        this.targetLookYaw = 0;
+        this.targetLookPitch = 0;
+      }
+    });
+
+    // Suppress browser default context menu
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+
+    // 2. Normal Left Click: Effortlessly click artwork or plaque to inspect
     this.container.addEventListener('click', (e) => {
+      if (e.button !== 0) return; // Only left clicks
+
       const rect = this.container.getBoundingClientRect();
       this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -925,45 +1021,7 @@ class DrawmadooExhibition {
       }
     });
 
-    // Desktop look-around: moving mouse rotates camera smoothly left/right (±35°) and up/down (±15°)
-    window.addEventListener('mousemove', (e) => {
-      if (this.isMobile || this.isInspecting) return;
-
-      const halfW = window.innerWidth / 2;
-      const halfH = window.innerHeight / 2;
-
-      // Normalized coordinates (-1 to 1) from screen center
-      const normX = Math.max(-1, Math.min(1, (e.clientX - halfW) / halfW));
-      const normY = Math.max(-1, Math.min(1, (e.clientY - halfH) / halfH));
-
-      // Moving mouse right smoothly looks right (-yaw in right-handed Three.js)
-      // Moving mouse up smoothly looks up (+pitch)
-      this.targetLookYaw = -normX * this.maxYaw;
-      this.targetLookPitch = -normY * this.maxPitch;
-
-      // Track active interaction time for natural auto-return
-      this.lastMouseMoveTime = performance.now();
-
-      // Hover cursor raycasting
-      const rect = this.container.getBoundingClientRect();
-      this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const intersects = this.raycaster.intersectObjects(this.scene.children, true);
-
-      let isHoveringPainting = false;
-      for (let i = 0; i < intersects.length; i++) {
-        if (intersects[i].object.userData?.isPainting) {
-          isHoveringPainting = true;
-          break;
-        }
-      }
-      this.container.style.cursor = isHoveringPainting ? 'pointer' : 'default';
-    });
-
-    // Mobile touch look-around: swiping temporarily rotates viewing direction
-    // Walks continue uninterrupted; camera smoothly recenters on release
+    // 3. Mobile Touch Look Around: Swipe left/right, up/down with auto-return on release
     let touchStartX = 0;
     let touchStartY = 0;
     let isTouching = false;
@@ -991,7 +1049,7 @@ class DrawmadooExhibition {
 
     this.container.addEventListener('touchend', () => {
       isTouching = false;
-      // After gesture ends, smoothly return camera to forward direction
+      // Smoothly return camera to forward walking direction
       if (window.gsap) {
         gsap.to(this, {
           targetLookYaw: 0,
@@ -1208,19 +1266,14 @@ class DrawmadooExhibition {
   }
 
   enterExhibition() {
-    const overlay = document.getElementById('ex-entrance-overlay');
-    if (overlay) {
-      overlay.classList.add('hidden');
-    }
-
-    // Smooth cinematic forward glide into the first gallery hall
-    this.currentCorridorZ = 5.5;
-    this.targetCorridorZ = 1.0;
+    // Camera smoothly glides from outside archway (z = 4.5) into Hall 1 (z = 0.5)
+    this.currentCorridorZ = 4.5;
+    this.targetCorridorZ = 0.5;
 
     if (window.gsap) {
       gsap.to(this, {
-        currentCorridorZ: 1.0,
-        targetCorridorZ: 1.0,
+        currentCorridorZ: 0.5,
+        targetCorridorZ: 0.5,
         duration: 2.2,
         ease: 'power3.out'
       });
@@ -1317,15 +1370,10 @@ class DrawmadooExhibition {
 
     const dt = Math.min(this.clock.getDelta(), 0.1);
 
-    // Desktop auto-centering: return look to forward when mouse is idle (>1.2s)
-    if (!this.isMobile && (performance.now() - this.lastMouseMoveTime > 1200)) {
-      this.targetLookYaw += (0 - this.targetLookYaw) * 0.05;
-      this.targetLookPitch += (0 - this.targetLookPitch) * 0.05;
-    }
-
-    // Smooth look-around interpolation (eliminates jitter, creates natural eye movement)
-    this.lookYaw += (this.targetLookYaw - this.lookYaw) * 0.085;
-    this.lookPitch += (this.targetLookPitch - this.lookPitch) * 0.085;
+    // Smooth look-around interpolation: fast responsive tracking when held, smooth damping return on release
+    const lookDamping = this.isRightMouseDown ? 0.15 : 0.08;
+    this.lookYaw += (this.targetLookYaw - this.lookYaw) * lookDamping;
+    this.lookPitch += (this.targetLookPitch - this.lookPitch) * lookDamping;
 
     // Mobile automatic walkthrough OR desktop guided auto-tour
     const shouldAutoWalk = (this.isMobile || this.isAutoTourActive) && !this.isInspecting;
@@ -1359,8 +1407,8 @@ class DrawmadooExhibition {
 
       if (walkDelta > 0.001) {
         this.walkPhase += walkDelta * 2.8;
-        const targetBobY = Math.sin(this.walkPhase * 2) * 0.016; // Subtle 1.6cm vertical rise/fall
-        const targetBobX = Math.cos(this.walkPhase) * 0.010;     // Subtle 1.0cm side-to-side weight transfer
+        const targetBobY = Math.sin(this.walkPhase * 2) * 0.015; // 1.5cm subtle vertical bob
+        const targetBobX = Math.cos(this.walkPhase) * 0.009;     // 0.9cm subtle horizontal sway
         this.headBobY += (targetBobY - this.headBobY) * 0.12;
         this.headBobX += (targetBobX - this.headBobX) * 0.12;
       } else {
