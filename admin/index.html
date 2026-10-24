@@ -4919,11 +4919,12 @@
       const statusText = document.getElementById("supabase-status-text");
       const statusDot = document.getElementById("supabase-status-dot");
 
-      if (urlInput) urlInput.value = localStorage.getItem("DRAWMADOO_SUPABASE_URL") || "";
-      if (keyInput) keyInput.value = localStorage.getItem("DRAWMADOO_SUPABASE_ANON_KEY") || "";
+      const config = window.DrawmadooSupabase ? window.DrawmadooSupabase.getConfig() : null;
+      if (urlInput) urlInput.value = config?.url || localStorage.getItem("DRAWMADOO_SUPABASE_URL") || "";
+      if (keyInput) keyInput.value = config?.anonKey || localStorage.getItem("DRAWMADOO_SUPABASE_ANON_KEY") || "";
 
       if (window.DrawmadooSupabase && window.DrawmadooSupabase.isConfigured()) {
-        if (statusText) statusText.textContent = "Connected & Active";
+        if (statusText) statusText.textContent = "Connected & Active (Cloud Database)";
         if (badge) {
           badge.style.background = "rgba(30,126,52,0.1)";
           badge.style.color = "#1e7e34";

@@ -675,22 +675,38 @@ class DrawmadooDatabaseEngine {
   getSupabaseConfig() {
     try {
       const saved = localStorage.getItem('drawmadoo_supabase_config');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.url && parsed.anonKey) {
+          return {
+            ...parsed,
+            url: parsed.url.replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, ''),
+            enabled: true
+          };
+        }
+      }
     } catch (e) {
       console.warn('Could not read Supabase config', e);
     }
+    const defaultUrl = 'https://luishtsdhiitqbzolydw.supabase.co';
+    const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1aXNodHNkaGlpdHFiem9seWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NTI1NjIsImV4cCI6MjEwODQyODU2Mn0.nERuyLOpDcchYlpyt3c_F6PB7t8n6KarNqCIVHiPCCI';
+    const url = (window.__DRAWMADOO_SUPABASE_URL__ || defaultUrl).replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+    const anonKey = (window.__DRAWMADOO_SUPABASE_KEY__ || defaultKey).trim();
     return {
-      url: window.__DRAWMADOO_SUPABASE_URL__ || '',
-      anonKey: window.__DRAWMADOO_SUPABASE_KEY__ || '',
+      url,
+      anonKey,
       table: 'artworks',
-      enabled: Boolean(window.__DRAWMADOO_SUPABASE_URL__)
+      enabled: Boolean(url && anonKey)
     };
   }
 
   saveSupabaseConfig(config) {
     try {
-      localStorage.setItem('drawmadoo_supabase_config', JSON.stringify(config));
+      const cleanUrl = (config.url || '').replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+      const cleanConfig = { ...config, url: cleanUrl };
+      localStorage.setItem('drawmadoo_supabase_config', JSON.stringify(cleanConfig));
       this.broadcastChange('supabase_config');
+      return cleanConfig;
     } catch (e) {
       console.error('Failed to save Supabase config', e);
     }
@@ -703,7 +719,8 @@ class DrawmadooDatabaseEngine {
       return null;
     }
     try {
-      const endpoint = `${config.url.replace(/\/$/, '')}/rest/v1/${config.table || 'artworks'}?select=*&order=created_at.desc`;
+      const baseUrl = config.url.replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+      const endpoint = `${baseUrl}/rest/v1/${config.table || 'artworks'}?select=*&order=created_at.desc`;
       const res = await fetch(endpoint, {
         headers: {
           'apikey': config.anonKey,

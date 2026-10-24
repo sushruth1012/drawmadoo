@@ -9,7 +9,18 @@
   'use strict';
 
   const STORAGE_KEY = 'drawmadoo_supabase_config';
+  const DEFAULT_SUPABASE_URL = 'https://luishtsdhiitqbzolydw.supabase.co';
+  const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1aXNodHNkaGlpdHFiem9seWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NTI1NjIsImV4cCI6MjEwODQyODU2Mn0.nERuyLOpDcchYlpyt3c_F6PB7t8n6KarNqCIVHiPCCI';
+
   let supabaseInstance = null;
+
+  function sanitizeUrl(rawUrl) {
+    if (!rawUrl) return '';
+    return rawUrl
+      .trim()
+      .replace(/\/rest\/v1\/?$/, '')
+      .replace(/\/+$/, '');
+  }
 
   const SupabaseClient = {
     /**
@@ -18,19 +29,37 @@
     getConfig() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.url && parsed.anonKey) {
+            return {
+              url: sanitizeUrl(parsed.url),
+              anonKey: (parsed.anonKey || '').trim(),
+              enabled: true
+            };
+          }
+        }
         const legacyUrl = localStorage.getItem('DRAWMADOO_SUPABASE_URL');
         const legacyKey = localStorage.getItem('DRAWMADOO_SUPABASE_ANON_KEY');
         if (legacyUrl && legacyKey) {
-          return { url: legacyUrl, anonKey: legacyKey, enabled: true };
+          return {
+            url: sanitizeUrl(legacyUrl),
+            anonKey: legacyKey.trim(),
+            enabled: true
+          };
         }
       } catch (e) {
         console.warn('[SupabaseClient] Error reading config from storage:', e);
       }
+
+      // Default configured cloud credentials
+      const activeUrl = sanitizeUrl(window.__DRAWMADOO_SUPABASE_URL__ || DEFAULT_SUPABASE_URL);
+      const activeKey = (window.__DRAWMADOO_SUPABASE_KEY__ || DEFAULT_SUPABASE_KEY).trim();
+
       return {
-        url: window.__DRAWMADOO_SUPABASE_URL__ || '',
-        anonKey: window.__DRAWMADOO_SUPABASE_KEY__ || '',
-        enabled: Boolean(window.__DRAWMADOO_SUPABASE_URL__ && window.__DRAWMADOO_SUPABASE_KEY__)
+        url: activeUrl,
+        anonKey: activeKey,
+        enabled: Boolean(activeUrl && activeKey)
       };
     },
 
@@ -38,10 +67,12 @@
      * Updates and saves Supabase credentials
      */
     saveConfig(url, anonKey) {
+      const cleanUrl = sanitizeUrl(url);
+      const cleanKey = (anonKey || '').trim();
       const config = {
-        url: (url || '').trim(),
-        anonKey: (anonKey || '').trim(),
-        enabled: Boolean(url && anonKey)
+        url: cleanUrl,
+        anonKey: cleanKey,
+        enabled: Boolean(cleanUrl && cleanKey)
       };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
