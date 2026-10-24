@@ -55,7 +55,7 @@ const DrawmadooData = {
   /* ── Trending Artists ── */
   artists: [
     {
-      id: 1, name: 'Aisha Khan', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&q=80',
+      id: 1, name: 'Aisha Khan', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       style: 'Watercolor', country: 'India', countryFlag: '🇮🇳', followers: 12400, verified: true,
       bio: 'Watercolor artist specializing in ethereal landscapes and botanical illustrations.',
       featured: true
@@ -204,7 +204,7 @@ const DrawmadooData = {
   artworks: [
     {
       id: 1, title: 'Golden Horizon', image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=500&q=80',
-      artist: 'Aisha Khan', artistAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80',
+      artist: 'Aisha Khan', artistAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
       price: 8500, currency: '₹', medium: 'Watercolor', size: '18 x 24 inches',
       rating: 4.8, reviews: 23, inStock: true, isNew: true, isFeatured: false
     },

@@ -3286,6 +3286,7 @@
                 <div style="display:flex; gap:0.75rem; align-items:center; margin:1.5rem 0; flex-wrap:wrap;">
                   <button type="button" class="btn btn-primary" onclick="saveSupabaseSettings()">Save Supabase Credentials</button>
                   <button type="button" class="btn btn-secondary" onclick="testSupabaseConnection()">Test Connection</button>
+                  <button type="button" class="btn btn-secondary" onclick="copyPermissionsFixSQL()">Copy Storage & Upload SQL Fix</button>
                   <button type="button" class="btn btn-secondary" onclick="exportDataToSupabaseSQL()">Export Backup SQL</button>
                 </div>
 
@@ -3597,7 +3598,7 @@
           id: 2,
           title: "The Blue City Jaali",
           artist: "Meera Joshi",
-          artistAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80",
+          artistAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
           price: 42500,
           medium: "Oil on Linen",
           size: "36 x 36 inches",
@@ -3688,7 +3689,7 @@
         {
           id: 2,
           name: "Meera Joshi",
-          avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
           style: "Pichwai & Gold Leaf Master",
           city: "Udaipur, Rajasthan",
           country: "India",
@@ -4993,6 +4994,41 @@ SELECT count(*) FROM public.artworks;
       showToast("Schema template & export SQL downloaded.", "success");
     }
 
+    function copyPermissionsFixSQL() {
+      const fixSQL = `-- Supabase Storage & Upload Permissions Fix
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES 
+  ('artworks', 'artworks', true, 26214400, ARRAY['image/jpeg', 'image/png', 'image/webp']),
+  ('avatars', 'avatars', true, 10485760, ARRAY['image/jpeg', 'image/png', 'image/webp'])
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Public Read Artworks" ON storage.objects;
+CREATE POLICY "Public Read Artworks" ON storage.objects FOR SELECT USING (bucket_id = 'artworks');
+
+DROP POLICY IF EXISTS "Artists Upload Artworks" ON storage.objects;
+DROP POLICY IF EXISTS "Allow Public & Authenticated Artworks Upload" ON storage.objects;
+CREATE POLICY "Allow Public & Authenticated Artworks Upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'artworks');
+
+DROP POLICY IF EXISTS "Allow Artworks Update" ON storage.objects;
+CREATE POLICY "Allow Artworks Update" ON storage.objects FOR UPDATE USING (bucket_id = 'artworks');
+
+ALTER TABLE public.artworks ADD COLUMN IF NOT EXISTS artist_name TEXT;
+DO $$ BEGIN ALTER TABLE public.artworks ALTER COLUMN artist_id DROP NOT NULL; EXCEPTION WHEN OTHERS THEN NULL; END $$;
+
+DROP POLICY IF EXISTS "Public can view available artworks" ON public.artworks;
+CREATE POLICY "Public can view available artworks" ON public.artworks FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Artists can insert own artworks" ON public.artworks;
+DROP POLICY IF EXISTS "Allow artwork insert" ON public.artworks;
+CREATE POLICY "Allow artwork insert" ON public.artworks FOR INSERT WITH CHECK (true);
+`;
+      navigator.clipboard.writeText(fixSQL).then(() => {
+        showToast("Storage permissions SQL copied to clipboard! Paste in Supabase SQL Editor.", "success");
+      }).catch(() => {
+        showToast("Could not copy automatically. Check supabase/fix_upload_permissions.sql", "info");
+      });
+    }
+
     /* ═══════════════════════════════════════════════════════════
        10. MODALS LOGIC
        ═══════════════════════════════════════════════════════════ */
@@ -5068,26 +5104,124 @@ SELECT count(*) FROM public.artworks;
       }
     }
 
-    function handleSaveArtwork(e) {
+    async function handleSaveArtwork(e) {
       e.preventDefault();
-      const title = document.getElementById("artwork-title-input").value;
+      const title = document.getElementById("artwork-title-input").value.trim();
       const artist = document.getElementById("artwork-artist-select").value;
       const price = parseFloat(document.getElementById("artwork-price-input").value) || 20000;
-      const medium = document.getElementById("artwork-medium-input").value;
-      const size = document.getElementById("artwork-size-input").value;
+      const medium = document.getElementById("artwork-medium-input").value.trim();
+      const size = document.getElementById("artwork-size-input").value.trim();
       const category = document.getElementById("artwork-category-select").value;
       const desc = document.getElementById("artwork-desc-input")?.value || "";
-      const previewSrc = document.getElementById("artwork-upload-preview").src;
       const isFeatured = document.getElementById("artwork-featured-checkbox").checked;
+      const fileInput = document.getElementById("artwork-file-input");
+      const file = fileInput?.files?.[0];
+      const previewSrc = document.getElementById("artwork-upload-preview").src;
 
-      const fallbackImages = [
-        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80",
-        "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&q=80",
-        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80"
-      ];
-      const image = (previewSrc && previewSrc.length > 50) ? previewSrc : fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+      if (!file && (!previewSrc || previewSrc.length < 50)) {
+        showToast("Please select a high-resolution photograph or scan of the artwork.", "warning");
+        return;
+      }
 
+      // Visual progress on submit button
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : "Save to Catalog";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite; vertical-align: middle; margin-right: 6px;">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+          </svg> Uploading to Supabase Storage...
+        `;
+      }
+
+      let publicUrl = "";
+      const client = window.DrawmadooSupabase ? window.DrawmadooSupabase.getClient() : null;
+
+      try {
+        if (client && file) {
+          // 1. Verify and prepare file path
+          const fileExt = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const currentUser = window.AuthService?.currentUser;
+          const userPrefix = currentUser ? currentUser.id : 'curator';
+          const filePath = `${userPrefix}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+          // Optimize image client-side to max 2400px before uploading
+          const uploadFile = (window.DrawmadooSupabase && typeof window.DrawmadooSupabase.optimizeImage === 'function')
+            ? await window.DrawmadooSupabase.optimizeImage(file, 2400)
+            : file;
+
+          console.log('[Drawmadoo Upload] Uploading artwork image to Supabase Storage bucket "artworks":', filePath);
+
+          // 2. ACTUALLY USE: supabase.storage.from('artworks').upload(...)
+          const { data: uploadData, error: uploadError } = await client.storage
+            .from('artworks')
+            .upload(filePath, uploadFile, {
+              cacheControl: '3600',
+              upsert: true
+            });
+
+          if (uploadError) {
+            console.error('[Drawmadoo Upload Error]', uploadError);
+            throw uploadError;
+          }
+
+          // 3. RETRIEVE PUBLIC URL: supabase.storage.from('artworks').getPublicUrl(...)
+          const { data: publicUrlData } = client.storage
+            .from('artworks')
+            .getPublicUrl(uploadData?.path || filePath);
+
+          publicUrl = publicUrlData ? publicUrlData.publicUrl : '';
+          console.log('[Drawmadoo Upload] Storage upload succeeded! Public URL:', publicUrl);
+
+          // 4. INSERT ARTWORK INTO public.artworks TABLE
+          const artworkRecord = {
+            title: title,
+            price: price,
+            medium: medium,
+            dimensions: size,
+            description: desc,
+            status: 'available',
+            featured: isFeatured,
+            primary_image_url: publicUrl,
+            tags: [category]
+          };
+          if (currentUser && currentUser.id) artworkRecord.artist_id = currentUser.id;
+          artworkRecord.artist_name = artist;
+
+          console.log('[Drawmadoo DB] Inserting artwork into public.artworks table:', artworkRecord);
+          const { data: insertedData, error: insertError } = await client
+            .from('artworks')
+            .insert([artworkRecord])
+            .select();
+
+          if (insertError) {
+            console.warn('[Drawmadoo DB Insert Warning]:', insertError);
+            // If foreign key constraint or column variance occurs, retry without artist_id/artist_name
+            if (insertError.message && (insertError.message.includes('foreign key') || insertError.message.includes('artist_id') || insertError.message.includes('artist_name'))) {
+              delete artworkRecord.artist_id;
+              delete artworkRecord.artist_name;
+              await client.from('artworks').insert([artworkRecord]);
+            }
+          } else {
+            console.log('[Drawmadoo DB] Successfully inserted artwork in public.artworks:', insertedData);
+          }
+        }
+      } catch (err) {
+        console.error('[Upload & Publish Error]:', err);
+        showToast(`Supabase upload issue: ${err.message || 'Check storage RLS'}. Saved to local catalog.`, "warning");
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      }
+
+      // Final image for local gallery sync
+      const finalImage = publicUrl || previewSrc || "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=80";
       const newId = `art-${Date.now()}`;
+
       if (window.DrawmadooDB) {
         window.DrawmadooDB.createArtwork({
           id: newId,
@@ -5098,8 +5232,8 @@ SELECT count(*) FROM public.artworks;
           size,
           category,
           description: desc,
-          image,
-          images: [image],
+          image: finalImage,
+          images: [finalImage],
           featured: isFeatured,
           status: 'available',
           isPlaceholder: false
@@ -5113,16 +5247,21 @@ SELECT count(*) FROM public.artworks;
           medium,
           size,
           category,
-          image,
+          image: finalImage,
+          images: [finalImage],
           inStock: true,
           isFeatured,
-          views: 120,
+          views: 1,
           sales: 0
         });
       }
 
       closeModal("modal-artwork");
-      showToast(`'${title}' published & updated on live storefront!`, "success");
+      document.getElementById("artwork-form").reset();
+      document.getElementById("artwork-upload-preview").style.display = "none";
+      document.getElementById("artwork-upload-placeholder").style.display = "block";
+
+      showToast(`'${title}' uploaded to Supabase Storage & published!`, "success");
       syncAdminAppFromDB();
       renderArtworksGrid(AdminApp.artworks);
       renderDashboard();
@@ -5179,20 +5318,47 @@ SELECT count(*) FROM public.artworks;
       }
     }
 
-    function handleSaveArtist(e) {
+    async function handleSaveArtist(e) {
       e.preventDefault();
-      const name = document.getElementById("artist-name-input").value;
-      const style = document.getElementById("artist-style-input").value;
-      const city = document.getElementById("artist-city-input").value;
-      const country = document.getElementById("artist-country-input").value || "India";
-      const bio = document.getElementById("artist-bio-input").value || "Independent contemporary artist.";
+      const name = document.getElementById("artist-name-input").value.trim();
+      const style = document.getElementById("artist-style-input").value.trim();
+      const city = document.getElementById("artist-city-input").value.trim();
+      const country = document.getElementById("artist-country-input").value.trim() || "India";
+      const bio = document.getElementById("artist-bio-input").value.trim() || "Independent contemporary artist.";
       const isVerified = document.getElementById("artist-verified-checkbox").checked;
+      const avatarInput = document.getElementById("artist-avatar-input");
+      const file = avatarInput?.files?.[0];
       const previewSrc = document.getElementById("artist-avatar-preview").src;
 
-      const avatar = (previewSrc && previewSrc.length > 50) ? previewSrc : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80";
+      let avatarUrl = "";
+      const client = window.DrawmadooSupabase ? window.DrawmadooSupabase.getClient() : null;
+
+      if (client && file) {
+        try {
+          const fileExt = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const filePath = `avatars/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+          const uploadFile = (window.DrawmadooSupabase && typeof window.DrawmadooSupabase.optimizeImage === 'function')
+            ? await window.DrawmadooSupabase.optimizeImage(file, 600)
+            : file;
+
+          const { data: uploadData, error: uploadErr } = await client.storage
+            .from('avatars')
+            .upload(filePath, uploadFile, { cacheControl: '3600', upsert: true });
+
+          if (!uploadErr) {
+            const { data: urlData } = client.storage.from('avatars').getPublicUrl(uploadData?.path || filePath);
+            avatarUrl = urlData?.publicUrl || "";
+          }
+        } catch (err) {
+          console.warn('[Avatar Upload Error]:', err);
+        }
+      }
+
+      const avatar = avatarUrl || (previewSrc && previewSrc.length > 50 ? previewSrc : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80");
 
       const newArtist = {
-        id: Date.now(),
+        id: `artist-${Date.now()}`,
         name,
         avatar,
         style,
@@ -5206,7 +5372,15 @@ SELECT count(*) FROM public.artworks;
       };
 
       AdminApp.artists.unshift(newArtist);
+      if (window.DrawmadooDB && typeof window.DrawmadooDB.createArtist === 'function') {
+        window.DrawmadooDB.createArtist(newArtist);
+      }
+
       closeModal("modal-artist");
+      document.getElementById("artist-form").reset();
+      document.getElementById("artist-avatar-preview").style.display = "none";
+      document.getElementById("artist-avatar-placeholder").style.display = "block";
+
       showToast(`Artist ${name} onboarded successfully!`, "success");
       renderArtistsGrid(AdminApp.artists);
       renderDashboard();

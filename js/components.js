@@ -184,7 +184,7 @@
    * Popular Artist Card
    */
   function ArtistCard(artist) {
-    const avatar = artist.avatar || 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&q=80';
+    const avatar = artist.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
     const followers = artist.followers ? `${(artist.followers / 1000).toFixed(1)}k` : '12.4k';
     return `
       <div class="curated-artist-card">
@@ -250,7 +250,7 @@
     if (!art) return '';
     const images = (art.images && art.images.length > 0) ? art.images : [art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80'];
     const formattedPrice = `₹${Number(art.price).toLocaleString('en-IN')}`;
-    const artistAvatar = art.artistAvatar || 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&q=80';
+    const artistAvatar = art.artistAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
     const isWishlisted = (JSON.parse(localStorage.getItem('drawmadoo_wishlist') || '[]')).includes(art.id);
 
     return `

@@ -159,53 +159,74 @@
     },
 
     /**
-     * Create Artwork (Artist Role only)
+     * Create Artwork (Direct Supabase Storage Upload & public.artworks Insert)
      */
     async createArtwork(artworkData, imageFile) {
       const user = window.AuthService?.currentUser;
-      if (!user) throw new Error('You must be signed in to upload artwork.');
-
       const client = window.DrawmadooSupabase ? window.DrawmadooSupabase.getClient() : null;
 
       let primaryImageUrl = artworkData.primary_image_url || '';
 
       // Upload image to Supabase Storage if file is provided
-      if (imageFile && window.DrawmadooSupabase && client) {
-        const fileExt = imageFile.name.split('.').pop();
-        const filePath = `${user.id}/${Date.now()}-${Math.random().toString(36).substr(2, 6)}.${fileExt}`;
+      if (imageFile && client) {
+        const fileExt = (imageFile.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const userPrefix = user ? user.id : 'curator';
+        const filePath = `${userPrefix}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        
+        console.log('[DrawmadooAPI] Uploading artwork to Supabase Storage:', filePath);
         primaryImageUrl = await window.DrawmadooSupabase.uploadFile('artworks', filePath, imageFile);
+        console.log('[DrawmadooAPI] Storage upload complete! Public URL:', primaryImageUrl);
       }
 
-      if (client) {
+      if (client && primaryImageUrl) {
+        const payload = {
+          title: artworkData.title,
+          price: Number(artworkData.price) || 0,
+          medium: artworkData.medium || 'Original Medium',
+          dimensions: artworkData.size || artworkData.dimensions || 'Standard',
+          year: artworkData.year || new Date().getFullYear(),
+          description: artworkData.description || '',
+          status: artworkData.status || 'available',
+          primary_image_url: primaryImageUrl,
+          tags: artworkData.tags || []
+        };
+        if (artworkData.categoryId) payload.category_id = artworkData.categoryId;
+        if (user && user.id) payload.artist_id = user.id;
+        if (artworkData.artist) payload.artist_name = artworkData.artist;
+
+        console.log('[DrawmadooAPI] Inserting artwork into public.artworks table...');
         const { data, error } = await client
           .from('artworks')
-          .insert({
-            title: artworkData.title,
-            artist_id: user.id,
-            category_id: artworkData.categoryId || null,
-            price: Number(artworkData.price),
-            medium: artworkData.medium,
-            dimensions: artworkData.size || artworkData.dimensions,
-            year: artworkData.year || new Date().getFullYear(),
-            description: artworkData.description,
-            status: artworkData.status || 'available',
-            primary_image_url: primaryImageUrl || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80',
-            tags: artworkData.tags || []
-          })
+          .insert([payload])
           .select()
           .single();
 
-        if (error) throw error;
-        return data;
+        if (error) {
+          console.warn('[DrawmadooAPI] Artwork table insert notice:', error);
+          if (error.message && (error.message.includes('foreign key') || error.message.includes('artist_id') || error.message.includes('artist_name'))) {
+            delete payload.artist_id;
+            delete payload.artist_name;
+            const { data: retryData, error: retryError } = await client
+              .from('artworks')
+              .insert([payload])
+              .select()
+              .single();
+            if (!retryError && retryData) return retryData;
+          }
+        } else if (data) {
+          console.log('[DrawmadooAPI] Successfully inserted into public.artworks:', data);
+          return data;
+        }
       }
 
-      // Offline fallback: save to DrawmadooDB
+      // Sync with DrawmadooDB
       if (window.DrawmadooDB) {
         return window.DrawmadooDB.createArtwork({
           ...artworkData,
-          artistId: user.id,
-          artist: window.AuthService?.userProfile?.fullName || 'My Studio',
-          images: [primaryImageUrl || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80']
+          artistId: user ? user.id : 'art-curator',
+          artist: artworkData.artist || window.AuthService?.userProfile?.fullName || 'Curated Masterpiece',
+          image: primaryImageUrl || artworkData.image,
+          images: [primaryImageUrl || artworkData.image]
         });
       }
     },
