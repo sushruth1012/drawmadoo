@@ -44,11 +44,8 @@ html, body {
   height: 100%;
   z-index: 1;
   outline: none;
-  cursor: grab;
-}
-
-#exhibition-canvas-container:active {
-  cursor: grabbing;
+  cursor: default;
+  touch-action: none;
 }
 
 #exhibition-canvas-container canvas {

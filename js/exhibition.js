@@ -2,7 +2,11 @@
  * ═════════════════════════════════════════════════════════════════════
  * DRAWMADOO — Virtual Art Exhibition 3D Engine (Three.js & GSAP)
  * Signature digital museum experience. Fully dynamic, CMS-driven,
- * Supabase-ready, with warm gallery lighting and guided camera flow.
+ * Supabase-ready, with luxury museum corridor walkthrough.
+ *
+ * Desktop: Scroll-driven inertia walkthrough along museum corridor.
+ * Mobile: Automatic cinematic guided walkthrough with subtle touch look.
+ * Interaction: Smooth glide to inspect artworks front-and-center.
  * ═════════════════════════════════════════════════════════════════════
  */
 
@@ -13,6 +17,10 @@ class DrawmadooExhibition {
     this.container = document.getElementById('exhibition-canvas-container');
     if (!this.container) return;
 
+    // Device & Platform Detection
+    this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      (window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+
     // Data state
     this.artworks = [];
     this.categories = [];
@@ -22,9 +30,23 @@ class DrawmadooExhibition {
     this.currentHallIndex = 0;
     this.isInspecting = false;
     this.isAutoTourActive = false;
-    this.autoTourTimer = null;
     this.ambientSoundActive = false;
     this.audioGuideUtterance = null;
+
+    // Corridor Navigation Coordinates & Inertia Physics
+    this.corridorX = 0;
+    this.corridorY = 1.85; // Human standing eye level in meters
+    this.currentCorridorZ = 4.0;
+    this.targetCorridorZ = 4.0;
+    this.savedCorridorZ = 4.0;
+    this.minCorridorZ = -80.0; // Dynamically set based on hall count
+    this.maxCorridorZ = 4.0;
+
+    // Mobile Guided Walk State
+    this.mobileWalkSpeed = 1.35; // units per second
+    this.mobilePauseTimer = 0;
+    this.lastPausedPainting = -1;
+    this.mobileLookOffset = { x: 0, y: 0 };
 
     // Three.js Core
     this.scene = null;
@@ -33,8 +55,6 @@ class DrawmadooExhibition {
     this.clock = new THREE.Clock();
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
-    this.targetCameraPos = new THREE.Vector3();
-    this.targetLookAt = new THREE.Vector3();
     this.currentLookAt = new THREE.Vector3();
     this.mouseParallax = { x: 0, y: 0, targetX: 0, targetY: 0 };
 
@@ -45,8 +65,9 @@ class DrawmadooExhibition {
     // Web Audio API
     this.audioCtx = null;
     this.ambientGain = null;
+    this.ambientOscs = null;
 
-    // Initialize
+    // Initialize Engine
     this.init();
   }
 
@@ -58,8 +79,9 @@ class DrawmadooExhibition {
     this.setupThreeScene();
     this.buildMuseumArchitecture();
 
-    this.showLoader(80, 'Curating museum lighting & frames...');
+    this.showLoader(75, 'Curating museum lighting & frames...');
     this.setupInteraction();
+    this.setupScrollNavigation();
     this.setupAudio();
     this.renderHeaderHallsNav();
     this.setupKeyboardControls();
@@ -178,12 +200,11 @@ class DrawmadooExhibition {
     this.scene.background = new THREE.Color(0x0e0d0c);
     this.scene.fog = new THREE.FogExp2(0x0e0d0c, 0.018);
 
-    // Perspective Camera at human standing eye-level (1.85m)
+    // Perspective Camera strictly at human standing eye-level (1.85m)
     this.camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 250);
-    this.camera.position.set(0, 1.85, 8);
-    this.targetCameraPos.copy(this.camera.position);
-    this.targetLookAt.set(0, 1.85, 0);
-    this.currentLookAt.copy(this.targetLookAt);
+    this.camera.position.set(this.corridorX, this.corridorY, 5.5);
+    this.currentLookAt.set(this.corridorX, this.corridorY, -4.5);
+    this.camera.lookAt(this.currentLookAt);
 
     // High performance WebGL Renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -219,7 +240,7 @@ class DrawmadooExhibition {
      ────────────────────────────────────────────────── */
   buildMuseumArchitecture() {
     const hallLength = 26; // Z distance per hall
-    const hallWidth = 11;  // X distance between opposite walls
+    const hallWidth = 11;  // X distance between opposite walls (corridor is center x=0)
     const wallHeight = 7.5;
 
     // Materials
@@ -248,6 +269,10 @@ class DrawmadooExhibition {
 
     const totalHalls = this.halls.length;
     const totalLength = totalHalls * hallLength;
+
+    // Configure corridor walk boundaries
+    this.minCorridorZ = -(totalLength) + 1.0;
+    this.maxCorridorZ = 4.0;
 
     // Continuous Grand Museum Floor with subtle gloss
     const floorGeo = new THREE.PlaneGeometry(hallWidth + 4, totalLength + 30);
@@ -314,20 +339,16 @@ class DrawmadooExhibition {
         const paintingGroup = this.createFramedPainting(art, xPos, yPos, zPos, rotY, globalIndex, hall.name);
         this.scene.add(paintingGroup);
 
-        // Store camera view coordinates for smooth cinematic navigation
-        const viewDistance = 3.6;
-        const cameraPosX = isLeft ? xPos + viewDistance : xPos - viewDistance;
-        const cameraPos = new THREE.Vector3(cameraPosX, 1.95, zPos);
-        const lookAtPos = new THREE.Vector3(xPos, yPos, zPos);
-
         this.paintingMeshes.push({
           index: globalIndex,
           id: art.id,
           artData: art,
           hallName: hall.name,
           mesh: paintingGroup,
-          cameraPos,
-          lookAtPos
+          xPos,
+          yPos,
+          zPos,
+          isLeft
         });
 
         globalIndex++;
@@ -554,47 +575,71 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     6. CINEMATIC CAMERA NAVIGATION & GUIDED FLOW
+     6. SCROLL NAVIGATION & CORRIDOR GLIDING SYSTEM
+     ────────────────────────────────────────────────── */
+  setupScrollNavigation() {
+    // Desktop wheel scroll event: moves camera smoothly along the main corridor
+    const onWheel = (e) => {
+      // Allow standard scrolling inside the inspector side panel if open
+      if (e.target && e.target.closest && e.target.closest('#artwork-inspector-panel')) {
+        return;
+      }
+
+      if (this.isInspecting) return;
+
+      // Prevent page scrolling/bouncing
+      e.preventDefault();
+
+      // Pause guided tour if active so user takes immediate natural control
+      if (this.isAutoTourActive) {
+        this.toggleAutoTour();
+      }
+
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) delta *= 33;
+      if (e.deltaMode === 2) delta *= 100;
+
+      // Scrolling Down (positive delta) -> walk forward deeper into museum (decrease Z)
+      // Scrolling Up (negative delta) -> walk back toward entrance (increase Z)
+      const scrollSensitivity = 0.0085;
+      this.targetCorridorZ -= delta * scrollSensitivity;
+
+      // Clamped strictly between entrance and the end of the museum
+      this.targetCorridorZ = Math.max(this.minCorridorZ, Math.min(this.maxCorridorZ, this.targetCorridorZ));
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: false });
+  }
+
+  /* ──────────────────────────────────────────────────
+     7. CINEMATIC CAMERA NAVIGATION & CORRIDOR FLOW
      ────────────────────────────────────────────────── */
   goToPainting(index, immediate = false) {
     if (!this.paintingMeshes || this.paintingMeshes.length === 0) return;
 
-    // Wrap index within bounds
+    if (this.isInspecting) {
+      this.closeInspection();
+    }
+
     const total = this.paintingMeshes.length;
     this.currentPaintingIndex = (index + total) % total;
     const target = this.paintingMeshes[this.currentPaintingIndex];
 
-    this.targetCameraPos.copy(target.cameraPos);
-    this.targetLookAt.copy(target.lookAtPos);
+    const targetZ = target.mesh.position.z;
 
     if (immediate) {
-      this.camera.position.copy(this.targetCameraPos);
-      this.currentLookAt.copy(this.targetLookAt);
-      this.camera.lookAt(this.currentLookAt);
+      this.targetCorridorZ = targetZ;
+      this.currentCorridorZ = targetZ;
+      this.camera.position.set(this.corridorX, this.corridorY, this.currentCorridorZ);
     } else {
-      // Butter-smooth GSAP cinematic transition (Never FPS-like)
       if (window.gsap) {
-        gsap.to(this.camera.position, {
-          x: this.targetCameraPos.x,
-          y: this.targetCameraPos.y,
-          z: this.targetCameraPos.z,
-          duration: 1.8,
+        gsap.to(this, {
+          targetCorridorZ: targetZ,
+          duration: 1.6,
           ease: 'power2.inOut'
         });
-
-        gsap.to(this.currentLookAt, {
-          x: this.targetLookAt.x,
-          y: this.targetLookAt.y,
-          z: this.targetLookAt.z,
-          duration: 1.8,
-          ease: 'power2.inOut',
-          onUpdate: () => {
-            this.camera.lookAt(this.currentLookAt);
-          }
-        });
       } else {
-        this.camera.position.copy(this.targetCameraPos);
-        this.camera.lookAt(this.targetLookAt);
+        this.targetCorridorZ = targetZ;
       }
     }
 
@@ -611,48 +656,117 @@ class DrawmadooExhibition {
   }
 
   goToHall(hallName) {
-    const firstInHall = this.paintingMeshes.findIndex(
+    const firstInHall = this.paintingMeshes.find(
       p => p.hallName.toLowerCase() === hallName.toLowerCase()
     );
-    if (firstInHall !== -1) {
-      this.goToPainting(firstInHall);
+    if (firstInHall) {
+      if (this.isInspecting) {
+        this.closeInspection();
+      }
+      const targetZ = firstInHall.mesh.position.z + 1.2;
+      if (window.gsap) {
+        gsap.to(this, {
+          targetCorridorZ: targetZ,
+          duration: 1.8,
+          ease: 'power2.inOut'
+        });
+      } else {
+        this.targetCorridorZ = targetZ;
+      }
+      this.updateActiveHallChip(hallName);
     }
   }
 
+  syncCurrentArtworkWithCorridor() {
+    if (!this.paintingMeshes || this.paintingMeshes.length === 0) return;
+
+    let closestPainting = null;
+    let minDiff = Infinity;
+
+    for (let i = 0; i < this.paintingMeshes.length; i++) {
+      const artZ = this.paintingMeshes[i].mesh.position.z;
+      const diff = Math.abs(artZ - this.currentCorridorZ);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestPainting = this.paintingMeshes[i];
+      }
+    }
+
+    if (closestPainting && closestPainting.index !== this.currentPaintingIndex) {
+      this.currentPaintingIndex = closestPainting.index;
+      this.updateBottomDockUI(closestPainting);
+      this.updateActiveHallChip(closestPainting.hallName);
+    }
+  }
+
+  getNearestPainting() {
+    if (!this.paintingMeshes || this.paintingMeshes.length === 0) return null;
+    let nearest = null;
+    let minDiff = Infinity;
+    for (let i = 0; i < this.paintingMeshes.length; i++) {
+      const diff = Math.abs(this.paintingMeshes[i].mesh.position.z - this.currentCorridorZ);
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearest = this.paintingMeshes[i];
+      }
+    }
+    return nearest;
+  }
+
   /* ──────────────────────────────────────────────────
-     7. ARTWORK INSPECTION & SIDE PANEL
+     8. ARTWORK INSPECTION & SIDE PANEL
      ────────────────────────────────────────────────── */
   inspectArtwork(index) {
     if (!this.paintingMeshes[index]) return;
     const target = this.paintingMeshes[index];
+
     this.isInspecting = true;
+    this.savedCorridorZ = this.currentCorridorZ;
+    this.targetCorridorZ = this.currentCorridorZ; // Halt walking inertia
 
     // Stop auto-tour if active
     if (this.isAutoTourActive) {
       this.toggleAutoTour();
     }
 
-    // Zoom camera closer to painting front-and-center
-    const isLeft = target.cameraPos.x < target.lookAtPos.x;
-    const closeDistance = 2.4;
-    const inspectX = isLeft ? target.lookAtPos.x - closeDistance : target.lookAtPos.x + closeDistance;
+    // Artwork position in world space
+    const artPos = target.mesh.position;
+    const isLeft = artPos.x < 0;
+
+    // View distance from painting front-and-center
+    // Left wall: artwork faces +X. Camera sits at artPos.x + 2.3
+    // Right wall: artwork faces -X. Camera sits at artPos.x - 2.3
+    const inspectDistance = 2.35;
+    const inspectX = isLeft ? artPos.x + inspectDistance : artPos.x - inspectDistance;
+    const inspectY = artPos.y;
+    const inspectZ = artPos.z;
 
     if (window.gsap) {
+      gsap.killTweensOf(this.camera.position);
+      gsap.killTweensOf(this.currentLookAt);
+
       gsap.to(this.camera.position, {
         x: inspectX,
-        y: target.lookAtPos.y,
-        z: target.lookAtPos.z,
-        duration: 1.2,
+        y: inspectY,
+        z: inspectZ,
+        duration: 1.35,
         ease: 'power2.out'
       });
+
       gsap.to(this.currentLookAt, {
-        x: target.lookAtPos.x,
-        y: target.lookAtPos.y,
-        z: target.lookAtPos.z,
-        duration: 1.2,
+        x: artPos.x,
+        y: artPos.y,
+        z: artPos.z,
+        duration: 1.35,
         ease: 'power2.out',
-        onUpdate: () => this.camera.lookAt(this.currentLookAt)
+        onUpdate: () => {
+          this.camera.lookAt(this.currentLookAt);
+        }
       });
+    } else {
+      this.camera.position.set(inspectX, inspectY, inspectZ);
+      this.currentLookAt.set(artPos.x, artPos.y, artPos.z);
+      this.camera.lookAt(this.currentLookAt);
     }
 
     // Populate and open Side Panel
@@ -662,16 +776,55 @@ class DrawmadooExhibition {
   }
 
   closeInspection() {
-    this.isInspecting = false;
     const panel = document.getElementById('artwork-inspector-panel');
     if (panel) panel.classList.remove('open');
-
-    // Return camera smoothly to standard gallery viewing distance
-    this.goToPainting(this.currentPaintingIndex);
 
     // Stop audio narration if playing
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+    }
+
+    // Return camera smoothly to the corridor center path
+    const returnZ = this.savedCorridorZ;
+    this.targetCorridorZ = returnZ;
+    this.currentCorridorZ = returnZ;
+
+    if (window.gsap) {
+      gsap.killTweensOf(this.camera.position);
+      gsap.killTweensOf(this.currentLookAt);
+
+      gsap.to(this.camera.position, {
+        x: this.corridorX,
+        y: this.corridorY,
+        z: returnZ,
+        duration: 1.25,
+        ease: 'power2.inOut'
+      });
+
+      const forwardLook = {
+        x: this.corridorX,
+        y: this.corridorY,
+        z: returnZ - 10
+      };
+
+      gsap.to(this.currentLookAt, {
+        x: forwardLook.x,
+        y: forwardLook.y,
+        z: forwardLook.z,
+        duration: 1.25,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          this.camera.lookAt(this.currentLookAt);
+        },
+        onComplete: () => {
+          this.isInspecting = false;
+        }
+      });
+    } else {
+      this.camera.position.set(this.corridorX, this.corridorY, returnZ);
+      this.currentLookAt.set(this.corridorX, this.corridorY, returnZ - 10);
+      this.camera.lookAt(this.currentLookAt);
+      this.isInspecting = false;
     }
   }
 
@@ -719,12 +872,11 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     8. INTERACTION & RAYCASTING
+     9. INTERACTION, RAYCASTING & TOUCH CONTROLS
      ────────────────────────────────────────────────── */
   setupInteraction() {
-    // Click on canvas to inspect
+    // Click on canvas to inspect artwork
     this.container.addEventListener('click', (e) => {
-      // Calculate mouse in normalized device coordinates
       const rect = this.container.getBoundingClientRect();
       this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -739,33 +891,77 @@ class DrawmadooExhibition {
           return;
         }
       }
+
+      // If clicked outside paintings while inspecting, close inspection
+      if (this.isInspecting) {
+        this.closeInspection();
+      }
     });
 
-    // Subtle mouse parallax (Clamped to avoid disorientation)
+    // Subtle desktop mouse look parallax + hover pointer cursor
     window.addEventListener('mousemove', (e) => {
+      if (this.isMobile) return;
+
       const halfW = window.innerWidth / 2;
       const halfH = window.innerHeight / 2;
-      this.mouseParallax.targetX = ((e.clientX - halfW) / halfW) * 0.12;
-      this.mouseParallax.targetY = ((e.clientY - halfH) / halfH) * 0.08;
+      this.mouseParallax.targetX = ((e.clientX - halfW) / halfW) * 0.18;
+      this.mouseParallax.targetY = ((e.clientY - halfH) / halfH) * 0.12;
+
+      // Hover cursor raycasting
+      const rect = this.container.getBoundingClientRect();
+      this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+
+      let isHoveringPainting = false;
+      for (let i = 0; i < intersects.length; i++) {
+        if (intersects[i].object.userData?.isPainting) {
+          isHoveringPainting = true;
+          break;
+        }
+      }
+      this.container.style.cursor = isHoveringPainting ? 'pointer' : 'default';
     });
 
-    // Touch support for mobile swipe
+    // Mobile touch look around (clamped to prevent disorientation)
     let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouching = false;
+
     this.container.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isTouching = true;
+      }
     }, { passive: true });
 
-    this.container.addEventListener('touchend', (e) => {
-      const diffX = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(diffX) > 50) {
-        if (diffX > 0) this.prevPainting();
-        else this.nextPainting();
+    this.container.addEventListener('touchmove', (e) => {
+      if (!isTouching || this.isInspecting) return;
+      const diffX = e.touches[0].clientX - touchStartX;
+      const diffY = e.touches[0].clientY - touchStartY;
+
+      // Subtle look offset (clamped to prevent free flight / disorientation)
+      this.mobileLookOffset.x = Math.max(-0.35, Math.min(0.35, (diffX / window.innerWidth) * 0.6));
+      this.mobileLookOffset.y = Math.max(-0.2, Math.min(0.2, (diffY / window.innerHeight) * 0.35));
+    }, { passive: true });
+
+    this.container.addEventListener('touchend', () => {
+      isTouching = false;
+      // Smoothly spring look back to forward center
+      if (window.gsap) {
+        gsap.to(this.mobileLookOffset, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
+      } else {
+        this.mobileLookOffset.x = 0;
+        this.mobileLookOffset.y = 0;
       }
     }, { passive: true });
   }
 
   /* ──────────────────────────────────────────────────
-     9. AUTO TOUR (Cinematic Guided Walkthrough)
+     10. GUIDED AUTO TOUR (Cinematic Guided Walkthrough)
      ────────────────────────────────────────────────── */
   toggleAutoTour() {
     this.isAutoTourActive = !this.isAutoTourActive;
@@ -779,8 +975,7 @@ class DrawmadooExhibition {
           <span>Pause Tour</span>
         `;
       }
-      this.showToast('Cinematic guided tour started. Enjoy the exhibition.');
-      this.runAutoTourStep();
+      this.showToast('Cinematic guided walkthrough started.');
     } else {
       if (tourBtn) {
         tourBtn.classList.remove('playing');
@@ -789,26 +984,14 @@ class DrawmadooExhibition {
           <span>Guided Tour</span>
         `;
       }
-      clearTimeout(this.autoTourTimer);
       this.showToast('Guided tour paused.');
     }
   }
 
-  runAutoTourStep() {
-    if (!this.isAutoTourActive) return;
-    this.autoTourTimer = setTimeout(() => {
-      if (this.isAutoTourActive && !this.isInspecting) {
-        this.nextPainting();
-        this.runAutoTourStep();
-      }
-    }, 7500); // Linger 7.5s at each painting
-  }
-
   /* ──────────────────────────────────────────────────
-     10. AMBIENT AUDIO & AUDIO GUIDE NARRATION
+     11. AMBIENT AUDIO & AUDIO GUIDE NARRATION
      ────────────────────────────────────────────────── */
   setupAudio() {
-    // Generate gentle harmonic ambient tone using Web Audio API
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) {
@@ -914,7 +1097,7 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     11. UI UPDATES & USER CONTROLS
+     12. UI UPDATES & USER CONTROLS
      ────────────────────────────────────────────────── */
   renderHeaderHallsNav() {
     const container = document.getElementById('ex-halls-nav');
@@ -951,7 +1134,17 @@ class DrawmadooExhibition {
 
   setupKeyboardControls() {
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      if (['INPUT', 'TEXTAREA'].includes(e.target?.tagName)) return;
+
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+        if (!this.isInspecting) {
+          this.targetCorridorZ = Math.max(this.minCorridorZ, this.targetCorridorZ - 2.2);
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        if (!this.isInspecting) {
+          this.targetCorridorZ = Math.min(this.maxCorridorZ, this.targetCorridorZ + 2.2);
+        }
+      } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         this.nextPainting();
       } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         this.prevPainting();
@@ -974,19 +1167,17 @@ class DrawmadooExhibition {
       overlay.classList.add('hidden');
     }
 
-    // Play initial smooth camera forward glide into Hall 1
+    // Smooth cinematic forward glide into the first gallery hall
+    this.currentCorridorZ = 5.5;
+    this.targetCorridorZ = 1.0;
+
     if (window.gsap) {
-      gsap.fromTo(
-        this.camera.position,
-        { z: 12, y: 2.2 },
-        {
-          z: this.targetCameraPos.z,
-          y: this.targetCameraPos.y,
-          x: this.targetCameraPos.x,
-          duration: 2.4,
-          ease: 'power3.out'
-        }
-      );
+      gsap.to(this, {
+        currentCorridorZ: 1.0,
+        targetCorridorZ: 1.0,
+        duration: 2.2,
+        ease: 'power3.out'
+      });
     }
 
     // Start ambient audio if user had toggled it
@@ -1054,7 +1245,6 @@ class DrawmadooExhibition {
 
   async refreshExhibitionData() {
     await this.loadDynamicData();
-    // Rebuild paintings in scene
     while (this.scene.children.length > 0) {
       this.scene.remove(this.scene.children[0]);
     }
@@ -1074,18 +1264,62 @@ class DrawmadooExhibition {
   }
 
   /* ──────────────────────────────────────────────────
-     12. RENDER LOOP
+     13. RENDER LOOP & INERTIA DYNAMICS
      ────────────────────────────────────────────────── */
   animate() {
     requestAnimationFrame(() => this.animate());
 
-    // Lerp subtle mouse parallax for realistic depth
-    this.mouseParallax.x += (this.mouseParallax.targetX - this.mouseParallax.x) * 0.04;
-    this.mouseParallax.y += (this.mouseParallax.targetY - this.mouseParallax.y) * 0.04;
+    const dt = Math.min(this.clock.getDelta(), 0.1);
+
+    // Subtle mouse parallax interpolation
+    this.mouseParallax.x += (this.mouseParallax.targetX - this.mouseParallax.x) * 0.05;
+    this.mouseParallax.y += (this.mouseParallax.targetY - this.mouseParallax.y) * 0.05;
+
+    // Mobile automatic walkthrough OR desktop guided auto-tour
+    const shouldAutoWalk = (this.isMobile || this.isAutoTourActive) && !this.isInspecting;
+    if (shouldAutoWalk) {
+      if (this.mobilePauseTimer > 0) {
+        this.mobilePauseTimer -= dt;
+      } else {
+        const nearest = this.getNearestPainting();
+        if (nearest && Math.abs(this.currentCorridorZ - nearest.mesh.position.z) < 0.35 && this.lastPausedPainting !== nearest.index) {
+          this.lastPausedPainting = nearest.index;
+          this.mobilePauseTimer = 2.4; // Pause briefly so viewer can admire the artwork
+        } else {
+          this.targetCorridorZ -= this.mobileWalkSpeed * dt;
+          if (this.targetCorridorZ < this.minCorridorZ) {
+            this.targetCorridorZ = this.maxCorridorZ;
+            this.currentCorridorZ = this.maxCorridorZ;
+            this.lastPausedPainting = -1;
+          }
+        }
+      }
+    }
 
     if (!this.isInspecting) {
-      this.camera.position.x = this.targetCameraPos.x + this.mouseParallax.x;
-      this.camera.position.y = this.targetCameraPos.y - this.mouseParallax.y;
+      // Smooth inertia glide along the corridor center
+      const lerpAlpha = 1.0 - Math.pow(0.002, dt);
+      this.currentCorridorZ += (this.targetCorridorZ - this.currentCorridorZ) * Math.min(lerpAlpha, 0.12);
+
+      // Strictly keep camera centered in corridor
+      this.camera.position.x = this.corridorX;
+      this.camera.position.y = this.corridorY;
+      this.camera.position.z = this.currentCorridorZ;
+
+      // Smooth forward lookAt with subtle clamped parallax
+      const forwardDist = 10.0;
+      const targetLookX = this.corridorX + (this.mouseParallax.x * 2.2) + (this.mobileLookOffset.x * 3.5);
+      const targetLookY = this.corridorY - (this.mouseParallax.y * 0.8) - (this.mobileLookOffset.y * 1.8);
+      const targetLookZ = this.currentCorridorZ - forwardDist;
+
+      this.currentLookAt.x += (targetLookX - this.currentLookAt.x) * 0.08;
+      this.currentLookAt.y += (targetLookY - this.currentLookAt.y) * 0.08;
+      this.currentLookAt.z = targetLookZ;
+
+      this.camera.lookAt(this.currentLookAt);
+
+      // Keep UI synchronized with closest artwork
+      this.syncCurrentArtworkWithCorridor();
     }
 
     this.renderer.render(this.scene, this.camera);
