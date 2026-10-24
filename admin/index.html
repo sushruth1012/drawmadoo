@@ -3579,206 +3579,10 @@
       selectedOrders: new Set(),
       
       // Artworks Store
-      artworks: [
-        {
-          id: 1,
-          title: "Evening at Hampi",
-          artist: "Rohan Deshpande",
-          artistAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
-          price: 12500,
-          medium: "Acrylic on Canvas",
-          size: "24 x 18 inches",
-          category: "Landscape",
-          image: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&q=80",
-          inStock: true,
-          isFeatured: true,
-          views: 3420,
-          sales: 14
-        },
-        {
-          id: 2,
-          title: "The Blue City Jaali",
-          artist: "Meera Joshi",
-          artistAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
-          price: 42500,
-          medium: "Oil on Linen",
-          size: "36 x 36 inches",
-          category: "Traditional",
-          image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80",
-          inStock: true,
-          isFeatured: true,
-          views: 4890,
-          sales: 8
-        },
-        {
-          id: 3,
-          title: "Pichwai Lotus Symphony",
-          artist: "Raghavendra Rao",
-          artistAvatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
-          price: 85000,
-          medium: "Natural Pigment on Cloth",
-          size: "48 x 36 inches",
-          category: "Traditional",
-          image: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=600&q=80",
-          inStock: true,
-          isFeatured: true,
-          views: 6120,
-          sales: 5
-        },
-        {
-          id: 4,
-          title: "Monsoon in Shantiniketan",
-          artist: "Devika Sen",
-          artistAvatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
-          price: 18000,
-          medium: "Watercolor on Arches 300gsm",
-          size: "20 x 28 inches",
-          category: "Watercolor",
-          image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&q=80",
-          inStock: true,
-          isFeatured: false,
-          views: 2190,
-          sales: 6
-        },
-        {
-          id: 5,
-          title: "Gond Tree of Life",
-          artist: "Suresh Maravi",
-          artistAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-          price: 14500,
-          medium: "Acrylic on Handmade Canvas",
-          size: "30 x 24 inches",
-          category: "Traditional",
-          image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80",
-          inStock: true,
-          isFeatured: false,
-          views: 3100,
-          sales: 12
-        },
-        {
-          id: 6,
-          title: "Mystic Varanasi Ghats",
-          artist: "Amitabh Das",
-          artistAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
-          price: 120000,
-          medium: "Oil on Belgian Linen",
-          size: "60 x 48 inches",
-          category: "Oil Painting",
-          image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80",
-          inStock: true,
-          isFeatured: true,
-          views: 7890,
-          sales: 3
-        }
-      ],
+      artworks: [],
 
       // Artists Store
-      artists: [
-        {
-          id: 1,
-          name: "Rohan Deshpande",
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
-          style: "Acrylic & Heritage Plein Air",
-          city: "Pune, Maharashtra",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 145,
-          totalSales: "₹18,40,000",
-          status: "Approved",
-          bio: "Sir J.J. School of Art alumnus. Captures the architectural grandeur of western India."
-        },
-        {
-          id: 2,
-          name: "Meera Joshi",
-          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
-          style: "Pichwai & Gold Leaf Master",
-          city: "Udaipur, Rajasthan",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 38,
-          totalSales: "₹24,80,000",
-          status: "Approved",
-          bio: "4th generation traditional temple artist, preserving miniature brushwork."
-        },
-        {
-          id: 3,
-          name: "Raghavendra Rao",
-          avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
-          style: "Tanjore & Sacred Art",
-          city: "Thanjavur, Tamil Nadu",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 62,
-          totalSales: "₹31,00,000",
-          status: "Approved",
-          bio: "National Awardee artisan working exclusively with certified 24-carat gold foil."
-        },
-        {
-          id: 4,
-          name: "Devika Sen",
-          avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
-          style: "Bengal School & Watercolor",
-          city: "Kolkata, West Bengal",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 84,
-          totalSales: "₹14,20,000",
-          status: "Pending",
-          bio: "Visva-Bharati graduate exploring lyrical water washes and monsoon moods."
-        },
-        {
-          id: 5,
-          name: "Suresh Maravi",
-          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-          style: "Gond Tribal & Folk Lore",
-          city: "Bhopal, Madhya Pradesh",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 51,
-          totalSales: "₹9,80,000",
-          status: "Pending",
-          bio: "Descendant of Jangarh Singh Shyam, depicting animist forest folklore."
-        },
-        {
-          id: 6,
-          name: "Lakshmi Pillai",
-          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80",
-          style: "Kerala Mural & Natural Dyes",
-          city: "Kochi, Kerala",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 29,
-          totalSales: "₹11,50,000",
-          status: "Pending",
-          bio: "Specializing in traditional Panchavarna wall mural conservation."
-        },
-        {
-          id: 7,
-          name: "Amitabh Das",
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
-          style: "Contemporary Oils",
-          city: "Varanasi, Uttar Pradesh",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 42,
-          totalSales: "₹28,60,000",
-          status: "Approved",
-          bio: "Breathtaking large-scale oils exploring spiritual ghats and river reflections."
-        },
-        {
-          id: 8,
-          name: "Aisha Khan",
-          avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80",
-          style: "Botanical Watercolor",
-          city: "Bengaluru, Karnataka",
-          country: "India",
-          countryFlag: "🇮🇳",
-          artworksCount: 96,
-          totalSales: "₹16,30,000",
-          status: "Approved",
-          bio: "Plein air botanical illustrations celebrating endangered flora of the Western Ghats."
-        }
-      ],
+      artists: [],
 
       // Orders Store
       orders: [
@@ -4170,6 +3974,14 @@
       // Popular Artworks Grid
       const spotlightGrid = document.getElementById("dashboard-spotlight-artworks");
       if (spotlightGrid) {
+        if (!AdminApp.artworks || AdminApp.artworks.length === 0) {
+          spotlightGrid.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 2.5rem 1rem; text-align: center; color: var(--text-muted);">
+              <p style="font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 500;">No artworks listed in catalog yet</p>
+              <button class="btn btn-secondary btn-sm" onclick="openArtworkModal()">+ Add First Artwork</button>
+            </div>
+          `;
+        } else {
         spotlightGrid.innerHTML = AdminApp.artworks.slice(0, 4).map(art => `
           <div class="art-spotlight-card">
             <div class="art-spotlight-img-wrap">
@@ -4191,6 +4003,7 @@
             </div>
           </div>
         `).join("");
+        }
       }
     }
 
@@ -4370,6 +4183,23 @@
       const listTbody = document.getElementById("artworks-list-tbody");
       if (!grid) return;
 
+      if (!artworks || artworks.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 4rem 2rem; text-align: center; background: var(--card); border: 2px dashed var(--border); border-radius: var(--radius-lg);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎨</div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text);">No Artworks in Gallery Yet</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem;">Your collection is clean and ready. Add original paintings, sketches, or digital artworks to display them live across Drawmadoo.</p>
+            <button class="btn btn-primary" onclick="openArtworkModal()">
+              <span>+ Upload Original Artwork</span>
+            </button>
+          </div>
+        `;
+        if (listTbody) {
+          listTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);">No artworks in catalog yet. Click '+ Upload Original Artwork' to add.</td></tr>`;
+        }
+        return;
+      }
+
       // Grid View
       grid.innerHTML = artworks.map(art => `
         <div class="artwork-card">
@@ -4494,6 +4324,20 @@
     function renderArtistsGrid(artistsToRender) {
       const container = document.getElementById("artists-grid-container");
       if (!container) return;
+
+      if (!artistsToRender || artistsToRender.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 4rem 2rem; text-align: center; background: var(--card); border: 2px dashed var(--border); border-radius: var(--radius-lg);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">👩‍🎨</div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text);">No Artists Registered Yet</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem;">Onboard verified artists with their biography, style, avatar, and social presence.</p>
+            <button class="btn btn-primary" onclick="openArtistModal()">
+              <span>+ Register New Artist</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
 
       container.innerHTML = artistsToRender.map(a => `
         <div class="artist-card">

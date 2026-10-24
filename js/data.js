@@ -53,56 +53,7 @@ const DrawmadooData = {
   ],
 
   /* ── Trending Artists ── */
-  artists: [
-    {
-      id: 1, name: 'Aisha Khan', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      style: 'Watercolor', country: 'India', countryFlag: '🇮🇳', followers: 12400, verified: true,
-      bio: 'Watercolor artist specializing in ethereal landscapes and botanical illustrations.',
-      featured: true
-    },
-    {
-      id: 2, name: 'Rohan Deshpande', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
-      style: 'Digital Art', country: 'India', countryFlag: '🇮🇳', followers: 8900, verified: true,
-      bio: 'Digital artist creating vibrant, story-driven artwork inspired by Indian mythology.',
-      featured: true
-    },
-    {
-      id: 3, name: 'Meera Nair', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80',
-      style: 'Traditional', country: 'India', countryFlag: '🇮🇳', followers: 6700, verified: true,
-      bio: 'Traditional Kerala mural painter bringing ancient art forms to modern collectors.',
-      featured: true
-    },
-    {
-      id: 4, name: 'Arjun Rao', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
-      style: 'Portrait', country: 'India', countryFlag: '🇮🇳', followers: 15200, verified: true,
-      bio: 'Portrait artist known for expressive oil paintings capturing the human spirit.',
-      featured: true
-    },
-    {
-      id: 5, name: 'Kiara Menon', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
-      style: 'Illustration', country: 'India', countryFlag: '🇮🇳', followers: 9100, verified: true,
-      bio: 'Illustrator creating whimsical, narrative-driven artwork for books and galleries.',
-      featured: false
-    },
-    {
-      id: 6, name: 'Vikram Sen', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
-      style: 'Landscape', country: 'India', countryFlag: '🇮🇳', followers: 7300, verified: true,
-      bio: 'Plein air painter capturing the breathtaking landscapes of the Himalayas.',
-      featured: false
-    },
-    {
-      id: 7, name: 'Sarah Mitchell', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80',
-      style: 'Abstract', country: 'USA', countryFlag: '🇺🇸', followers: 18500, verified: true,
-      bio: 'Abstract expressionist working with bold colors and large-scale canvases.',
-      featured: false
-    },
-    {
-      id: 8, name: 'Yuki Tanaka', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80',
-      style: 'Anime', country: 'Japan', countryFlag: '🇯🇵', followers: 22100, verified: true,
-      bio: 'Anime-inspired digital artist with a unique blend of traditional and modern techniques.',
-      featured: false
-    }
-  ],
+  artists: [],
 
   /* ── Why Drawmadoo (4 Minimal Standard Cards) ── */
   whyDrawmadoo: [
@@ -113,33 +64,7 @@ const DrawmadooData = {
   ],
 
   /* ── Featured Artwork ── */
-  featuredArtwork: {
-    id: 1,
-    title: 'Evening at Hampi',
-    description: 'A serene view of the historic Hampi ruins during sunset, painted in acrylic on canvas. This piece captures the golden hour light cascading through ancient temple pillars.',
-    price: 12500,
-    currency: '₹',
-    image: 'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=900&q=80',
-    thumbnails: [
-      'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=200&q=80',
-      'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&q=80',
-      'https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=200&q=80',
-      'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80'
-    ],
-    medium: 'Acrylic on Canvas',
-    size: '24 x 18 inches',
-    year: 2024,
-    artist: {
-      name: 'Rohan Deshpande',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80',
-      verified: true
-    },
-    tags: ['landscape', 'heritage', 'sunset', 'architecture'],
-    featured: true,
-    inStock: true,
-    rating: 4.9,
-    reviews: 47
-  },
+  featuredArtwork: null,
 
   /* ── Shop by Medium ── */
   mediums: [
@@ -176,69 +101,10 @@ const DrawmadooData = {
   ],
 
   /* ── Featured Artist (Meet the Artist) ── */
-  featuredArtist: {
-    name: 'Rohan Deshpande',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-    coverImage: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1200&q=80',
-    bio: 'Born in Pune, India, Rohan discovered his passion for art at the age of 8. After studying at the Sir J.J. School of Art in Mumbai, he spent years traveling across India, capturing the soul of the subcontinent through his vibrant acrylic paintings. His work has been exhibited in galleries across Mumbai, Delhi, and London.',
-    style: 'Acrylic on Canvas',
-    country: 'India',
-    countryFlag: '🇮🇳',
-    followers: 8900,
-    artworks: 145,
-    sold: 89,
-    verified: true,
-    social: {
-      instagram: '#', youtube: '#', twitter: '#'
-    },
-    timeline: [
-      { year: 2015, event: 'Graduated from Sir J.J. School of Art' },
-      { year: 2017, event: 'First solo exhibition in Mumbai' },
-      { year: 2019, event: 'Featured in India Art Fair' },
-      { year: 2021, event: 'International exhibition in London' },
-      { year: 2023, event: 'Joined Drawmadoo as Featured Artist' }
-    ]
-  },
+  featuredArtist: null,
 
   /* ── Product Cards (Gallery) ── */
-  artworks: [
-    {
-      id: 1, title: 'Golden Horizon', image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=500&q=80',
-      artist: 'Aisha Khan', artistAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
-      price: 8500, currency: '₹', medium: 'Watercolor', size: '18 x 24 inches',
-      rating: 4.8, reviews: 23, inStock: true, isNew: true, isFeatured: false
-    },
-    {
-      id: 2, title: 'Mystic Forest', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80',
-      artist: 'Vikram Sen', artistAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80',
-      price: 15000, currency: '₹', medium: 'Oil on Canvas', size: '30 x 40 inches',
-      rating: 4.9, reviews: 56, inStock: true, isNew: false, isFeatured: true
-    },
-    {
-      id: 3, title: 'Abstract Emotions', image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500&q=80',
-      artist: 'Sarah Mitchell', artistAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80',
-      price: 22000, currency: '₹', medium: 'Acrylic', size: '36 x 48 inches',
-      rating: 5.0, reviews: 12, inStock: true, isNew: true, isFeatured: false
-    },
-    {
-      id: 4, title: 'Temple at Dawn', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=500&q=80',
-      artist: 'Meera Nair', artistAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
-      price: 9800, currency: '₹', medium: 'Traditional', size: '20 x 28 inches',
-      rating: 4.7, reviews: 34, inStock: true, isNew: false, isFeatured: false
-    },
-    {
-      id: 5, title: 'Digital Dreams', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80',
-      artist: 'Rohan Deshpande', artistAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80',
-      price: 5500, currency: '₹', medium: 'Digital Print', size: '16 x 20 inches',
-      rating: 4.6, reviews: 89, inStock: true, isNew: false, isFeatured: false
-    },
-    {
-      id: 6, title: 'Sakura Whisper', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80',
-      artist: 'Yuki Tanaka', artistAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80',
-      price: 7200, currency: '₹', medium: 'Digital Art', size: '18 x 24 inches',
-      rating: 4.9, reviews: 67, inStock: true, isNew: true, isFeatured: false
-    }
-  ],
+  artworks: [],
 
   /* ── Newsletter ── */
   newsletter: {

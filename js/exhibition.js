@@ -96,6 +96,12 @@ class DrawmadooExhibition {
     this.showLoader(15, 'Preparing your immersive art exhibition...');
     await this.loadDynamicData();
 
+    if (!this.artworks || this.artworks.length === 0) {
+      this.hideLoader();
+      this.showEmptyExhibitionNotice();
+      return;
+    }
+
     this.showLoader(45, 'Curating exhibition halls & architecture...');
     this.setupThreeScene();
     this.buildMuseumArchitecture();
@@ -1486,6 +1492,32 @@ class DrawmadooExhibition {
   /* ──────────────────────────────────────────────────
      13. RENDER LOOP, REALISTIC GAIT & INERTIA DYNAMICS
      ────────────────────────────────────────────────── */
+  showEmptyExhibitionNotice() {
+    let overlay = document.getElementById('ex-empty-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'ex-empty-overlay';
+      overlay.style.cssText = 'position:fixed; inset:0; background:#0e0d0c; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; z-index:9000; color:#f8f5ef;';
+      overlay.innerHTML = `
+        <div style="font-size:3.5rem; margin-bottom:1.25rem;">🏛️</div>
+        <h2 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:2.4rem; font-weight:500; margin-bottom:0.75rem; color:#fff;">Virtual Art Exhibition</h2>
+        <p style="font-family:'Inter', sans-serif; font-size:1.05rem; color:#a69888; max-width:520px; line-height:1.6; margin-bottom:2rem;">Your gallery halls are clean and ready for your authentic collection. Add original artworks via the Admin CMS to mount and experience them in 3D.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+          <a href="admin/index.html" style="background:#c99a42; color:#0e0d0c; padding:12px 28px; border-radius:999px; text-decoration:none; font-weight:600; font-family:'Inter', sans-serif; box-shadow:0 4px 16px rgba(201,154,66,0.3);">+ Add Artwork in Admin</a>
+          <a href="index.html" style="background:rgba(255,255,255,0.08); color:#f8f5ef; border:1px solid rgba(255,255,255,0.18); padding:12px 28px; border-radius:999px; text-decoration:none; font-family:'Inter', sans-serif;">Return to Home</a>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    } else {
+      overlay.style.display = 'flex';
+    }
+
+    // Keep listening to CMS updates so when the user adds an artwork, it automatically loads!
+    window.addEventListener('drawmadoo:dbchange', () => {
+      window.location.reload();
+    }, { once: true });
+  }
+
   animate() {
     requestAnimationFrame(() => this.animate());
 

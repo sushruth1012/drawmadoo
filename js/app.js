@@ -2026,26 +2026,32 @@ function renderArtists() {
 
   const artists = (DrawmadooData.artists || []).slice(0, 6);
 
-  const cardsHtml = artists
-    .map(
-      artist => `
-      <div class="artist-card" data-artist-id="${artist.id}">
-        <div class="artist-avatar-wrap">
-          <img class="artist-avatar img-loading" data-src="${artist.avatar}" alt="${artist.name}" loading="lazy" />
-          ${artist.verified ? `<div class="artist-verified-badge" title="Verified Artist">${getIcon('check', '', 12)}</div>` : ''}
+  const cardsHtml = artists.length > 0
+    ? artists.map(
+        artist => `
+        <div class="artist-card" data-artist-id="${artist.id}">
+          <div class="artist-avatar-wrap">
+            <img class="artist-avatar img-loading" data-src="${artist.avatar}" alt="${artist.name}" loading="lazy" />
+            ${artist.verified ? `<div class="artist-verified-badge" title="Verified Artist">${getIcon('check', '', 12)}</div>` : ''}
+          </div>
+          <h3 class="artist-name">${artist.name}</h3>
+          <span class="artist-style-pill">${artist.style}</span>
+          <div class="artist-stats" style="margin: 6px 0 12px;">
+            <span>${artist.countryFlag || '🌍'} ${artist.country}</span> • <span>${Number(artist.followers).toLocaleString()} Collectors</span>
+          </div>
+          <button class="btn btn-outline btn-sm" style="width: 100%; border-radius: var(--radius-full);" onclick="window.location.href='explore.html?artist=' + encodeURIComponent('${artist.name}')">
+            View Studio
+          </button>
         </div>
-        <h3 class="artist-name">${artist.name}</h3>
-        <span class="artist-style-pill">${artist.style}</span>
-        <div class="artist-stats" style="margin: 6px 0 12px;">
-          <span>${artist.countryFlag || '🌍'} ${artist.country}</span> • <span>${Number(artist.followers).toLocaleString()} Collectors</span>
-        </div>
-        <button class="btn btn-outline btn-sm" style="width: 100%; border-radius: var(--radius-full);" onclick="window.location.href='explore.html?artist=' + encodeURIComponent('${artist.name}')">
-          View Studio
-        </button>
+      `
+      ).join('')
+    : `
+      <div style="width: 100%; text-align: center; padding: 3rem 1rem; color: var(--color-text-muted);">
+        <p style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--color-text-primary); margin-bottom: 0.5rem;">Authentic Artists Joining Soon</p>
+        <p style="font-size: 0.9rem; max-width: 480px; margin: 0 auto 1.5rem;">We verify independent creators. Artists can register and customize their portfolios via Admin.</p>
+        <a href="admin/index.html" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full);">Open Artist Studio</a>
       </div>
-    `
-    )
-    .join('');
+    `;
 
   container.innerHTML = `
     <div class="section-header animate-on-scroll">
@@ -2165,7 +2171,16 @@ function renderFeaturedArtwork() {
   if (!container) return;
 
   const artworks = (DrawmadooData.artworks || []).slice(0, 4);
-  const productsHtml = artworks.map(art => renderProductCard(art)).join('');
+  const productsHtml = artworks.length > 0
+    ? artworks.map(art => renderProductCard(art)).join('')
+    : `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e5ded4);">
+        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🎨</div>
+        <p style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--color-text-primary); margin-bottom: 0.5rem;">Curating Original Masterpieces</p>
+        <p style="font-size: 0.9rem; color: var(--color-text-muted); max-width: 440px; margin: 0 auto 1.5rem;">Your gallery is fresh and ready for your own artworks. Upload via Admin to feature them here.</p>
+        <a href="admin/index.html" class="btn btn-primary btn-sm" style="border-radius: var(--radius-full);">Add Artworks in Admin</a>
+      </div>
+    `;
 
   container.innerHTML = `
     <div class="section-header animate-on-scroll">
@@ -2317,6 +2332,24 @@ function renderCustomerHomes() {
 function renderMeetArtist() {
   const container = document.getElementById('artist-spotlight-container');
   if (!container) return;
+
+  if (!DrawmadooData.featuredArtist || !DrawmadooData.featuredArtist.name) {
+    container.innerHTML = `
+      <div class="section-header animate-on-scroll">
+        <div>
+          <span class="badge badge-verified">Artist Spotlight</span>
+          <h2 style="margin-top: var(--space-2);">Meet the Artist</h2>
+        </div>
+      </div>
+      <div style="text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e5ded4);">
+        <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🌟</div>
+        <p style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--color-text-primary); margin-bottom: 0.5rem;">Artist Spotlight Ready</p>
+        <p style="font-size: 0.9rem; color: var(--color-text-muted); max-width: 440px; margin: 0 auto 1.5rem;">Select your featured artist in the Admin Homepage Builder to showcase their profile and milestones here.</p>
+        <a href="admin/index.html" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full);">Select in Admin</a>
+      </div>
+    `;
+    return;
+  }
 
   const artist = DrawmadooData.featuredArtist || {};
   const timeline = artist.timeline || [];
@@ -3364,7 +3397,8 @@ function initCarousel() {
   const nextBtn = document.getElementById('featured-next-btn');
   if (!mainImg) return;
 
-  const fa = DrawmadooData.featuredArtwork || {};
+  const fa = DrawmadooData.featuredArtwork;
+  if (!fa || !fa.image) return;
   const thumbs = fa.thumbnails && fa.thumbnails.length > 0 ? fa.thumbnails : [fa.image];
 
   function setIndex(newIdx) {
