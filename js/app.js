@@ -1945,7 +1945,7 @@ function renderHero() {
               <span>Explore Gallery</span>
               ${getIcon('arrow-right', '', 16)}
             </a>
-            <a href="admin/index.html" class="btn btn-secondary btn-lg" onclick="showToast('Connecting to artist application portal...');">
+            <a href="become-artist.html" class="btn btn-secondary btn-lg">
               Become an Artist
             </a>
             <a href="#artists-section" class="btn btn-secondary btn-lg">

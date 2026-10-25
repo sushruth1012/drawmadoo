@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Apply to become a verified Drawmadoo artist. Exhibit your work in our luxury digital gallery, connect with global art collectors, and accept bespoke custom commissions.">
+  <meta name="theme-color" content="#F8F5EF">
+  <title>Become an Artist — Drawmadoo Atelier</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <!-- Core Design System -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth-modal.css">
+  <link rel="stylesheet" href="css/artist-registration.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🎨</text></svg>">
+</head>
+<body class="artist-register-page">
+
+  <!-- ═══════════ Sticky Luxury Navbar ═══════════ -->
+  <header class="navbar scrolled" id="artist-navbar" role="banner" style="position: sticky; top: 0; z-index: 1000; background: rgba(248, 245, 239, 0.94); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(193, 154, 73, 0.22); padding: 0.85rem 0;">
+    <div class="container navbar-inner" style="display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0 1.5rem;">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="navbar-logo" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+        <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius: 50%; box-shadow: 0 4px 12px rgba(43, 34, 29, 0.12);">
+          <defs>
+            <radialGradient id="artNavTeal" cx="32%" cy="32%" r="48%"><stop offset="0%" stop-color="#168EB5"/><stop offset="100%" stop-color="#0F6F8E"/></radialGradient>
+            <radialGradient id="artNavGold" cx="68%" cy="36%" r="52%"><stop offset="0%" stop-color="#F5CE70"/><stop offset="100%" stop-color="#C19A49"/></radialGradient>
+            <radialGradient id="artNavTerra" cx="62%" cy="72%" r="46%"><stop offset="0%" stop-color="#E27236"/><stop offset="100%" stop-color="#B56B4A"/></radialGradient>
+            <radialGradient id="artNavDark" cx="42%" cy="42%" r="58%"><stop offset="0%" stop-color="#3D302A"/><stop offset="100%" stop-color="#2B221D"/></radialGradient>
+            <clipPath id="artNavClip"><circle cx="50" cy="50" r="48"/></clipPath>
+          </defs>
+          <g clip-path="url(#artNavClip)">
+            <circle cx="50" cy="50" r="48" fill="url(#artNavDark)"/>
+            <circle cx="38" cy="38" r="38" fill="url(#artNavTeal)"/>
+            <circle cx="63" cy="40" r="40" fill="url(#artNavGold)"/>
+            <circle cx="56" cy="62" r="36" fill="url(#artNavTerra)"/>
+            <ellipse cx="64" cy="58" rx="4" ry="6" fill="#140E0A" transform="rotate(25 64 58)" opacity="0.6"/>
+          </g>
+          <circle cx="50" cy="50" r="48" stroke="#2B221D" stroke-width="3" fill="none"/>
+          <g transform="translate(33, 67) rotate(45)">
+            <polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/>
+            <polygon points="0,0 -1.2,-4 1.2,-4" fill="#2B221D"/>
+            <rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/>
+            <rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/>
+            <rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/>
+            <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C19A49" rx="0.8"/>
+            <path d="M -3.2,-58 C -3.2,-61 3.2,-61 3.2,-58 Z" fill="#201813"/>
+          </g>
+        </svg>
+        <span style="font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif); font-size: 1.6rem; font-weight: 600; color: #2B221D; letter-spacing: -0.01em;">Drawmadoo</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="navbar-links" style="display: flex; gap: 2rem; align-items: center;">
+        <a href="index.html" style="color: #665A52; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s ease;">Home</a>
+        <a href="explore.html" style="color: #665A52; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s ease;">Explore Gallery</a>
+        <a href="exhibition.html" style="color: #665A52; text-decoration: none; font-size: 0.95rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+          Virtual Exhibition
+          <span style="font-size: 9px; padding: 2px 7px; border-radius: 999px; background: #C19A49; color: #FFFFFF; font-weight: 700; letter-spacing: 0.05em;">3D</span>
+        </a>
+        <a href="index.html#custom-artworks-section" style="color: #665A52; text-decoration: none; font-size: 0.95rem; font-weight: 500;">Custom Artworks</a>
+        <span style="color: #C19A49; font-weight: 600; font-size: 0.95rem; border-bottom: 2px solid #C19A49; padding-bottom: 2px;">Artist Portal</span>
+      </nav>
+
+      <!-- Right Navigation Actions -->
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="explore.html" class="btn-subtle" style="text-decoration: none; font-size: 0.88rem; color: #5B4332; font-weight: 600; padding: 8px 18px; border-radius: 9999px; border: 1px solid rgba(193, 154, 73, 0.35); background: #FFFFFF; transition: all 0.25s ease;">
+          Browse Collection
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═══════════ Main Atelier Application Container ═══════════ -->
+  <main class="container" style="max-width: 1140px; margin: 0 auto; padding: 0 1.5rem;">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" style="padding: 1.5rem 0 0.5rem; display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #665A52;">
+      <a href="index.html" style="color: #665A52; text-decoration: none;">Home</a>
+      <span>/</span>
+      <a href="explore.html" style="color: #665A52; text-decoration: none;">Artists</a>
+      <span>/</span>
+      <span style="color: #C19A49; font-weight: 600;">Become an Artist</span>
+    </nav>
+
+    <!-- Atelier Hero Header -->
+    <section class="artist-hero-header" id="artist-hero-header">
+      <div class="artist-hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        DRAWMADOO CURATED ATELIER
+      </div>
+      <h1 class="artist-hero-title">Join the Curated Guild of Master Artists</h1>
+      <p class="artist-hero-subtitle">
+        Exhibit your original masterpieces to international collectors, receive bespoke portrait commissions, and enjoy seamless royalties with full provenance protection.
+      </p>
+    </section>
+
+    <!-- Value Propositions / Perks Strip -->
+    <section class="artist-perks-strip" id="artist-perks-strip">
+      <div class="artist-perk-item">
+        <div class="artist-perk-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="artist-perk-title">Global Collector Reach</h3>
+        <p class="artist-perk-desc">Showcase your original canvas & digital works to high-net-worth art patrons and galleries across 40+ countries.</p>
+      </div>
+
+      <div class="artist-perk-item">
+        <div class="artist-perk-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3 class="artist-perk-title">Bespoke Commissions</h3>
+        <p class="artist-perk-desc">Receive client commission requests for custom pencil sketches, oils, and watercolors with guaranteed escrow payments.</p>
+      </div>
+
+      <div class="artist-perk-item">
+        <div class="artist-perk-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <h3 class="artist-perk-title">Direct Payouts</h3>
+        <p class="artist-perk-desc">Receive fast, transparent bank transfers with artist royalties among the highest in the luxury art industry.</p>
+      </div>
+
+      <div class="artist-perk-item">
+        <div class="artist-perk-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="artist-perk-title">Provenance & Copyright</h3>
+        <p class="artist-perk-desc">You retain 100% intellectual property rights. Every sold artwork receives a verified digital Certificate of Authenticity.</p>
+      </div>
+    </section>
+
+    <!-- Already Verified Notice (Conditional) -->
+    <div id="already-verified-banner" style="display: none; max-width: 780px; margin: 0 auto 5rem; background: #FFFFFF; border: 1.5px solid #6A7458; border-radius: 20px; padding: 3rem 2rem; text-align: center; box-shadow: 0 12px 36px rgba(43, 34, 29, 0.08);">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(106, 116, 88, 0.15); color: #6A7458; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: #2B221D; margin-bottom: 0.75rem;">Verified Artist Account</h2>
+      <p style="color: #665A52; max-width: 540px; margin: 0 auto 2rem; font-size: 1rem; line-height: 1.6;">
+        Your portfolio is already approved as an official verified Drawmadoo artist. You can manage your artworks and exhibitions directly from the Studio Dashboard.
+      </p>
+      <a href="admin/index.html" class="artist-submit-btn" style="max-width: 280px; margin: 0 auto; text-decoration: none;">
+        Launch Artist Studio →
+      </a>
+    </div>
+
+    <!-- ═══════════ Application Form Card ═══════════ -->
+    <div class="artist-form-card" id="artist-form-card">
+      
+      <!-- Top Error Banner -->
+      <div class="artist-error-banner" id="artist-error-banner" role="alert">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong style="display: block; font-weight: 700; margin-bottom: 2px;">Submission Incomplete</strong>
+          <span id="artist-error-message-text">Please resolve the highlighted errors before submitting your application.</span>
+        </div>
+      </div>
+
+      <!-- Authenticated User Banner (Shown when user is already logged in) -->
+      <div id="authenticated-user-banner" style="display: none; align-items: center; gap: 12px; background: rgba(193, 154, 73, 0.1); border: 1px solid rgba(193, 154, 73, 0.3); border-radius: 12px; padding: 12px 18px; margin-bottom: 2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C19A49" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span style="font-size: 0.88rem; color: #2B221D;">
+          Submitting as authenticated user: <strong id="logged-in-email-display">user@example.com</strong>
+        </span>
+      </div>
+
+      <!-- Application Form -->
+      <form id="artist-application-form" novalidate>
+
+        <!-- ── SECTION 1: Personal Credentials & Identity ── -->
+        <div class="form-section-header">
+          <div class="form-section-number">1</div>
+          <h2 class="form-section-title">Artist Credentials & Contact</h2>
+        </div>
+
+        <div class="form-row-2">
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="applicant-fullname">Full Legal Name <span class="req">*</span></label>
+            <input type="text" id="applicant-fullname" class="artist-text-input" placeholder="e.g. Leonardo da Vinci" required>
+            <div class="field-error-msg" id="applicant-fullname-error"></div>
+          </div>
+
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="applicant-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="applicant-email" class="artist-text-input" placeholder="artist@example.com" required>
+            <div class="field-error-msg" id="applicant-email-error"></div>
+          </div>
+        </div>
+
+        <div class="artist-field-group" id="password-field-group">
+          <label class="artist-field-label" for="applicant-password">Set Account Password <span class="req">*</span></label>
+          <input type="password" id="applicant-password" class="artist-text-input" placeholder="At least 6 characters" minlength="6">
+          <p class="artist-field-hint">Used to securely access your artist dashboard once your portfolio is approved.</p>
+          <div class="field-error-msg" id="applicant-password-error"></div>
+        </div>
+
+        <!-- ── SECTION 2: Artist Persona & Creative Practice ── -->
+        <div class="form-section-header" style="margin-top: 2.5rem;">
+          <div class="form-section-number">2</div>
+          <h2 class="form-section-title">Creative Persona & Mediums</h2>
+        </div>
+
+        <div class="form-row-2">
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="artist-display-name">Professional Artist Display Name <span class="req">*</span></label>
+            <input type="text" id="artist-display-name" class="artist-text-input" placeholder="e.g. Elena Rostova or Atelier Elena" required>
+            <p class="artist-field-hint">The signature name displayed across the gallery and certificates.</p>
+            <div class="field-error-msg" id="artist-display-name-error"></div>
+          </div>
+
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="artist-country">Country of Residence <span class="req">*</span></label>
+            <select id="artist-country" class="artist-select" required>
+              <option value="">Select country...</option>
+              <option value="India">India</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="France">France</option>
+              <option value="Italy">Italy</option>
+              <option value="Germany">Germany</option>
+              <option value="Spain">Spain</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+              <option value="Japan">Japan</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Switzerland">Switzerland</option>
+              <option value="Brazil">Brazil</option>
+              <option value="Other">Other Country</option>
+            </select>
+            <div class="field-error-msg" id="artist-country-error"></div>
+          </div>
+        </div>
+
+        <!-- Specialties Pill Selector -->
+        <div class="artist-field-group">
+          <label class="artist-field-label">Artistic Mediums & Specialties <span class="req">*</span></label>
+          <p class="artist-field-hint" style="margin-bottom: 8px;">Select all mediums that represent your creative practice.</p>
+          <div class="specialties-grid">
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Oil Painting">
+              <span class="specialty-pill">🎨 Oil Painting</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Pencil Sketch">
+              <span class="specialty-pill">✏️ Pencil Sketch</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Charcoal">
+              <span class="specialty-pill">🖤 Charcoal</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Watercolor">
+              <span class="specialty-pill">💧 Watercolor</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Acrylic">
+              <span class="specialty-pill">🖌️ Acrylic</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Digital Fine Art">
+              <span class="specialty-pill">💻 Digital Fine Art</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Mixed Media">
+              <span class="specialty-pill">✨ Mixed Media</span>
+            </label>
+            <label class="specialty-pill-label">
+              <input type="checkbox" name="specialties" value="Pastel & Chalk">
+              <span class="specialty-pill">🖍️ Pastel & Chalk</span>
+            </label>
+          </div>
+          <div class="field-error-msg" id="specialties-error"></div>
+        </div>
+
+        <!-- Artist Bio -->
+        <div class="artist-field-group">
+          <label class="artist-field-label" for="artist-bio">Artist Statement / Philosophy <span class="req">*</span></label>
+          <textarea id="artist-bio" class="artist-textarea" rows="4" placeholder="Tell us about your artistic philosophy, influences, and what inspires your creative expressions..." required></textarea>
+          <p class="artist-field-hint">Minimum 25 characters. Will be featured on your official artist profile page.</p>
+          <div class="field-error-msg" id="artist-bio-error"></div>
+        </div>
+
+        <!-- ── SECTION 3: Portfolio & Identity Verification ── -->
+        <div class="form-section-header" style="margin-top: 2.5rem;">
+          <div class="form-section-number">3</div>
+          <h2 class="form-section-title">Portfolio & Atelier Identity</h2>
+        </div>
+
+        <!-- Profile Photo Drop Zone -->
+        <div class="artist-field-group">
+          <label class="artist-field-label">Artist Portrait or Atelier Photograph <span class="req">*</span></label>
+          <p class="artist-field-hint" style="margin-bottom: 8px;">Upload a high-resolution portrait or photo working in your atelier studio (JPG, PNG, WebP up to 10MB).</p>
+          
+          <div class="artist-upload-zone" id="artist-upload-zone" tabindex="0" role="button" aria-label="Upload artist portrait image">
+            <input type="file" id="artist-profile-photo" accept="image/jpeg,image/png,image/webp">
+            
+            <div id="upload-prompt-content">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C19A49" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px; display: block;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <p style="font-weight: 600; font-size: 0.95rem; color: #2B221D; margin: 0 0 4px;">
+                Drag & drop your photograph here, or <span style="color: #C19A49; text-decoration: underline;">browse files</span>
+              </p>
+              <span style="font-size: 0.78rem; color: #665A52;">JPG, PNG, or WebP &bull; Maximum file size 10MB</span>
+            </div>
+
+            <!-- Uploaded File Preview Container -->
+            <div class="upload-preview-container" id="upload-preview-container">
+              <img id="preview-thumb-img" class="preview-thumb" src="" alt="Selected artist photograph preview">
+              <div class="preview-meta">
+                <div class="preview-filename" id="preview-filename">photo.jpg</div>
+                <div class="preview-filesize" id="preview-filesize">2.4 MB</div>
+              </div>
+              <button type="button" class="preview-remove-btn" id="preview-remove-btn" title="Remove photograph" aria-label="Remove photograph">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+          </div>
+          <div class="field-error-msg" id="profile-photo-error"></div>
+        </div>
+
+        <!-- Portfolio Description -->
+        <div class="artist-field-group">
+          <label class="artist-field-label" for="portfolio-description">Portfolio History & Notable Works <span class="req">*</span></label>
+          <textarea id="portfolio-description" class="artist-textarea" rows="4" placeholder="Detail your experience, past exhibitions, notable sales, education, or prominent art projects..." required></textarea>
+          <p class="artist-field-hint">Minimum 25 characters. Helps our curatorial jury evaluate your portfolio.</p>
+          <div class="field-error-msg" id="portfolio-description-error"></div>
+        </div>
+
+        <!-- Links Row -->
+        <div class="form-row-2">
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="artist-website">Portfolio Website or Catalog URL</label>
+            <input type="url" id="artist-website" class="artist-text-input" placeholder="https://yourportfolio.com">
+            <div class="field-error-msg" id="artist-website-error"></div>
+          </div>
+
+          <div class="artist-field-group">
+            <label class="artist-field-label" for="artist-instagram">Instagram or ArtStation Handle</label>
+            <input type="text" id="artist-instagram" class="artist-text-input" placeholder="@yourartaccount">
+            <div class="field-error-msg" id="artist-instagram-error"></div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 2rem;">
+          <button type="submit" class="artist-submit-btn" id="artist-submit-btn">
+            <span>Submit Artist Application</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <p style="text-align: center; font-size: 0.78rem; color: #665A52; margin-top: 10px;">
+            By applying, you agree to Drawmadoo's curatorial standards, copyright guidelines, and artist terms of service.
+          </p>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ═══════════ Premium Success Screen ═══════════ -->
+    <div class="artist-success-screen" id="artist-success-screen" role="region" aria-live="polite">
+      
+      <div class="success-badge-icon">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+
+      <div class="success-status-pill">
+        <span class="success-status-dot"></span>
+        Curatorial Status: Application Pending Review
+      </div>
+
+      <h2 class="success-heading">Application Under Review</h2>
+
+      <!-- STRICT REQUIREMENT 6: Exact Required Copy -->
+      <div class="success-message-box">
+        Your artist application has been submitted successfully. Our team will review your portfolio and notify you once your account is approved.
+      </div>
+
+      <!-- Application Details Card -->
+      <div style="background: #FFFFFF; border: 1px solid rgba(193, 154, 73, 0.25); border-radius: 16px; padding: 1.5rem; max-width: 540px; margin: 0 auto 2.5rem; text-align: left; box-shadow: 0 4px 16px rgba(43, 34, 29, 0.04);">
+        <h4 style="font-family: var(--font-heading); font-size: 1.2rem; color: #2B221D; margin: 0 0 1rem; border-bottom: 1px solid rgba(43, 34, 29, 0.08); padding-bottom: 0.5rem;">Application Summary</h4>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
+          <span style="color: #665A52;">Application Reference:</span>
+          <strong id="success-app-id" style="color: #2B221D; font-family: monospace;">DM-ART-PENDING</strong>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
+          <span style="color: #665A52;">Artist Signature:</span>
+          <strong id="success-artist-name" style="color: #2B221D;">Distinguished Artist</strong>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
+          <span style="color: #665A52;">Primary Disciplines:</span>
+          <strong id="success-artist-specialties" style="color: #2B221D;">Fine Art</strong>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+          <span style="color: #665A52;">Submitted On:</span>
+          <strong id="success-submitted-date" style="color: #2B221D;">Today</strong>
+        </div>
+      </div>
+
+      <!-- Navigation CTAs -->
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a href="explore.html" class="artist-submit-btn" style="max-width: 240px; text-decoration: none; margin-top: 0;">
+          Explore Gallery
+        </a>
+        <a href="index.html" class="btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; padding: 16px 28px; border-radius: 9999px; border: 1.5px solid rgba(43, 34, 29, 0.2); background: #FFFFFF; color: #2B221D; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease;">
+          Return to Home
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ═══════════ Loading Modal Overlay ═══════════ -->
+  <div class="artist-loading-overlay" id="artist-loading-overlay" role="dialog" aria-modal="true" aria-labelledby="artist-loading-title">
+    <div class="artist-loading-card">
+      <div class="artist-spinner"></div>
+      <h3 class="artist-loading-title" id="artist-loading-title">Submitting Portfolio</h3>
+      <p class="artist-loading-step" id="artist-loading-step-text">Connecting to curation services...</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ Footer ═══════════ -->
+  <footer style="margin-top: 6rem; background: #FCFAF7; border-top: 1px solid rgba(193, 154, 73, 0.22); padding: 4rem 1.5rem 2.5rem; text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <p style="font-family: var(--font-heading); font-size: 1.6rem; color: #2B221D; margin-bottom: 0.5rem; font-weight: 600;">Drawmadoo Atelier</p>
+      <p style="font-size: 0.88rem; color: #665A52; line-height: 1.6; max-width: 520px; margin: 0 auto 1.5rem;">
+        Empowering traditional and digital artists worldwide through curated exhibitions, transparent collector commerce, and custom portrait commissions.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1.5rem; font-size: 0.82rem; color: #665A52; margin-bottom: 1.5rem;">
+        <a href="index.html" style="color: #665A52; text-decoration: none;">Home</a>
+        <span>&bull;</span>
+        <a href="explore.html" style="color: #665A52; text-decoration: none;">Artworks</a>
+        <span>&bull;</span>
+        <a href="exhibition.html" style="color: #665A52; text-decoration: none;">Virtual Exhibition</a>
+        <span>&bull;</span>
+        <a href="become-artist.html" style="color: #C19A49; text-decoration: none; font-weight: 600;">Become an Artist</a>
+      </div>
+      <p style="font-size: 0.78rem; color: #9A8E85; margin: 0;">&copy; 2026 Drawmadoo Art Gallery. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════ Scripts ═══════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/artist-registration.js"></script>
+
+</body>
+</html>

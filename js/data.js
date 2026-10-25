@@ -28,7 +28,7 @@ const DrawmadooData = {
     ctaExhibition: { text: 'Explore Art Exhibition', link: 'exhibition.html' },
     cta1: { text: 'Explore Gallery', link: 'explore.html', icon: 'arrow-right' },
     cta2: { text: 'Meet Artists', link: '#artists-section' },
-    cta3: { text: 'Become an Artist', link: 'admin/index.html' },
+    cta3: { text: 'Become an Artist', link: 'become-artist.html' },
     image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80',
     stats: [
       { value: '18,000+', label: 'Original Artworks', icon: 'palette' },
