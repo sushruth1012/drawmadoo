@@ -76,7 +76,7 @@
     return `
       <article class="masonry-artwork-card ${isSold ? 'is-sold' : ''}" data-id="${art.id}">
         <!-- Image Container with Overlays -->
-        <div class="card-image-box" onclick="window.DrawmadooComponents.openQuickView('${art.id}')">
+        <div class="card-image-box" onclick="window.DrawmadooComponents.openArtworkDetails('${art.id}')">
           <!-- Badges -->
           <div class="card-badges-top-left">
             ${isHumanMade ? `<span class="badge-human-made" title="100% Human-Created Artwork">100% Human</span>` : ''}
@@ -100,7 +100,7 @@
 
         <!-- Metadata Body -->
         <div class="card-details-box">
-          <h3 class="card-artwork-title" onclick="window.DrawmadooComponents.openQuickView('${art.id}')">${art.title}</h3>
+          <h3 class="card-artwork-title" onclick="window.DrawmadooComponents.openArtworkDetails('${art.id}')">${art.title}</h3>
           
           <div class="card-artist-line">
             <span class="card-artist-name">${artistName}</span>
@@ -168,7 +168,7 @@
   function MiniArtworkCard(art) {
     const img = (art.images && art.images[0]) || art.image || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=300&q=80';
     return `
-      <div class="featured-mini-card" onclick="window.DrawmadooComponents.openQuickView('${art.id}')">
+      <div class="featured-mini-card" onclick="window.DrawmadooComponents.openArtworkDetails('${art.id}')">
         <div class="featured-mini-img-wrap">
           <img src="${img}" alt="${art.title}" loading="lazy">
         </div>
@@ -381,7 +381,8 @@
     // Component event hooks (overridden by page logic)
     onCategorySelect: () => {},
     filterByCollection: () => {},
-    openQuickView: () => {},
+    openArtworkDetails: (artId) => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artId); },
+    openQuickView: (artId) => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artId); },
     closeQuickView: () => {},
     setQuickViewImage: () => {},
     prevQuickViewImage: () => {},

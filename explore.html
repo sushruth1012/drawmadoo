@@ -768,7 +768,8 @@
         document.getElementById('navbar-search-input').value = colName;
         renderGallery();
       };
-      C.openQuickView = (artId) => openQuickViewModal(artId);
+      C.openArtworkDetails = (artId) => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artId); };
+      C.openQuickView = (artId) => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artId); };
       C.closeQuickView = () => closeQuickViewModal();
       C.setQuickViewImage = (src, btn) => {
         const main = document.getElementById('quickview-main-img');

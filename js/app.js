@@ -3351,7 +3351,9 @@ function initQuickView() {
     document.body.appendChild(modal);
   }
 
-  window.openQuickView = artworkId => {
+  window.openArtworkDetails = artworkId => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artworkId); };
+  window.openQuickView = artworkId => { window.location.href = 'artwork-details.html?id=' + encodeURIComponent(artworkId); };
+  const legacyOpenQuickView = artworkId => {
     const artwork = (DrawmadooData.artworks || []).find(a => a.id === artworkId) || DrawmadooData.featuredArtwork;
     if (!artwork) return;
 
@@ -3699,6 +3701,30 @@ window.handleCustomCommissionSubmit = function(e) {
    Executes strictly in the specified order on DOMContentLoaded.
    ───────────────────────────────────────────────────────────────────── */
 function initApp() {
+  // Check for custom inspiration reference from artwork details
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const customRef = urlParams.get('custom_ref');
+    if (customRef) {
+      const refTitle = urlParams.get('title') || 'Selected Artwork';
+      const refArtist = urlParams.get('artist') || '';
+      setTimeout(() => {
+        if (typeof window.openCustomCommissionModal === 'function') {
+          window.openCustomCommissionModal();
+          const notesInput = document.getElementById('custom-client-notes');
+          if (notesInput && !notesInput.value) {
+            notesInput.value = `Inspiration Reference: "${refTitle}" by ${refArtist} (Ref #${customRef})\nI would love a custom artwork commissioned in a similar style and medium.`;
+          }
+          const nameEl = document.getElementById('custom-upload-filename');
+          if (nameEl && refTitle) {
+            nameEl.textContent = `Inspiration: "${refTitle}" by ${refArtist}`;
+            nameEl.style.color = '#C19A49';
+          }
+        }
+      }, 500);
+    }
+  } catch (e) {}
+
   // 1. Restore stored state & apply theme/admin overrides
   loadStoredState();
   injectRuntimeStyles();
