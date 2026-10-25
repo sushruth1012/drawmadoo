@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/auth-modal.css">
   <link rel="stylesheet" href="css/logo-intro.css">
+  <link rel="stylesheet" href="css/custom-artworks.css">
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🎨</text></svg>">
@@ -58,6 +59,62 @@
   <main>
     <!-- 2. Hero Section (Maximum Visual Impact, Breathing Whitespace) -->
     <section id="hero-section" class="hero" aria-label="Featured artwork showcase"></section>
+
+    <!-- ═══════════ Signature Feature: Custom Artworks (Emotionally Transforms Memories into Timeless Art) ═══════════ -->
+    <section id="custom-artworks-section" class="custom-artworks-section" aria-label="Custom Artworks">
+      <div class="custom-art-container">
+        <div class="custom-art-grid">
+          
+          <!-- Left Column (30%): Storytelling, Emotion & Call to Action -->
+          <div class="custom-art-text-col">
+            <span class="custom-art-label">CUSTOM ARTWORKS</span>
+            <h2 class="custom-art-heading">Turn Your Memories<br>Into Timeless Art.</h2>
+            <div class="custom-art-quote-wrapper">
+              <span class="custom-art-quote-mark" aria-hidden="true">&ldquo;</span>
+              <p class="custom-art-quote">A photograph captures how a moment looked.<br>Art captures how it felt.</p>
+            </div>
+            <button type="button" class="custom-art-cta" onclick="window.openCustomCommissionModal()" aria-label="Create My Artwork">
+              <span>Create My Artwork</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Right Column (70%): Purely Automated Non-Interactive Before/After Frame -->
+          <div class="custom-art-image-col">
+            <div class="custom-art-compare-frame" role="img" aria-label="Automated transformation comparison from photograph to handcrafted pencil sketch">
+              <!-- Base Layer: Original Photograph -->
+              <img src="assets/images/custom-photo.jpg" alt="Original memory photograph" class="custom-art-img-base" loading="eager" width="1000" height="1250">
+              
+              <!-- Reveal Layer: Handcrafted Pencil Sketch (Wiped automatically via CSS clip-path) -->
+              <div class="custom-art-sketch-layer" aria-hidden="true">
+                <img src="assets/images/custom-sketch.jpg" alt="Handcrafted graphite pencil sketch" loading="eager" width="1000" height="1250">
+              </div>
+
+              <!-- Automated Brushed Gold Divider Line & Luxury Metallic Pencil Tip Grip -->
+              <div class="custom-art-divider" aria-hidden="true">
+                <div class="custom-art-handle" title="Transformation reveal">
+                  <svg width="18" height="30" viewBox="0 0 24 38" fill="none" stroke="#2C221A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Elegant pencil tip geometry -->
+                    <polygon points="12,2 22,25 2,25" fill="rgba(247, 242, 234, 0.96)" stroke="#2C221A" stroke-width="1.5" />
+                    <polygon points="12,2 16,11 8,11" fill="#2C221A" stroke="none" />
+                    <line x1="12" y1="11" x2="12" y2="25" stroke="#C99A42" stroke-width="1.2" />
+                    <rect x="5" y="26" width="14" height="9" rx="2" fill="rgba(44, 34, 26, 0.16)" stroke="#2C221A" stroke-width="1.2" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Refined Discreet Status Tags -->
+              <span class="custom-art-tag custom-art-tag-sketch" aria-hidden="true">Pencil Sketch</span>
+              <span class="custom-art-tag custom-art-tag-photo" aria-hidden="true">Original Photograph</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
 
     <!-- 3. Popular Categories (Top 6 Categories + View All Categories) -->
     <section id="categories-section" class="section" aria-label="Art categories">
@@ -97,6 +154,100 @@
 
   <!-- ═══════════ Quick View Modal Container ═══════════ -->
   <div id="quickview-modal-placeholder"></div>
+
+  <!-- ═══════════ Custom Artwork Commission Modal ═══════════ -->
+  <div id="custom-commission-modal-overlay" class="custom-commission-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="custom-modal-title" onclick="if(event.target === this) window.closeCustomCommissionModal()">
+    <div class="custom-commission-modal">
+      <button type="button" class="custom-commission-close" onclick="window.closeCustomCommissionModal()" aria-label="Close dialog">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div id="custom-modal-form-view">
+        <span class="custom-step-pill">Bespoke Commission</span>
+        <h3 id="custom-modal-title" class="custom-modal-title">Turn Your Memory Into Timeless Art</h3>
+        <p class="custom-modal-subtitle">Share your photograph and vision. Our master artists will transform it into an authentic, hand-crafted masterpiece.</p>
+
+        <form id="custom-commission-form" onsubmit="window.handleCustomCommissionSubmit(event)">
+          <!-- Medium Selection -->
+          <div class="custom-form-field">
+            <label class="custom-form-label">Preferred Medium</label>
+            <div class="custom-medium-grid">
+              <label class="custom-medium-option selected">
+                <input type="radio" name="custom-medium" value="pencil" checked style="accent-color: #C99A42;">
+                <span>Graphite Pencil Sketch</span>
+              </label>
+              <label class="custom-medium-option">
+                <input type="radio" name="custom-medium" value="charcoal" style="accent-color: #C99A42;">
+                <span>Fine Charcoal Drawing</span>
+              </label>
+              <label class="custom-medium-option">
+                <input type="radio" name="custom-medium" value="oil" style="accent-color: #C99A42;">
+                <span>Oil on Canvas</span>
+              </label>
+              <label class="custom-medium-option">
+                <input type="radio" name="custom-medium" value="watercolor" style="accent-color: #C99A42;">
+                <span>Expressive Watercolor</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Upload Photo -->
+          <div class="custom-form-field">
+            <label class="custom-form-label">Upload Your Reference Photo</label>
+            <div class="custom-upload-zone" onclick="document.getElementById('custom-photo-input').click()">
+              <input type="file" id="custom-photo-input" accept="image/*" onchange="window.handleCustomPhotoSelect(event)">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C99A42" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 8px; display: block;">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p id="custom-upload-filename" style="margin: 0; font-size: 0.88rem; color: #2C221A; font-weight: 500;">Click or drag photo here</p>
+              <span style="font-size: 0.76rem; color: #6E6359;">Supports JPG, PNG, WEBP up to 25MB</span>
+            </div>
+          </div>
+
+          <!-- Contact Fields -->
+          <div class="custom-form-field">
+            <label class="custom-form-label" for="custom-client-name">Your Full Name</label>
+            <input type="text" id="custom-client-name" class="custom-form-input" placeholder="e.g. Eleanor Vance" required>
+          </div>
+
+          <div class="custom-form-field">
+            <label class="custom-form-label" for="custom-client-email">Email Address</label>
+            <input type="email" id="custom-client-email" class="custom-form-input" placeholder="eleanor@example.com" required>
+          </div>
+
+          <div class="custom-form-field">
+            <label class="custom-form-label" for="custom-client-notes">Vision & Notes (Optional)</label>
+            <textarea id="custom-client-notes" class="custom-form-textarea" rows="3" placeholder="Tell us the story behind this memory, preferred sizing, or details you'd love highlighted..."></textarea>
+          </div>
+
+          <button type="submit" class="custom-submit-btn">
+            <span>Request Custom Commission</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Screen -->
+      <div id="custom-modal-success-view" class="custom-success-notice">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(201, 154, 66, 0.12); color: #C99A42; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h3 class="custom-modal-title">Your Memory Has Been Received</h3>
+        <p class="custom-modal-subtitle" style="max-width: 440px; margin: 0 auto 1.5rem;">Thank you! Our curator and master artists are reviewing your photograph. We will reach out to you within 24 hours with medium recommendations and a custom quote.</p>
+        <button type="button" class="custom-submit-btn" style="max-width: 220px; margin: 0 auto;" onclick="window.closeCustomCommissionModal()">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════ Scripts ═══════════ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

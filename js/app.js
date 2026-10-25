@@ -3596,9 +3596,84 @@ function initKeyboardAccessibility() {
       if (document.getElementById('quick-view-modal')?.classList.contains('open')) {
         window.closeQuickView();
       }
+      if (document.getElementById('custom-commission-modal-overlay')?.classList.contains('open')) {
+        window.closeCustomCommissionModal();
+      }
     }
   });
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   SECTION 5.17: CUSTOM ARTWORKS SIGNATURE FEATURE
+   Manages viewport intersection stagger animation and bespoke modal
+   ───────────────────────────────────────────────────────────────────── */
+function initCustomArtworksSection() {
+  const section = document.getElementById('custom-artworks-section');
+  if (section) {
+    if (!('IntersectionObserver' in window)) {
+      section.classList.add('in-view');
+    } else {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            section.classList.add('in-view');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(section);
+    }
+  }
+
+  // Radio button medium selector highlighting
+  const mediumOptions = document.querySelectorAll('.custom-medium-option');
+  mediumOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      mediumOptions.forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+}
+
+window.openCustomCommissionModal = function() {
+  const overlay = document.getElementById('custom-commission-modal-overlay');
+  if (overlay) {
+    const formView = document.getElementById('custom-modal-form-view');
+    const successView = document.getElementById('custom-modal-success-view');
+    if (formView) formView.style.display = 'block';
+    if (successView) successView.classList.remove('active');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeCustomCommissionModal = function() {
+  const overlay = document.getElementById('custom-commission-modal-overlay');
+  if (overlay) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+};
+
+window.handleCustomPhotoSelect = function(e) {
+  const file = e.target.files?.[0];
+  const nameEl = document.getElementById('custom-upload-filename');
+  if (file && nameEl) {
+    nameEl.textContent = 'Selected: ' + file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+    nameEl.style.color = '#C99A42';
+  }
+};
+
+window.handleCustomCommissionSubmit = function(e) {
+  e.preventDefault();
+  const formView = document.getElementById('custom-modal-form-view');
+  const successView = document.getElementById('custom-modal-success-view');
+  if (formView) formView.style.display = 'none';
+  if (successView) successView.classList.add('active');
+  if (typeof showToast === 'function') {
+    showToast('Bespoke inquiry received! We will be in touch shortly.', 'success');
+  }
+};
 
 /* ─────────────────────────────────────────────────────────────────────
    SECTION 6: MASTER INITIALIZATION
@@ -3646,6 +3721,7 @@ function initApp() {
   initRecentlySold();
   initForms();
   initKeyboardAccessibility();
+  initCustomArtworksSection();
 
   // 4. Mark page as loaded for smooth transition
   document.body.classList.add('page-loaded');
