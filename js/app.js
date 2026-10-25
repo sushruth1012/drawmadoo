@@ -401,11 +401,24 @@ function injectRuntimeStyles() {
     /* Hero Section */
     .hero {
       position: relative;
-      padding: var(--space-20) 0 var(--space-16);
+      padding: clamp(6.5rem, 9.5vw, 10rem) 0 clamp(4.5rem, 6.5vw, 7rem);
       overflow: hidden;
       min-height: 85vh;
       display: flex;
       align-items: center;
+      background-color: var(--color-bg);
+      background-image: 
+        radial-gradient(ellipse 70% 60% at 85% 20%, rgba(193, 154, 73, 0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 10% 80%, rgba(252, 250, 247, 0.8) 0%, transparent 60%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(43, 34, 29, 0.025) 1px, transparent 1px);
+      background-size: 18px 18px;
+      pointer-events: none;
+      opacity: 0.7;
     }
     .hero-grid {
       display: grid;
@@ -422,23 +435,27 @@ function injectRuntimeStyles() {
       margin-bottom: var(--space-6);
     }
     .hero-title {
-      font-size: clamp(2.8rem, 5vw, 4.2rem);
-      line-height: 1.1;
+      font-family: var(--font-heading);
+      font-size: clamp(3.2rem, 5.2vw, 4.6rem);
+      line-height: 1.12;
       margin-bottom: var(--space-6);
-      font-weight: 400;
+      font-weight: 500;
       color: var(--color-text);
+      letter-spacing: -0.02em;
     }
     .hero-title em {
       font-style: italic;
-      color: var(--color-primary);
-      font-weight: 500;
+      color: var(--color-secondary);
+      font-weight: 400;
     }
     .hero-subtitle {
-      font-size: var(--text-lg);
-      line-height: var(--leading-relaxed);
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      line-height: 1.65;
       color: var(--color-text-secondary);
       margin-bottom: var(--space-8);
       max-width: 580px;
+      font-weight: 400;
     }
     .hero-cta-group {
       display: flex;
@@ -514,8 +531,8 @@ function injectRuntimeStyles() {
       position: relative;
       border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      border: 8px solid var(--color-surface);
+      box-shadow: 0 20px 50px rgba(43, 34, 29, 0.08), 0 0 35px rgba(193, 154, 73, 0.08);
+      border: 8px solid #FFFFFF;
       background: var(--color-card);
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
@@ -547,42 +564,42 @@ function injectRuntimeStyles() {
       justify-content: space-between;
     }
 
-    /* Floating Paint Elements */
+    /* Soft Cream & Muted Gold Ambient Lighting */
     .floating-paint {
       position: absolute;
       pointer-events: none;
       z-index: 1;
-      opacity: 0.2;
-      filter: blur(1px);
+      opacity: 0.08;
+      filter: blur(36px);
       transition: opacity 0.3s;
     }
     .floating-paint-1 {
       top: 10%;
       left: -2%;
       width: 280px;
-      animation: floatSlow1 12s ease-in-out infinite alternate;
-      color: var(--color-primary);
+      animation: floatSlow1 18s ease-in-out infinite alternate;
+      color: var(--color-accent);
     }
     .floating-paint-2 {
       top: 60%;
       right: -3%;
       width: 320px;
-      animation: floatSlow2 15s ease-in-out infinite alternate;
-      color: var(--color-burnt-orange);
+      animation: floatSlow2 20s ease-in-out infinite alternate;
+      color: var(--color-accent-light);
     }
     .floating-paint-3 {
       bottom: 5%;
       left: 35%;
       width: 220px;
-      animation: floatSlow3 10s ease-in-out infinite alternate;
-      color: var(--color-artist-blue);
+      animation: floatSlow3 16s ease-in-out infinite alternate;
+      color: #FCFAF7;
     }
     .floating-paint-4 {
       top: 5%;
       right: 25%;
       width: 180px;
-      animation: floatSlow1 14s ease-in-out 2s infinite alternate;
-      color: var(--color-golden-sand);
+      animation: floatSlow1 22s ease-in-out 2s infinite alternate;
+      color: var(--color-accent);
     }
 
     @keyframes floatSlow1 {
@@ -710,7 +727,7 @@ function injectRuntimeStyles() {
       font-size: var(--text-xs);
       font-weight: 600;
       color: var(--color-primary);
-      background: rgba(138, 90, 43, 0.1);
+      background: rgba(193, 154, 73, 0.12);
       padding: 3px 10px;
       border-radius: var(--radius-full);
       margin-bottom: var(--space-3);
@@ -757,7 +774,7 @@ function injectRuntimeStyles() {
       width: 48px;
       height: 48px;
       border-radius: var(--radius-md);
-      background: rgba(138, 90, 43, 0.1);
+      background: rgba(193, 154, 73, 0.12);
       color: var(--color-primary);
       display: flex;
       align-items: center;
@@ -898,16 +915,18 @@ function injectRuntimeStyles() {
     }
     .product-card {
       position: relative;
-      border-radius: var(--radius-lg);
+      border-radius: 18px;
       overflow: hidden;
-      background: var(--color-card);
+      background: #FFFFFF;
       border: 1px solid var(--color-border-card);
+      box-shadow: var(--shadow-card);
       transition: all var(--duration-slow) var(--ease-out);
       display: flex;
       flex-direction: column;
     }
     .product-card:hover {
       transform: translateY(-6px);
+      border-color: var(--color-border-card-hover);
       box-shadow: var(--shadow-card-hover);
     }
     .product-img-wrap {
@@ -1247,14 +1266,14 @@ function injectRuntimeStyles() {
 
     /* Newsletter Box */
     .newsletter-box {
-      background: linear-gradient(135deg, var(--color-card) 0%, var(--color-bg-alt) 100%);
+      background: #FFFFFF;
       border-radius: var(--radius-2xl);
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--color-border-card);
       padding: var(--space-16) var(--space-8);
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-museum);
     }
     .newsletter-form {
       display: flex;
@@ -1918,18 +1937,18 @@ function renderHero() {
 
           <!-- Hero Action Buttons -->
           <div class="hero-cta-group" style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
-            <a href="exhibition.html" class="btn btn-primary btn-lg btn-exhibition-glow" onclick="document.body.style.transition='opacity 0.4s ease'; document.body.style.opacity='0'; setTimeout(()=>window.location.href='exhibition.html', 350); return false;" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent-terracotta) 100%); border: none; box-shadow: 0 8px 24px rgba(200, 90, 36, 0.35); display: inline-flex; align-items: center; gap: 8px;">
+            <a href="exhibition.html" class="btn btn-primary btn-lg" onclick="document.body.style.transition='opacity 0.4s ease'; document.body.style.opacity='0'; setTimeout(()=>window.location.href='exhibition.html', 350); return false;" style="display: inline-flex; align-items: center; gap: 8px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
               <span>Explore Art Exhibition</span>
             </a>
-            <a href="explore.html" class="btn btn-outline btn-lg">
+            <a href="explore.html" class="btn btn-secondary btn-lg">
               <span>Explore Gallery</span>
               ${getIcon('arrow-right', '', 16)}
             </a>
             <a href="admin/index.html" class="btn btn-secondary btn-lg" onclick="showToast('Connecting to artist application portal...');">
               Become an Artist
             </a>
-            <a href="#artists-section" class="btn btn-outline btn-lg">
+            <a href="#artists-section" class="btn btn-secondary btn-lg">
               Meet Artists
             </a>
           </div>

@@ -50,7 +50,7 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 15px 35px rgba(44, 34, 26, 0.05));
+  filter: drop-shadow(0 15px 35px rgba(43, 34, 29, 0.05));
 }
 
 /* Subtle skip button for accessible navigation / power users */
@@ -58,9 +58,9 @@
   position: absolute;
   bottom: 28px;
   right: 28px;
-  background: rgba(44, 34, 26, 0.04);
-  color: #6E6359;
-  border: 1px solid rgba(44, 34, 26, 0.1);
+  background: rgba(43, 34, 29, 0.04);
+  color: #665A52;
+  border: 1px solid rgba(43, 34, 29, 0.1);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 11px;
@@ -77,8 +77,8 @@
 }
 
 .intro-skip-pill:hover {
-  background: rgba(44, 34, 26, 0.08);
-  color: #2C221A;
+  background: rgba(43, 34, 29, 0.08);
+  color: #2B221D;
 }
 
 #drawmadoo-intro-overlay:hover .intro-skip-pill,

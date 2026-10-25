@@ -438,7 +438,7 @@
         container.innerHTML = `
           <div class="auth-header">
             <div class="auth-emblem">
-              <svg width="48" height="48" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#2C221A"/><g transform="translate(33, 67) rotate(45)"><polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/><polygon points="0,0 -1.2,-4 1.2,-4" fill="#2C221A"/><rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/><rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/><rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/><rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/></g></svg>
+              <svg width="48" height="48" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#2B221D"/><g transform="translate(33, 67) rotate(45)"><polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/><polygon points="0,0 -1.2,-4 1.2,-4" fill="#2B221D"/><rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/><rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/><rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/><rect x="-3.5" y="-58" width="7" height="6.5" fill="#C19A49" rx="0.8"/></g></svg>
             </div>
             <h2 class="auth-title">Welcome to Drawmadoo</h2>
             <p class="auth-subtitle">Select how you would like to experience the marketplace.</p>
@@ -485,7 +485,7 @@
       container.innerHTML = `
         <div class="auth-header">
           <div class="auth-emblem">
-            <svg width="48" height="48" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#2C221A"/><g transform="translate(33, 67) rotate(45)"><polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/><polygon points="0,0 -1.2,-4 1.2,-4" fill="#2C221A"/><rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/><rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/><rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/><rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/></g></svg>
+            <svg width="48" height="48" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#2B221D"/><g transform="translate(33, 67) rotate(45)"><polygon points="0,0 -3.5,-12 3.5,-12" fill="#EAD7C2"/><polygon points="0,0 -1.2,-4 1.2,-4" fill="#2B221D"/><rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/><rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/><rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/><rect x="-3.5" y="-58" width="7" height="6.5" fill="#C19A49" rx="0.8"/></g></svg>
           </div>
           <h2 class="auth-title">${isForgot ? 'Reset Password' : (isSignup ? 'Create Account' : 'Welcome Back')}</h2>
           <p class="auth-subtitle">${isForgot ? 'Enter your email to receive a recovery link.' : 'Enter your credentials to access your Drawmadoo account.'}</p>
@@ -531,7 +531,7 @@
             <div class="auth-form-group">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label class="auth-label" style="margin-bottom: 0;">Password</label>
-                ${!isSignup ? `<a onclick="AuthService.renderModalView('forgot')" style="font-size: 11px; color: #6E6359; cursor: pointer; text-decoration: underline;">Forgot?</a>` : ''}
+                ${!isSignup ? `<a onclick="AuthService.renderModalView('forgot')" style="font-size: 11px; color: #665A52; cursor: pointer; text-decoration: underline;">Forgot?</a>` : ''}
               </div>
               <div class="auth-input-wrap">
                 <input type="password" class="auth-input" id="authPassword" placeholder="••••••••" required autocomplete="${isSignup ? 'new-password' : 'current-password'}">
@@ -609,7 +609,7 @@
       if (!input) return;
       if (input.type === 'password') {
         input.type = 'text';
-        btn.style.color = '#2C221A';
+        btn.style.color = '#2B221D';
       } else {
         input.type = 'password';
         btn.style.color = '#9E9388';
@@ -640,7 +640,7 @@
 
           btn.innerHTML = avatarUrl ? 
             `<img src="${avatarUrl}" alt="Avatar" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">` :
-            `<div style="width: 28px; height: 28px; border-radius: 50%; background: #2C221A; color: #FFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;">${initials}</div>`;
+            `<div style="width: 28px; height: 28px; border-radius: 50%; background: #2B221D; color: #FFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;">${initials}</div>`;
 
           btn.onclick = (e) => {
             e.preventDefault();

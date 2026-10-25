@@ -6,54 +6,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* ── Brand Colors (Refined Luxury Museum Palette) ── */
-  --color-primary:        #2C221A;       /* Deep Earth Brown */
-  --color-primary-light:  #44352A;
-  --color-primary-dark:   #1C1510;
-  --color-secondary:      #24583E;       /* Forest Green */
-  --color-secondary-light:#2E6B4C;
-  --color-accent:         #C99A42;       /* Marigold Gold */
-  --color-accent-light:   #D4A84F;
-  --color-supporting:     #C85A24;       /* Terracotta */
-  --color-supporting-light:#D56A24;
+  /* ── Brand Colors (Luxury Art Museum Palette) ── */
+  --color-primary:        #2B221D;       /* Deep Gallery Walnut Brown */
+  --color-primary-light:  #3D302A;
+  --color-primary-dark:   #1E1713;
+  --color-secondary:      #5B4332;       /* Earth Brown */
+  --color-secondary-light:#725642;
+  --color-accent:         #C19A49;       /* Accent Gold */
+  --color-accent-light:   #D4AF65;
+  --color-supporting:     #B56B4A;       /* Terracotta Accent */
+  --color-supporting-light:#C87A57;
+  --color-olive:          #6A7458;       /* Olive Accent */
+  --color-olive-light:    #7E8A6A;
+  --color-terracotta:     #B56B4A;       /* Terracotta Accent */
+  --color-earth-brown:    #5B4332;       /* Earth Brown */
+  --color-gold:           #C19A49;       /* Accent Gold */
 
   /* Legacy brand aliases for backward compatibility */
-  --color-artist-blue:    #24583E;       /* Forest Green */
-  --color-artist-blue-light: #2E6B4C;
-  --color-burnt-orange:   #C85A24;       /* Terracotta */
-  --color-burnt-orange-light: #D56A24;
-  --color-golden-sand:    #C99A42;       /* Marigold Gold */
-  --color-golden-sand-light: #D4A84F;
-  --color-forest-green:   #24583E;
-  --color-earth-brown:    #2C221A;
+  --color-artist-blue:    #6A7458;       /* Olive Accent */
+  --color-artist-blue-light: #7E8A6A;
+  --color-burnt-orange:   #B56B4A;       /* Terracotta */
+  --color-burnt-orange-light: #C87A57;
+  --color-golden-sand:    #C19A49;       /* Accent Gold */
+  --color-golden-sand-light: #D4AF65;
+  --color-forest-green:   #6A7458;
 
-  /* ── Surface Colors (Bright, Airy, Natural Light) ── */
+  /* ── Surface Colors (Light, Airy, Luxury Museum Gallery) ── */
   --color-bg:             #F8F5EF;       /* Warm Ivory (Primary Page Background) */
-  --color-bg-alt:         #FCFAF6;       /* Soft Cream (Alternate Section Background) */
+  --color-bg-alt:         #FCFAF7;       /* Gallery White (Alternate Section Background) */
   --color-card:           #FFFFFF;       /* Pure White Cards */
   --color-card-hover:     #FFFFFF;
   --color-surface:        #FFFFFF;
   --color-surface-glass:  rgba(248, 245, 239, 0.88);
-  --color-overlay:        rgba(44, 34, 26, 0.45);
-  --color-overlay-heavy:  rgba(44, 34, 26, 0.75);
+  --color-surface-glass-scrolled: rgba(255, 255, 255, 0.94);
+  --color-overlay:        rgba(43, 34, 29, 0.45);
+  --color-overlay-heavy:  rgba(43, 34, 29, 0.75);
 
-  /* ── Text Colors (High Contrast & Warm Readability) ── */
-  --color-text:           #2C221A;       /* Deep Earth Brown */
-  --color-text-secondary: #6E6359;       /* Muted warm gray */
-  --color-text-muted:     #9E9387;
+  /* ── Text Colors (High Contrast & Clear Readability) ── */
+  --color-text:           #2B221D;       /* Primary Text */
+  --color-text-primary:   #2B221D;       /* Primary Text */
+  --color-text-secondary: #665A52;       /* Secondary Text */
+  --color-text-muted:     #8C8077;
   --color-text-inverse:   #F8F5EF;
   --color-text-on-primary:#FFFFFF;
 
   /* ── Semantic Colors ── */
-  --color-success:        #24583E;       /* Forest Green */
+  --color-success:        #6A7458;       /* Olive Accent */
   --color-error:          #B83A3A;
-  --color-warning:        #C99A42;       /* Marigold Gold */
-  --color-info:           #24583E;
+  --color-warning:        #C19A49;       /* Accent Gold */
+  --color-info:           #6A7458;
 
-  /* ── Border Colors (Thin, Delicate & Elegant) ── */
-  --color-border:         rgba(44, 34, 26, 0.08);
-  --color-border-strong:  rgba(44, 34, 26, 0.16);
-  --color-border-card:    rgba(44, 34, 26, 0.06);
+  /* ── Border Colors (Thin, Elegant Gold & Museum Hairlines) ── */
+  --color-border:         rgba(43, 34, 29, 0.08);
+  --color-border-strong:  rgba(43, 34, 29, 0.16);
+  --color-border-card:    rgba(193, 154, 73, 0.22); /* Elegant thin gold border */
+  --color-border-card-hover: rgba(193, 154, 73, 0.55);
+  --color-border-gold:    rgba(193, 154, 73, 0.28);
 
   /* ── Typography ── */
   --font-heading:   'Cormorant Garamond', 'Georgia', serif;
@@ -114,17 +122,18 @@
   --radius-2xl:  32px;
   --radius-full: 9999px;
 
-  /* ── Soft & Weightless Gallery Shadows ── */
-  --shadow-xs:    0 1px 2px rgba(44, 34, 26, 0.03);
-  --shadow-sm:    0 2px 8px rgba(44, 34, 26, 0.04);
-  --shadow:       0 4px 16px rgba(44, 34, 26, 0.05);
-  --shadow-md:    0 8px 24px rgba(44, 34, 26, 0.07);
-  --shadow-lg:    0 14px 36px rgba(44, 34, 26, 0.08);
-  --shadow-xl:    0 20px 50px rgba(44, 34, 26, 0.10);
-  --shadow-glow:  0 0 35px rgba(201, 154, 66, 0.15);
-  --shadow-card:  0 2px 14px rgba(44, 34, 26, 0.04);
-  --shadow-card-hover: 0 12px 32px rgba(44, 34, 26, 0.08);
-  --shadow-glass: 0 8px 32px rgba(44, 34, 26, 0.05);
+  /* ── Soft & Weightless Museum Shadows & Ambient Gold ── */
+  --shadow-xs:    0 1px 2px rgba(43, 34, 29, 0.03);
+  --shadow-sm:    0 2px 8px rgba(43, 34, 29, 0.04);
+  --shadow:       0 4px 16px rgba(43, 34, 29, 0.05);
+  --shadow-md:    0 8px 24px rgba(43, 34, 29, 0.06);
+  --shadow-lg:    0 14px 36px rgba(43, 34, 29, 0.07);
+  --shadow-xl:    0 20px 50px rgba(43, 34, 29, 0.08);
+  --shadow-glow:  0 0 35px rgba(193, 154, 73, 0.12); /* Soft muted gold ambient lighting */
+  --shadow-card:  0 4px 20px rgba(43, 34, 29, 0.04), 0 1px 3px rgba(43, 34, 29, 0.02);
+  --shadow-card-hover: 0 16px 36px -4px rgba(43, 34, 29, 0.08), 0 4px 14px rgba(193, 154, 73, 0.12);
+  --shadow-museum: 0 12px 32px rgba(43, 34, 29, 0.06), 0 2px 8px rgba(193, 154, 73, 0.08);
+  --shadow-glass: 0 8px 32px rgba(43, 34, 29, 0.04);
 
   /* ── Transitions ── */
   --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
@@ -147,7 +156,7 @@
 
   /* ── Glass ── */
   --glass-bg:       rgba(248, 245, 239, 0.88);
-  --glass-border:   rgba(255, 255, 255, 0.6);
+  --glass-border:   rgba(193, 154, 73, 0.18);
   --glass-blur:     20px;
 }
 
