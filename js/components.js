@@ -18,7 +18,7 @@
     bag: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
     eye: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
     share: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
-    star: `<svg width="12" height="12" viewBox="0 0 24 24" fill="#C19A49" stroke="#C19A49" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    star: `<svg width="12" height="12" viewBox="0 0 24 24" fill="#C9A46A" stroke="#C9A46A" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
     chevronLeft: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>`,
     chevronRight: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`,
     close: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
@@ -212,7 +212,7 @@
     return `
       <div class="gallery-empty-state">
         <div class="empty-state-art-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5B4332" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m8 15 4-4 4 4"/><line x1="12" y1="19" x2="12" y2="11"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2C2723" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m8 15 4-4 4 4"/><line x1="12" y1="19" x2="12" y2="11"/></svg>
         </div>
         <h3 class="empty-state-title">${title}</h3>
         <p class="empty-state-desc">${subtitle}</p>

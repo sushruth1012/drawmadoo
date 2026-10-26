@@ -58,8 +58,8 @@ const icons = {
   logo: `<svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="navTeal" cx="32%" cy="32%" r="48%"><stop offset="0%" stop-color="#168EB5"/><stop offset="100%" stop-color="#0F6F8E"/></radialGradient>
-      <radialGradient id="navGold" cx="68%" cy="36%" r="52%"><stop offset="0%" stop-color="#F5CE70"/><stop offset="100%" stop-color="#C99A42"/></radialGradient>
-      <radialGradient id="navTerra" cx="62%" cy="72%" r="46%"><stop offset="0%" stop-color="#E27236"/><stop offset="100%" stop-color="#C85A24"/></radialGradient>
+      <radialGradient id="navGold" cx="68%" cy="36%" r="52%"><stop offset="0%" stop-color="#DEC08F"/><stop offset="100%" stop-color="#C9A46A"/></radialGradient>
+      <radialGradient id="navTerra" cx="62%" cy="72%" r="46%"><stop offset="0%" stop-color="#BA7C4B"/><stop offset="100%" stop-color="#A56A3A"/></radialGradient>
       <radialGradient id="navDark" cx="42%" cy="42%" r="58%"><stop offset="0%" stop-color="#342820"/><stop offset="100%" stop-color="#140E0A"/></radialGradient>
       <clipPath id="navCircleClip"><circle cx="50" cy="50" r="48"/></clipPath>
     </defs>
@@ -77,7 +77,7 @@ const icons = {
       <rect x="-3.5" y="-52" width="2.2" height="40" fill="#8A5A2B"/>
       <rect x="-1.3" y="-52" width="2.6" height="40" fill="#D4A373"/>
       <rect x="1.3" y="-52" width="2.2" height="40" fill="#A67244"/>
-      <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C99A42" rx="0.8"/>
+      <rect x="-3.5" y="-58" width="7" height="6.5" fill="#C9A46A" rx="0.8"/>
       <path d="M -3.2,-58 C -3.2,-61 3.2,-61 3.2,-58 Z" fill="#201813"/>
     </g>
   </svg>`
@@ -408,14 +408,14 @@ function injectRuntimeStyles() {
       align-items: center;
       background-color: var(--color-bg);
       background-image: 
-        radial-gradient(ellipse 70% 60% at 85% 20%, rgba(193, 154, 73, 0.08) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 50% at 10% 80%, rgba(252, 250, 247, 0.8) 0%, transparent 60%);
+        radial-gradient(ellipse 70% 60% at 85% 20%, rgba(201, 164, 106, 0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 10% 80%, rgba(253, 251, 248, 0.8) 0%, transparent 60%);
     }
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(43, 34, 29, 0.025) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(44, 39, 35, 0.025) 1px, transparent 1px);
       background-size: 18px 18px;
       pointer-events: none;
       opacity: 0.7;
@@ -531,7 +531,7 @@ function injectRuntimeStyles() {
       position: relative;
       border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(43, 34, 29, 0.08), 0 0 35px rgba(193, 154, 73, 0.08);
+      box-shadow: 0 20px 50px rgba(44, 39, 35, 0.08), 0 0 35px rgba(201, 164, 106, 0.08);
       border: 8px solid #FFFFFF;
       background: var(--color-card);
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -592,7 +592,7 @@ function injectRuntimeStyles() {
       left: 35%;
       width: 220px;
       animation: floatSlow3 16s ease-in-out infinite alternate;
-      color: #FCFAF7;
+      color: #FDFBF8;
     }
     .floating-paint-4 {
       top: 5%;
@@ -727,7 +727,7 @@ function injectRuntimeStyles() {
       font-size: var(--text-xs);
       font-weight: 600;
       color: var(--color-primary);
-      background: rgba(193, 154, 73, 0.12);
+      background: rgba(201, 164, 106, 0.12);
       padding: 3px 10px;
       border-radius: var(--radius-full);
       margin-bottom: var(--space-3);
@@ -774,7 +774,7 @@ function injectRuntimeStyles() {
       width: 48px;
       height: 48px;
       border-radius: var(--radius-md);
-      background: rgba(193, 154, 73, 0.12);
+      background: rgba(201, 164, 106, 0.12);
       color: var(--color-primary);
       display: flex;
       align-items: center;
@@ -2193,7 +2193,7 @@ function renderFeaturedArtwork() {
   const productsHtml = artworks.length > 0
     ? artworks.map(art => renderProductCard(art)).join('')
     : `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e5ded4);">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e7ded2);">
         <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🎨</div>
         <p style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--color-text-primary); margin-bottom: 0.5rem;">Curating Original Masterpieces</p>
         <p style="font-size: 0.9rem; color: var(--color-text-muted); max-width: 440px; margin: 0 auto 1.5rem;">Your gallery is fresh and ready for your own artworks. Upload via Admin to feature them here.</p>
@@ -2360,7 +2360,7 @@ function renderMeetArtist() {
           <h2 style="margin-top: var(--space-2);">Meet the Artist</h2>
         </div>
       </div>
-      <div style="text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e5ded4);">
+      <div style="text-align: center; padding: 3.5rem 1.5rem; background: var(--color-bg-card, #ffffff); border-radius: var(--radius-lg); border: 1px dashed var(--color-border, #e7ded2);">
         <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🌟</div>
         <p style="font-family: var(--font-heading); font-size: 1.35rem; color: var(--color-text-primary); margin-bottom: 0.5rem;">Artist Spotlight Ready</p>
         <p style="font-size: 0.9rem; color: var(--color-text-muted); max-width: 440px; margin: 0 auto 1.5rem;">Select your featured artist in the Admin Homepage Builder to showcase their profile and milestones here.</p>
@@ -3681,7 +3681,7 @@ window.handleCustomPhotoSelect = function(e) {
   const nameEl = document.getElementById('custom-upload-filename');
   if (file && nameEl) {
     nameEl.textContent = 'Selected: ' + file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
-    nameEl.style.color = '#C99A42';
+    nameEl.style.color = '#C9A46A';
   }
 };
 
@@ -3718,7 +3718,7 @@ function initApp() {
           const nameEl = document.getElementById('custom-upload-filename');
           if (nameEl && refTitle) {
             nameEl.textContent = `Inspiration: "${refTitle}" by ${refArtist}`;
-            nameEl.style.color = '#C19A49';
+            nameEl.style.color = '#C9A46A';
           }
         }
       }, 500);

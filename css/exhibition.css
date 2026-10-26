@@ -12,7 +12,7 @@
   --ex-border-subtle: rgba(255, 255, 255, 0.08);
   --ex-text: #f7f2ea;
   --ex-text-muted: #a69888;
-  --ex-gold: #c99a42;
+  --ex-gold: #c9a46a;
   --ex-gold-glow: rgba(201, 154, 66, 0.28);
   --ex-brown: #8a5a2b;
   --ex-orange: #d56a24;
@@ -812,7 +812,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, #c99a42 0%, #8a5a2b 100%);
+  background: linear-gradient(135deg, #c9a46a 0%, #8a5a2b 100%);
   border: none;
   color: #0c0b0a;
   font-size: 16px;

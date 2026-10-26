@@ -1,67 +1,69 @@
 /* ═══════════════════════════════════════════════════════════
    DRAWMADOO — Design System Tokens
-   Bright, Calm, Premium Museum & Gallery Aesthetic
+   Bright, Refined, Minimal Luxury Museum & Gallery Aesthetic
    ═══════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* ── Brand Colors (Luxury Art Museum Palette) ── */
-  --color-primary:        #2B221D;       /* Deep Gallery Walnut Brown */
-  --color-primary-light:  #3D302A;
-  --color-primary-dark:   #1E1713;
-  --color-secondary:      #5B4332;       /* Earth Brown */
-  --color-secondary-light:#725642;
-  --color-accent:         #C19A49;       /* Accent Gold */
-  --color-accent-light:   #D4AF65;
-  --color-supporting:     #B56B4A;       /* Terracotta Accent */
-  --color-supporting-light:#C87A57;
-  --color-olive:          #6A7458;       /* Olive Accent */
-  --color-olive-light:    #7E8A6A;
-  --color-terracotta:     #B56B4A;       /* Terracotta Accent */
-  --color-earth-brown:    #5B4332;       /* Earth Brown */
-  --color-gold:           #C19A49;       /* Accent Gold */
+  /* ── Master Color System (Luxury Museum & Handcrafted Art Palette) ── */
+  --color-primary:        #2C2723;       /* Refined Deep Gallery Charcoal Brown (Primary Text & Primary CTA) */
+  --color-primary-light:  #3D352F;
+  --color-primary-dark:   #1C1815;
+  --color-secondary:      #6F665F;       /* Muted Warm Taupe / Secondary Text */
+  --color-secondary-light:#8E847C;
+  --color-accent:         #C9A46A;       /* Luxury Gold */
+  --color-accent-light:   #DEC08F;
+  --color-gold:           #C9A46A;       /* Luxury Gold (Hover states, badges, highlights) */
+  --color-primary-accent: #A56A3A;       /* Primary Accent (Warm Terracotta Ochre) */
+  --color-terracotta:     #A56A3A;       /* Primary Accent */
+  --color-supporting:     #A56A3A;
+  --color-supporting-light:#BA7C4B;
+  --color-olive:          #70806B;       /* Olive Accent */
+  --color-olive-light:    #899884;
+  --color-earth-brown:    #2C2723;
 
   /* Legacy brand aliases for backward compatibility */
-  --color-artist-blue:    #6A7458;       /* Olive Accent */
-  --color-artist-blue-light: #7E8A6A;
-  --color-burnt-orange:   #B56B4A;       /* Terracotta */
-  --color-burnt-orange-light: #C87A57;
-  --color-golden-sand:    #C19A49;       /* Accent Gold */
-  --color-golden-sand-light: #D4AF65;
-  --color-forest-green:   #6A7458;
+  --color-artist-blue:    #70806B;       /* Calm Sage / Olive Accent */
+  --color-artist-blue-light: #899884;
+  --color-burnt-orange:   #A56A3A;       /* Primary Accent */
+  --color-burnt-orange-light: #BA7C4B;
+  --color-golden-sand:    #C9A46A;       /* Luxury Gold */
+  --color-golden-sand-light: #DEC08F;
+  --color-forest-green:   #70806B;
 
   /* ── Surface Colors (Light, Airy, Luxury Museum Gallery) ── */
-  --color-bg:             #F8F5EF;       /* Warm Ivory (Primary Page Background) */
-  --color-bg-alt:         #FCFAF7;       /* Gallery White (Alternate Section Background) */
+  --color-bg:             #F7F4EE;       /* Primary Background (Warm Ivory) */
+  --color-bg-alt:         #FDFBF8;       /* Alternate Background (Gallery White) */
+  --color-bg-white:       #FFFFFF;       /* Pure White Background */
   --color-card:           #FFFFFF;       /* Pure White Cards */
   --color-card-hover:     #FFFFFF;
   --color-surface:        #FFFFFF;
-  --color-surface-glass:  rgba(248, 245, 239, 0.88);
-  --color-surface-glass-scrolled: rgba(255, 255, 255, 0.94);
-  --color-overlay:        rgba(43, 34, 29, 0.45);
-  --color-overlay-heavy:  rgba(43, 34, 29, 0.75);
+  --color-surface-glass:  rgba(247, 244, 238, 0.90);
+  --color-surface-glass-scrolled: rgba(253, 251, 248, 0.95);
+  --color-overlay:        rgba(44, 39, 35, 0.45);
+  --color-overlay-heavy:  rgba(44, 39, 35, 0.75);
 
   /* ── Text Colors (High Contrast & Clear Readability) ── */
-  --color-text:           #2B221D;       /* Primary Text */
-  --color-text-primary:   #2B221D;       /* Primary Text */
-  --color-text-secondary: #665A52;       /* Secondary Text */
-  --color-text-muted:     #8C8077;
-  --color-text-inverse:   #F8F5EF;
+  --color-text:           #2C2723;       /* Primary Text */
+  --color-text-primary:   #2C2723;       /* Primary Text */
+  --color-text-secondary: #6F665F;       /* Secondary Text */
+  --color-text-muted:     #8E847C;
+  --color-text-inverse:   #F7F4EE;
   --color-text-on-primary:#FFFFFF;
 
   /* ── Semantic Colors ── */
-  --color-success:        #6A7458;       /* Olive Accent */
+  --color-success:        #70806B;       /* Olive Accent */
   --color-error:          #B83A3A;
-  --color-warning:        #C19A49;       /* Accent Gold */
-  --color-info:           #6A7458;
+  --color-warning:        #C9A46A;       /* Luxury Gold */
+  --color-info:           #70806B;
 
-  /* ── Border Colors (Thin, Elegant Gold & Museum Hairlines) ── */
-  --color-border:         rgba(43, 34, 29, 0.08);
-  --color-border-strong:  rgba(43, 34, 29, 0.16);
-  --color-border-card:    rgba(193, 154, 73, 0.22); /* Elegant thin gold border */
-  --color-border-card-hover: rgba(193, 154, 73, 0.55);
-  --color-border-gold:    rgba(193, 154, 73, 0.28);
+  /* ── Border Colors (Thin, Light Warm Borders & Museum Hairlines) ── */
+  --color-border:         #E7DED2;       /* Borders */
+  --color-border-strong:  #D5C8B8;
+  --color-border-card:    #E7DED2;       /* Light Warm Border */
+  --color-border-card-hover: #C9A46A;    /* Luxury Gold hover */
+  --color-border-gold:    rgba(201, 164, 106, 0.35);
 
   /* ── Typography ── */
   --font-heading:   'Cormorant Garamond', 'Georgia', serif;
@@ -123,17 +125,17 @@
   --radius-full: 9999px;
 
   /* ── Soft & Weightless Museum Shadows & Ambient Gold ── */
-  --shadow-xs:    0 1px 2px rgba(43, 34, 29, 0.03);
-  --shadow-sm:    0 2px 8px rgba(43, 34, 29, 0.04);
-  --shadow:       0 4px 16px rgba(43, 34, 29, 0.05);
-  --shadow-md:    0 8px 24px rgba(43, 34, 29, 0.06);
-  --shadow-lg:    0 14px 36px rgba(43, 34, 29, 0.07);
-  --shadow-xl:    0 20px 50px rgba(43, 34, 29, 0.08);
-  --shadow-glow:  0 0 35px rgba(193, 154, 73, 0.12); /* Soft muted gold ambient lighting */
-  --shadow-card:  0 4px 20px rgba(43, 34, 29, 0.04), 0 1px 3px rgba(43, 34, 29, 0.02);
-  --shadow-card-hover: 0 16px 36px -4px rgba(43, 34, 29, 0.08), 0 4px 14px rgba(193, 154, 73, 0.12);
-  --shadow-museum: 0 12px 32px rgba(43, 34, 29, 0.06), 0 2px 8px rgba(193, 154, 73, 0.08);
-  --shadow-glass: 0 8px 32px rgba(43, 34, 29, 0.04);
+  --shadow-xs:    0 1px 3px rgba(44, 39, 35, 0.03);
+  --shadow-sm:    0 2px 8px rgba(44, 39, 35, 0.04);
+  --shadow:       0 4px 16px rgba(44, 39, 35, 0.05);
+  --shadow-md:    0 8px 24px rgba(44, 39, 35, 0.06);
+  --shadow-lg:    0 14px 36px rgba(44, 39, 35, 0.07);
+  --shadow-xl:    0 20px 50px rgba(44, 39, 35, 0.08);
+  --shadow-glow:  0 0 35px rgba(201, 164, 106, 0.10); /* Soft warm gold ambient lighting */
+  --shadow-card:  0 4px 20px rgba(44, 39, 35, 0.04), 0 1px 3px rgba(44, 39, 35, 0.02);
+  --shadow-card-hover: 0 16px 36px -4px rgba(44, 39, 35, 0.08), 0 4px 14px rgba(201, 164, 106, 0.12);
+  --shadow-museum: 0 12px 32px rgba(44, 39, 35, 0.06), 0 2px 8px rgba(201, 164, 106, 0.08);
+  --shadow-glass: 0 8px 32px rgba(44, 39, 35, 0.04);
 
   /* ── Transitions ── */
   --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
@@ -155,12 +157,12 @@
   --z-admin:     1100;
 
   /* ── Glass ── */
-  --glass-bg:       rgba(248, 245, 239, 0.88);
-  --glass-border:   rgba(193, 154, 73, 0.18);
+  --glass-bg:       rgba(247, 244, 238, 0.90);
+  --glass-border:   #E7DED2;
   --glass-blur:     20px;
 }
 
-/* ── Refined Twilight Museum Theme (Warm & Elegant, Never Charcoal) ── */
+/* ── Refined Twilight Museum Theme ── */
 [data-theme="dark"] {
   --color-bg:             #1F1915;       /* Warm Earth Twilight */
   --color-bg-alt:         #27201B;       /* Deep Warm Cocoa */
@@ -171,14 +173,14 @@
   --color-overlay:        rgba(0, 0, 0, 0.55);
   --color-overlay-heavy:  rgba(0, 0, 0, 0.80);
 
-  --color-text:           #F8F5EF;       /* Warm Ivory */
+  --color-text:           #F7F4EE;       /* Warm Ivory */
   --color-text-secondary: #C8BFB5;
   --color-text-muted:     #9E9387;
-  --color-text-inverse:   #2C221A;
+  --color-text-inverse:   #2C2723;
 
-  --color-border:         rgba(248, 245, 239, 0.08);
-  --color-border-strong:  rgba(248, 245, 239, 0.16);
-  --color-border-card:    rgba(248, 245, 239, 0.06);
+  --color-border:         rgba(247, 244, 238, 0.10);
+  --color-border-strong:  rgba(247, 244, 238, 0.18);
+  --color-border-card:    rgba(247, 244, 238, 0.08);
 
   --shadow-xs:    0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.25);
@@ -186,7 +188,7 @@
   --shadow-md:    0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg:    0 12px 40px rgba(0, 0, 0, 0.4);
   --shadow-xl:    0 20px 60px rgba(0, 0, 0, 0.45);
-  --shadow-glow:  0 0 35px rgba(201, 154, 66, 0.18);
+  --shadow-glow:  0 0 35px rgba(201, 164, 106, 0.18);
   --shadow-card:  0 2px 14px rgba(0, 0, 0, 0.25);
   --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.35);
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);

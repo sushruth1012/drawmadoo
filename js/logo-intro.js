@@ -64,7 +64,7 @@
           <defs>
             <!-- Soft realistic drop shadow for pencil -->
             <filter id="introPencilShadow" x="-60%" y="-60%" width="220%" height="220%">
-              <feDropShadow dx="-5" dy="7" stdDeviation="4.5" flood-color="#2B221D" flood-opacity="0.20"/>
+              <feDropShadow dx="-5" dy="7" stdDeviation="4.5" flood-color="#2C2723" flood-opacity="0.20"/>
             </filter>
 
             <!-- Palette inner color washes (Official Brand Colors) -->
@@ -75,15 +75,15 @@
             </radialGradient>
 
             <radialGradient id="introGoldWash" cx="68%" cy="36%" r="52%">
-              <stop offset="0%" stop-color="#F5CE70" stop-opacity="0.98"/>
-              <stop offset="55%" stop-color="#C19A49" stop-opacity="0.88"/>
-              <stop offset="100%" stop-color="#C19A49" stop-opacity="0"/>
+              <stop offset="0%" stop-color="#DEC08F" stop-opacity="0.98"/>
+              <stop offset="55%" stop-color="#C9A46A" stop-opacity="0.88"/>
+              <stop offset="100%" stop-color="#C9A46A" stop-opacity="0"/>
             </radialGradient>
 
             <radialGradient id="introTerracottaWash" cx="62%" cy="72%" r="46%">
-              <stop offset="0%" stop-color="#E27236" stop-opacity="0.95"/>
-              <stop offset="60%" stop-color="#C85A24" stop-opacity="0.85"/>
-              <stop offset="100%" stop-color="#C85A24" stop-opacity="0"/>
+              <stop offset="0%" stop-color="#BA7C4B" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#A56A3A" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#A56A3A" stop-opacity="0"/>
             </radialGradient>
 
             <!-- Palette deep dark ground -->
@@ -114,14 +114,14 @@
             <circle cx="112" cy="124" r="36" fill="url(#introTerracottaWash)"/>
             <!-- Palette Thumbhole -->
             <ellipse cx="128" cy="116" rx="8" ry="11" fill="#140E0A" transform="rotate(25 128 116)" opacity="0.6"/>
-            <ellipse cx="128" cy="116" rx="6" ry="9" fill="#2B221D" transform="rotate(25 128 116)"/>
+            <ellipse cx="128" cy="116" rx="6" ry="9" fill="#2C2723" transform="rotate(25 128 116)"/>
           </g>
 
           <!-- 2. Sketched Outer Perimeter of the Emblem (Live pencil sketch) -->
           <path id="introSketchCircle"
                 d="M 52 100 A 48 48 0 1 1 52 100.1"
                 fill="none"
-                stroke="#2B221D"
+                stroke="#2C2723"
                 stroke-width="3.2"
                 stroke-linecap="round"
                 stroke-linejoin="round"/>
@@ -130,7 +130,7 @@
           <path id="introSketchSwirl"
                 d="M 52 100 C 66 65, 110 60, 130 80 C 146 95, 135 128, 110 132 C 85 136, 75 122, 66 134"
                 fill="none"
-                stroke="#C19A49"
+                stroke="#C9A46A"
                 stroke-width="1.8"
                 stroke-linecap="round"
                 stroke-dasharray="240"
@@ -144,14 +144,14 @@
                   font-size="52"
                   font-weight="600"
                   letter-spacing="-0.015em"
-                  fill="#2B221D">Drawmadoo</text>
+                  fill="#2C2723">Drawmadoo</text>
           </g>
 
           <!-- 5. Delicate Gold Signature Underline flourish -->
           <path id="introSignatureUnderline"
                 d="M 175 132 Q 260 135 340 131 Q 400 128 450 132"
                 fill="none"
-                stroke="#C19A49"
+                stroke="#C9A46A"
                 stroke-width="1.6"
                 stroke-linecap="round"
                 stroke-dasharray="290"
@@ -168,7 +168,7 @@
               <path d="M -6.5,-24 Q -3.2,-21.5 0,-24 Q 3.2,-21.5 6.5,-24" fill="#D4A373" opacity="0.4"/>
               
               <!-- Graphite lead tip at the very point (0,0) -->
-              <polygon points="0,0 -2.2,-8 2.2,-8" fill="#2B221D"/>
+              <polygon points="0,0 -2.2,-8 2.2,-8" fill="#2C2723"/>
 
               <!-- Pencil Shaft / Body (13px wide, 78px long, from y=-24 to y=-102) -->
               <rect x="-6.5" y="-102" width="4" height="78" fill="#8A5A2B"/>
@@ -176,8 +176,8 @@
               <rect x="2.5" y="-102" width="4" height="78" fill="#A67244"/>
 
               <!-- Brass Ferrule / Gold Ring (from y=-102 to y=-115) -->
-              <rect x="-6.5" y="-115" width="13" height="13" rx="1.5" fill="#C19A49"/>
-              <line x1="-6.5" y1="-108.5" x2="6.5" y2="-108.5" stroke="#F5CE70" stroke-width="1.2"/>
+              <rect x="-6.5" y="-115" width="13" height="13" rx="1.5" fill="#C9A46A"/>
+              <line x1="-6.5" y1="-108.5" x2="6.5" y2="-108.5" stroke="#DEC08F" stroke-width="1.2"/>
               
               <!-- Dipped Crown end (y=-115 to y=-121) -->
               <path d="M -6,-115 C -6,-120.5 6,-120.5 6,-115 Z" fill="#201813"/>

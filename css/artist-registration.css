@@ -6,20 +6,20 @@
 /* ── Page Container ── */
 .artist-register-page {
   min-height: 100vh;
-  background-color: var(--color-bg, #F8F5EF);
-  color: var(--color-text, #2B221D);
+  background-color: var(--color-bg, #F7F4EE);
+  color: var(--color-text, #2C2723);
   position: relative;
   overflow-x: hidden;
   background-image: 
-    radial-gradient(ellipse 65% 50% at 85% 15%, rgba(193, 154, 73, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 55% at 10% 80%, rgba(252, 250, 247, 0.7) 0%, transparent 60%);
+    radial-gradient(ellipse 65% 50% at 85% 15%, rgba(201, 164, 106, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 10% 80%, rgba(253, 251, 248, 0.7) 0%, transparent 60%);
 }
 
 .artist-register-page::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(43, 34, 29, 0.025) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(44, 39, 35, 0.025) 1px, transparent 1px);
   background-size: 18px 18px;
   pointer-events: none;
   opacity: 0.7;
@@ -39,9 +39,9 @@
   gap: 8px;
   padding: 6px 16px;
   border-radius: var(--radius-full, 9999px);
-  background: rgba(193, 154, 73, 0.12);
-  border: 1px solid rgba(193, 154, 73, 0.28);
-  color: var(--color-accent, #C19A49);
+  background: rgba(201, 164, 106, 0.12);
+  border: 1px solid rgba(201, 164, 106, 0.28);
+  color: var(--color-accent, #C9A46A);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -53,7 +53,7 @@
   font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
   font-size: clamp(2.4rem, 4.5vw, 3.8rem);
   line-height: 1.15;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   font-weight: 500;
   max-width: 780px;
   margin: 0 auto 1.25rem;
@@ -64,7 +64,7 @@
   font-family: var(--font-body, 'Inter', sans-serif);
   font-size: clamp(1rem, 1.2vw, 1.15rem);
   line-height: 1.65;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
   max-width: 620px;
   margin: 0 auto;
   font-weight: 400;
@@ -96,17 +96,17 @@
 
 .artist-perk-item {
   background: #FFFFFF;
-  border: 1px solid rgba(193, 154, 73, 0.22);
+  border: 1px solid rgba(201, 164, 106, 0.22);
   border-radius: var(--radius-lg, 16px);
   padding: 1.5rem 1.25rem;
-  box-shadow: 0 4px 18px rgba(43, 34, 29, 0.04);
+  box-shadow: 0 4px 18px rgba(44, 39, 35, 0.04);
   text-align: center;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .artist-perk-item:hover {
   transform: translateY(-3px);
-  border-color: rgba(193, 154, 73, 0.45);
+  border-color: rgba(201, 164, 106, 0.45);
 }
 
 .artist-perk-icon {
@@ -114,8 +114,8 @@
   height: 44px;
   margin: 0 auto 12px;
   border-radius: 50%;
-  background: rgba(193, 154, 73, 0.12);
-  color: var(--color-accent, #C19A49);
+  background: rgba(201, 164, 106, 0.12);
+  color: var(--color-accent, #C9A46A);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,14 +124,14 @@
 .artist-perk-title {
   font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
   font-size: 1.15rem;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin-bottom: 4px;
   font-weight: 600;
 }
 
 .artist-perk-desc {
   font-size: 0.82rem;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
   line-height: 1.45;
 }
 
@@ -140,10 +140,10 @@
   max-width: 860px;
   margin: 0 auto 6rem;
   background: #FFFFFF;
-  border: 1px solid rgba(193, 154, 73, 0.25);
+  border: 1px solid rgba(201, 164, 106, 0.25);
   border-radius: var(--radius-xl, 24px);
   padding: clamp(2rem, 5vw, 3.75rem);
-  box-shadow: 0 16px 48px -10px rgba(43, 34, 29, 0.08), 0 0 40px rgba(193, 154, 73, 0.06);
+  box-shadow: 0 16px 48px -10px rgba(44, 39, 35, 0.08), 0 0 40px rgba(201, 164, 106, 0.06);
   position: relative;
   z-index: 2;
 }
@@ -155,14 +155,14 @@
   gap: 12px;
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(43, 34, 29, 0.08);
+  border-bottom: 1px solid rgba(44, 39, 35, 0.08);
 }
 
 .form-section-number {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--color-primary, #2B221D);
+  background: var(--color-primary, #2C2723);
   color: #FFFFFF;
   font-size: 0.8rem;
   font-weight: 600;
@@ -175,7 +175,7 @@
 .form-section-title {
   font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
   font-size: 1.5rem;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin: 0;
   font-weight: 600;
 }
@@ -201,19 +201,19 @@
   display: block;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin-bottom: 6px;
   letter-spacing: 0.02em;
 }
 
 .artist-field-label span.req {
-  color: #B56B4A;
+  color: #A56A3A;
   margin-left: 2px;
 }
 
 .artist-field-hint {
   font-size: 0.75rem;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
   margin-top: 5px;
 }
 
@@ -223,11 +223,11 @@
   width: 100%;
   padding: 12px 16px;
   border-radius: var(--radius-md, 12px);
-  border: 1.5px solid rgba(43, 34, 29, 0.14);
-  background: #FCFAF7;
+  border: 1.5px solid rgba(44, 39, 35, 0.14);
+  background: #FDFBF8;
   font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.95rem;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   outline: none;
   transition: all 0.25s ease;
 }
@@ -236,8 +236,8 @@
 .artist-textarea:focus,
 .artist-select:focus {
   background: #FFFFFF;
-  border-color: var(--color-accent, #C19A49);
-  box-shadow: 0 0 0 3.5px rgba(193, 154, 73, 0.16);
+  border-color: var(--color-accent, #C9A46A);
+  box-shadow: 0 0 0 3.5px rgba(201, 164, 106, 0.16);
 }
 
 .artist-text-input.field-error,
@@ -280,28 +280,28 @@
   gap: 6px;
   padding: 8px 16px;
   border-radius: var(--radius-full, 9999px);
-  border: 1px solid rgba(43, 34, 29, 0.15);
-  background: #FCFAF7;
-  color: var(--color-text-secondary, #665A52);
+  border: 1px solid rgba(44, 39, 35, 0.15);
+  background: #FDFBF8;
+  color: var(--color-text-secondary, #6F665F);
   font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .specialty-pill-label input[type="checkbox"]:checked + .specialty-pill {
-  background: var(--color-primary, #2B221D);
+  background: var(--color-primary, #2C2723);
   color: #FFFFFF;
-  border-color: var(--color-primary, #2B221D);
-  box-shadow: 0 2px 8px rgba(43, 34, 29, 0.14);
+  border-color: var(--color-primary, #2C2723);
+  box-shadow: 0 2px 8px rgba(44, 39, 35, 0.14);
 }
 
 /* ── Photo Upload Zone ── */
 .artist-upload-zone {
-  border: 2px dashed rgba(193, 154, 73, 0.4);
+  border: 2px dashed rgba(201, 164, 106, 0.4);
   border-radius: var(--radius-lg, 16px);
   padding: 2.25rem 1.5rem;
   text-align: center;
-  background: rgba(193, 154, 73, 0.03);
+  background: rgba(201, 164, 106, 0.03);
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
@@ -309,8 +309,8 @@
 
 .artist-upload-zone:hover,
 .artist-upload-zone.dragover {
-  border-color: var(--color-accent, #C19A49);
-  background: rgba(193, 154, 73, 0.08);
+  border-color: var(--color-accent, #C9A46A);
+  background: rgba(201, 164, 106, 0.08);
 }
 
 .artist-upload-zone input[type="file"] {
@@ -329,7 +329,7 @@
   gap: 16px;
   padding: 12px;
   background: #FFFFFF;
-  border: 1px solid rgba(193, 154, 73, 0.3);
+  border: 1px solid rgba(201, 164, 106, 0.3);
   border-radius: 12px;
   margin-top: 12px;
 }
@@ -343,7 +343,7 @@
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--color-accent, #C19A49);
+  border: 2px solid var(--color-accent, #C9A46A);
 }
 
 .preview-meta {
@@ -354,13 +354,13 @@
 .preview-filename {
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin-bottom: 2px;
 }
 
 .preview-filesize {
   font-size: 0.78rem;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
 }
 
 .preview-remove-btn {
@@ -404,11 +404,11 @@
 /* ── Submit Button & Loading State ── */
 .artist-submit-btn {
   width: 100%;
-  background: var(--color-primary, #2B221D);
+  background: var(--color-primary, #2C2723);
   color: #FFFFFF;
   padding: 16px 36px;
   border-radius: var(--radius-full, 9999px);
-  border: 1.5px solid var(--color-primary, #2B221D);
+  border: 1.5px solid var(--color-primary, #2C2723);
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -417,15 +417,15 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: 0 4px 18px rgba(43, 34, 29, 0.16);
+  box-shadow: 0 4px 18px rgba(44, 39, 35, 0.16);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   margin-top: 1rem;
 }
 
 .artist-submit-btn:hover:not(:disabled) {
-  background: var(--color-primary-light, #3D302A);
+  background: var(--color-primary-light, #3D352F);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(43, 34, 29, 0.24);
+  box-shadow: 0 10px 28px rgba(44, 39, 35, 0.24);
 }
 
 .artist-submit-btn:disabled {
@@ -438,7 +438,7 @@
 .artist-loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(43, 34, 29, 0.65);
+  background: rgba(44, 39, 35, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 99999;
@@ -454,20 +454,20 @@
 
 .artist-loading-card {
   background: #FFFFFF;
-  border: 1px solid rgba(193, 154, 73, 0.35);
+  border: 1px solid rgba(201, 164, 106, 0.35);
   border-radius: var(--radius-xl, 24px);
   padding: 2.75rem 2.25rem;
   text-align: center;
   max-width: 460px;
   width: 100%;
-  box-shadow: 0 25px 60px rgba(43, 34, 29, 0.25);
+  box-shadow: 0 25px 60px rgba(44, 39, 35, 0.25);
 }
 
 .artist-spinner {
   width: 52px;
   height: 52px;
-  border: 3.5px solid rgba(193, 154, 73, 0.2);
-  border-top-color: var(--color-accent, #C19A49);
+  border: 3.5px solid rgba(201, 164, 106, 0.2);
+  border-top-color: var(--color-accent, #C9A46A);
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
   margin: 0 auto 1.5rem;
@@ -480,14 +480,14 @@
 .artist-loading-title {
   font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
   font-size: 1.7rem;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .artist-loading-step {
   font-size: 0.92rem;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
   line-height: 1.5;
 }
 
@@ -497,10 +497,10 @@
   max-width: 780px;
   margin: 0 auto 6rem;
   background: #FFFFFF;
-  border: 1px solid rgba(193, 154, 73, 0.3);
+  border: 1px solid rgba(201, 164, 106, 0.3);
   border-radius: var(--radius-xl, 24px);
   padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3.5rem);
-  box-shadow: 0 20px 60px rgba(43, 34, 29, 0.08), 0 0 45px rgba(193, 154, 73, 0.08);
+  box-shadow: 0 20px 60px rgba(44, 39, 35, 0.08), 0 0 45px rgba(201, 164, 106, 0.08);
   text-align: center;
   position: relative;
   z-index: 2;
@@ -526,33 +526,33 @@
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background: rgba(193, 154, 73, 0.12);
-  color: var(--color-accent, #C19A49);
+  background: rgba(201, 164, 106, 0.12);
+  color: var(--color-accent, #C9A46A);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.75rem;
-  border: 1.5px solid rgba(193, 154, 73, 0.35);
-  box-shadow: 0 8px 24px rgba(193, 154, 73, 0.16);
+  border: 1.5px solid rgba(201, 164, 106, 0.35);
+  box-shadow: 0 8px 24px rgba(201, 164, 106, 0.16);
 }
 
 .success-heading {
   font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
   font-size: clamp(2.2rem, 3.8vw, 3.2rem);
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   margin-bottom: 1.25rem;
   font-weight: 500;
   line-height: 1.2;
 }
 
 .success-message-box {
-  background: #FCFAF7;
-  border: 1px solid rgba(193, 154, 73, 0.22);
+  background: #FDFBF8;
+  border: 1px solid rgba(201, 164, 106, 0.22);
   border-radius: var(--radius-md, 14px);
   padding: 1.5rem 1.75rem;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
   max-width: 620px;
   margin: 0 auto 2.25rem;
 }
@@ -561,9 +561,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(193, 154, 73, 0.14);
-  color: #8C6A1E;
-  border: 1px solid rgba(193, 154, 73, 0.32);
+  background: rgba(201, 164, 106, 0.14);
+  color: #8C6C38;
+  border: 1px solid rgba(201, 164, 106, 0.32);
   border-radius: var(--radius-full, 9999px);
   padding: 6px 18px;
   font-size: 0.8rem;
@@ -577,7 +577,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #C19A49;
+  background: #C9A46A;
   animation: pulseDot 1.8s infinite;
 }
 
@@ -589,7 +589,7 @@
 .success-details-card {
   text-align: left;
   background: #FFFFFF;
-  border: 1px solid rgba(43, 34, 29, 0.08);
+  border: 1px solid rgba(44, 39, 35, 0.08);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   max-width: 540px;
@@ -610,7 +610,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-secondary, #665A52);
+  color: var(--color-text-secondary, #6F665F);
   margin-bottom: 3px;
   font-weight: 600;
 }
@@ -618,5 +618,5 @@
 .success-detail-row div {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-text, #2B221D);
+  color: var(--color-text, #2C2723);
 }

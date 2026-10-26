@@ -105,8 +105,8 @@
         if (!art) {
           document.getElementById('art-details-root').innerHTML = `
             <div style="text-align: center; padding: 6rem 1.5rem;">
-              <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: #2B221D; margin-bottom: 1rem;">Artwork Not Found</h2>
-              <p style="color: #665A52; margin-bottom: 2rem;">The requested artwork could not be located in our gallery registry.</p>
+              <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: #2C2723; margin-bottom: 1rem;">Artwork Not Found</h2>
+              <p style="color: #6F665F; margin-bottom: 2rem;">The requested artwork could not be located in our gallery registry.</p>
               <a href="explore.html" class="btn-art-buy" style="max-width: 240px; margin: 0 auto; text-decoration: none;">Explore Gallery</a>
             </div>
           `;
@@ -285,7 +285,7 @@
       }
 
       if (related.length === 0) {
-        container.innerHTML = `<p style="color: #665A52; grid-column: 1 / -1; text-align: center;">Curating related artworks from the atelier...</p>`;
+        container.innerHTML = `<p style="color: #6F665F; grid-column: 1 / -1; text-align: center;">Curating related artworks from the atelier...</p>`;
         return;
       }
 

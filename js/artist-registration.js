@@ -140,7 +140,7 @@
       if (emailInput && user.email) {
         emailInput.value = user.email;
         emailInput.disabled = true;
-        emailInput.style.backgroundColor = 'rgba(43, 34, 29, 0.04)';
+        emailInput.style.backgroundColor = 'rgba(44, 39, 35, 0.04)';
       }
       if (passwordGroup) {
         passwordGroup.style.display = 'none';

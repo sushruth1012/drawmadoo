@@ -7,7 +7,7 @@
   position: fixed;
   inset: 0;
   z-index: 100000;
-  background: rgba(43, 34, 29, 0.45);
+  background: rgba(44, 39, 35, 0.45);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
@@ -31,8 +31,8 @@
   max-width: 460px;
   background: #FFFFFF;
   border-radius: 24px;
-  border: 1px solid rgba(43, 34, 29, 0.08);
-  box-shadow: 0 25px 60px -15px rgba(43, 34, 29, 0.22),
+  border: 1px solid rgba(44, 39, 35, 0.08);
+  box-shadow: 0 25px 60px -15px rgba(44, 39, 35, 0.22),
               0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   padding: 36px 32px;
   transform: translateY(16px) scale(0.98);
@@ -53,9 +53,9 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #F8F5EF;
-  border: 1px solid rgba(43, 34, 29, 0.06);
-  color: #665A52;
+  background: #F7F4EE;
+  border: 1px solid rgba(44, 39, 35, 0.06);
+  color: #6F665F;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,7 +65,7 @@
 }
 
 .auth-modal-close:hover {
-  background: #2B221D;
+  background: #2C2723;
   color: #FFFFFF;
   transform: rotate(90deg);
 }
@@ -83,32 +83,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(43, 34, 29, 0.12);
+  box-shadow: 0 6px 18px rgba(44, 39, 35, 0.12);
 }
 
 .auth-title {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: 26px;
   font-weight: 600;
-  color: #2B221D;
+  color: #2C2723;
   letter-spacing: -0.01em;
   margin-bottom: 6px;
 }
 
 .auth-subtitle {
   font-size: 14px;
-  color: #665A52;
+  color: #6F665F;
   line-height: 1.5;
 }
 
 /* Auth Navigation Tabs */
 .auth-tabs {
   display: flex;
-  background: #F8F5EF;
+  background: #F7F4EE;
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 24px;
-  border: 1px solid rgba(43, 34, 29, 0.06);
+  border: 1px solid rgba(44, 39, 35, 0.06);
 }
 
 .auth-tab-btn {
@@ -116,7 +116,7 @@
   padding: 9px 12px;
   font-size: 13px;
   font-weight: 600;
-  color: #665A52;
+  color: #6F665F;
   border: none;
   background: transparent;
   border-radius: 9px;
@@ -127,8 +127,8 @@
 
 .auth-tab-btn.active {
   background: #FFFFFF;
-  color: #2B221D;
-  box-shadow: 0 2px 8px rgba(43, 34, 29, 0.08);
+  color: #2C2723;
+  box-shadow: 0 2px 8px rgba(44, 39, 35, 0.08);
 }
 
 /* Google OAuth Button */
@@ -136,26 +136,26 @@
   width: 100%;
   padding: 12px 18px;
   background: #FFFFFF;
-  border: 1.5px solid rgba(43, 34, 29, 0.12);
+  border: 1.5px solid rgba(44, 39, 35, 0.12);
   border-radius: 14px;
   font-size: 14px;
   font-weight: 600;
-  color: #2B221D;
+  color: #2C2723;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(43, 34, 29, 0.04);
+  box-shadow: 0 2px 6px rgba(44, 39, 35, 0.04);
   margin-bottom: 20px;
 }
 
 .btn-google:hover {
-  background: #F8F5EF;
-  border-color: #2B221D;
+  background: #F7F4EE;
+  border-color: #2C2723;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(43, 34, 29, 0.08);
+  box-shadow: 0 4px 12px rgba(44, 39, 35, 0.08);
 }
 
 .auth-divider {
@@ -170,7 +170,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(43, 34, 29, 0.1);
+  background: rgba(44, 39, 35, 0.1);
 }
 
 .auth-divider span {
@@ -191,7 +191,7 @@
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: #2B221D;
+  color: #2C2723;
   margin-bottom: 6px;
   letter-spacing: 0.02em;
 }
@@ -206,18 +206,18 @@
   width: 100%;
   padding: 12px 16px;
   background: #FCFAF6;
-  border: 1.5px solid rgba(43, 34, 29, 0.1);
+  border: 1.5px solid rgba(44, 39, 35, 0.1);
   border-radius: 12px;
   font-size: 14px;
-  color: #2B221D;
+  color: #2C2723;
   outline: none;
   transition: all 0.2s ease;
 }
 
 .auth-input:focus {
   background: #FFFFFF;
-  border-color: #2B221D;
-  box-shadow: 0 0 0 4px rgba(43, 34, 29, 0.08);
+  border-color: #2C2723;
+  box-shadow: 0 0 0 4px rgba(44, 39, 35, 0.08);
 }
 
 .auth-password-toggle {
@@ -233,14 +233,14 @@
 }
 
 .auth-password-toggle:hover {
-  color: #2B221D;
+  color: #2C2723;
 }
 
 /* Submit Button */
 .btn-auth-submit {
   width: 100%;
   padding: 13px 20px;
-  background: #2B221D;
+  background: #2C2723;
   color: #FFFFFF;
   border: none;
   border-radius: 14px;
@@ -248,14 +248,14 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(43, 34, 29, 0.2);
+  box-shadow: 0 4px 14px rgba(44, 39, 35, 0.2);
   margin-top: 8px;
 }
 
 .btn-auth-submit:hover {
   background: #1F1711;
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(43, 34, 29, 0.28);
+  box-shadow: 0 6px 18px rgba(44, 39, 35, 0.28);
 }
 
 .btn-auth-submit:disabled {
@@ -268,11 +268,11 @@
   margin-top: 20px;
   text-align: center;
   font-size: 13px;
-  color: #665A52;
+  color: #6F665F;
 }
 
 .auth-footer-links a {
-  color: #2B221D;
+  color: #2C2723;
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
@@ -311,7 +311,7 @@
 }
 
 .role-choice-card {
-  border: 2px solid rgba(43, 34, 29, 0.1);
+  border: 2px solid rgba(44, 39, 35, 0.1);
   background: #FCFAF6;
   border-radius: 16px;
   padding: 20px 16px;
@@ -322,16 +322,16 @@
 }
 
 .role-choice-card:hover {
-  border-color: #2B221D;
+  border-color: #2C2723;
   background: #FFFFFF;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(43, 34, 29, 0.08);
+  box-shadow: 0 6px 18px rgba(44, 39, 35, 0.08);
 }
 
 .role-choice-card.selected {
-  border-color: #2B221D;
+  border-color: #2C2723;
   background: #FFFFFF;
-  box-shadow: 0 8px 24px rgba(43, 34, 29, 0.14);
+  box-shadow: 0 8px 24px rgba(44, 39, 35, 0.14);
 }
 
 .role-choice-card.selected::after {
@@ -342,7 +342,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #2B221D;
+  background: #2C2723;
   color: #FFFFFF;
   font-size: 11px;
   font-weight: 700;
@@ -356,8 +356,8 @@
   height: 44px;
   margin: 0 auto 12px;
   border-radius: 12px;
-  background: #F8F5EF;
-  color: #2B221D;
+  background: #F7F4EE;
+  color: #2C2723;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -366,13 +366,13 @@
 .role-title {
   font-size: 15px;
   font-weight: 700;
-  color: #2B221D;
+  color: #2C2723;
   margin-bottom: 4px;
 }
 
 .role-desc {
   font-size: 12px;
-  color: #665A52;
+  color: #6F665F;
   line-height: 1.4;
 }
 
@@ -386,7 +386,7 @@
   align-items: center;
   gap: 8px;
   background: none;
-  border: 1.5px solid rgba(43, 34, 29, 0.15);
+  border: 1.5px solid rgba(44, 39, 35, 0.15);
   padding: 3px 10px 3px 4px;
   border-radius: 999px;
   cursor: pointer;
@@ -394,8 +394,8 @@
 }
 
 .user-avatar-btn:hover {
-  border-color: #2B221D;
-  background: rgba(43, 34, 29, 0.04);
+  border-color: #2C2723;
+  background: rgba(44, 39, 35, 0.04);
 }
 
 .user-avatar-img {
@@ -403,7 +403,7 @@
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
-  background: #2B221D;
+  background: #2C2723;
   color: #FFFFFF;
   font-size: 12px;
   font-weight: 700;
@@ -422,17 +422,17 @@
 }
 
 .user-role-badge.customer {
-  background: rgba(43, 34, 29, 0.08);
-  color: #2B221D;
+  background: rgba(44, 39, 35, 0.08);
+  color: #2C2723;
 }
 
 .user-role-badge.artist {
   background: rgba(200, 90, 36, 0.12);
-  color: #C85A24;
+  color: #A56A3A;
 }
 
 .user-role-badge.admin {
-  background: rgba(193, 154, 73, 0.18);
+  background: rgba(201, 164, 106, 0.18);
   color: #8C6615;
 }
 
@@ -444,8 +444,8 @@
   width: 250px;
   background: #FFFFFF;
   border-radius: 18px;
-  border: 1px solid rgba(43, 34, 29, 0.08);
-  box-shadow: 0 15px 35px -5px rgba(43, 34, 29, 0.15);
+  border: 1px solid rgba(44, 39, 35, 0.08);
+  box-shadow: 0 15px 35px -5px rgba(44, 39, 35, 0.15);
   padding: 8px;
   z-index: 1000;
   opacity: 0;
@@ -462,14 +462,14 @@
 
 .user-dropdown-header {
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(43, 34, 29, 0.06);
+  border-bottom: 1px solid rgba(44, 39, 35, 0.06);
   margin-bottom: 6px;
 }
 
 .user-dropdown-name {
   font-size: 14px;
   font-weight: 700;
-  color: #2B221D;
+  color: #2C2723;
 }
 
 .user-dropdown-email {
@@ -487,7 +487,7 @@
   padding: 9px 12px;
   font-size: 13px;
   font-weight: 500;
-  color: #2B221D;
+  color: #2C2723;
   border-radius: 10px;
   text-decoration: none;
   cursor: pointer;
@@ -499,13 +499,13 @@
 }
 
 .user-dropdown-item:hover {
-  background: #F8F5EF;
-  color: #2B221D;
+  background: #F7F4EE;
+  color: #2C2723;
 }
 
 .user-dropdown-item.logout {
   color: #B91C1C;
-  border-top: 1px solid rgba(43, 34, 29, 0.06);
+  border-top: 1px solid rgba(44, 39, 35, 0.06);
   margin-top: 6px;
   padding-top: 11px;
 }

@@ -124,9 +124,19 @@ ul, ol { list-style: none; }
 }
 
 .section-alt {
-  background-color: var(--color-bg-alt);
-  border-top: 1px solid rgba(193, 154, 73, 0.12);
-  border-bottom: 1px solid rgba(193, 154, 73, 0.12);
+  background-color: var(--color-bg-alt, #FDFBF8);
+  border-top: 1px solid var(--color-border, #E7DED2);
+  border-bottom: 1px solid var(--color-border, #E7DED2);
+}
+
+.section-ivory {
+  background-color: var(--color-bg, #F7F4EE);
+}
+
+.section-white {
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--color-border, #E7DED2);
+  border-bottom: 1px solid var(--color-border, #E7DED2);
 }
 
 /* ── Section Headers ── */
@@ -176,7 +186,7 @@ ul, ol { list-style: none; }
 .btn-primary {
   background: var(--color-primary);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(43, 34, 29, 0.14);
+  box-shadow: 0 4px 14px rgba(44, 39, 35, 0.14);
   border: 1.5px solid var(--color-primary);
 }
 
@@ -184,36 +194,36 @@ ul, ol { list-style: none; }
   background: var(--color-primary-light);
   border-color: var(--color-primary-light);
   color: #FFFFFF;
-  box-shadow: 0 8px 24px rgba(43, 34, 29, 0.22);
+  box-shadow: 0 8px 24px rgba(44, 39, 35, 0.22);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
   background: #FFFFFF;
   color: var(--color-primary);
-  border: 1.5px solid rgba(43, 34, 29, 0.18);
-  box-shadow: 0 2px 8px rgba(43, 34, 29, 0.04);
+  border: 1.5px solid rgba(44, 39, 35, 0.18);
+  box-shadow: 0 2px 8px rgba(44, 39, 35, 0.04);
 }
 
 .btn-secondary:hover {
   background: var(--color-bg);
   border-color: var(--color-accent);
   color: var(--color-primary);
-  box-shadow: 0 6px 18px rgba(43, 34, 29, 0.08);
+  box-shadow: 0 6px 18px rgba(44, 39, 35, 0.08);
   transform: translateY(-2px);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--color-text);
-  border: 1.5px solid rgba(43, 34, 29, 0.18);
+  border: 1.5px solid rgba(44, 39, 35, 0.18);
 }
 
 .btn-outline:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
   background: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(43, 34, 29, 0.06);
+  box-shadow: 0 4px 14px rgba(44, 39, 35, 0.06);
   transform: translateY(-2px);
 }
 
@@ -223,7 +233,7 @@ ul, ol { list-style: none; }
 }
 
 .btn-ghost:hover {
-  background: rgba(43, 34, 29, 0.05);
+  background: rgba(44, 39, 35, 0.05);
   color: var(--color-text);
 }
 
@@ -231,14 +241,14 @@ ul, ol { list-style: none; }
   background: var(--color-accent);
   color: #FFFFFF;
   border: 1.5px solid var(--color-accent);
-  box-shadow: 0 4px 14px rgba(193, 154, 73, 0.2);
+  box-shadow: 0 4px 14px rgba(201, 164, 106, 0.2);
 }
 
 .btn-accent:hover {
   background: var(--color-accent-light);
   border-color: var(--color-accent-light);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(193, 154, 73, 0.3);
+  box-shadow: 0 8px 22px rgba(201, 164, 106, 0.3);
 }
 
 .btn-artist-blue {
@@ -331,27 +341,27 @@ ul, ol { list-style: none; }
 }
 
 .badge-primary {
-  background: rgba(193, 154, 73, 0.12);
+  background: rgba(201, 164, 106, 0.12);
   color: var(--color-accent);
-  border: 1px solid rgba(193, 154, 73, 0.28);
+  border: 1px solid rgba(201, 164, 106, 0.28);
 }
 
 .badge-featured {
-  background: rgba(181, 107, 74, 0.12);
-  color: var(--color-terracotta);
-  border: 1px solid rgba(181, 107, 74, 0.28);
+  background: rgba(165, 106, 58, 0.10);
+  color: var(--color-primary-accent);
+  border: 1px solid rgba(165, 106, 58, 0.25);
 }
 
 .badge-verified {
-  background: rgba(106, 116, 88, 0.12);
+  background: rgba(112, 128, 107, 0.12);
   color: var(--color-olive);
-  border: 1px solid rgba(106, 116, 88, 0.28);
+  border: 1px solid rgba(112, 128, 107, 0.28);
 }
 
 .badge-human {
-  background: rgba(106, 116, 88, 0.12);
+  background: rgba(112, 128, 107, 0.12);
   color: var(--color-olive);
-  border: 1px solid rgba(106, 116, 88, 0.28);
+  border: 1px solid rgba(112, 128, 107, 0.28);
 }
 
 /* ── Admin Edit Controls ── */
